@@ -13,6 +13,14 @@
       href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
     />
+
+    <!-- MathJax for latex maths -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
   </head>
 
   <body>
@@ -24,15 +32,32 @@
         <p>
           I completed Google's
           <a href="https://foobar.withgoogle.com/" target="_blank">FooBar</a>
-          challenge April 2023 after a friend of mine sent me a referral link.
-          This involved solving a series of mathematical and/or coding problems
-          using Python 2.7 (or Java). The challenge included 5 levels of
-          increasing difficulty with 1-3 tasks per level. Here I summarise the
-          tasks and explain how I solved each problem.
+          challenge during April 2023. This involved solving a series of
+          mathematical and coding problems using Python 2.7 (or Java). The
+          challenge included 5 levels of increasing difficulty with 1-3 tasks
+          per level. Here I summarise the tasks and explain how I solved each
+          one.
         </p>
-        <section class="foobar-challenge">
+
+        <div class="table-of-contents toc-layer1">
+          <a href="#sec-challenge1">Challenge 1</a>
+          <a href="#sec-challenge2">Challenge 2</a>
+          <a href="#sec-challenge3">Challenge 3</a>
+          <a href="#sec-challenge4">Challenge 4</a>
+          <a href="#sec-challenge5">Challenge 5</a>
+        </div>
+
+        <section class="foobar-challenge" id="sec-challenge1">
           <h2>Challenge 1</h2>
-          <section class="foobar-task">
+          <div class="table-of-contents toc-layer2">
+            <a href="#sec-task-1">Re-ID</a>
+          </div>
+          <p>
+            The first level contained only a single task, titled "Re-ID", which
+            involved efficiently generating prime numbers. A task summary,
+            adapted from the original challenge instructions, is given below.
+          </p>
+          <section class="foobar-task" id="sec-task-1">
             <div class="foobar-task-description">
               Re-ID<br />
               =====<br />
@@ -41,13 +66,82 @@
               of a string of all primes, "2357111317192329...", and returns the
               next five digits in the string. For example, if n is 3 then their
               ID number will be "71113". The value of n will always be between 0
-              and 10000.
+              and 10000.<br />
+              <br />
+              -- Test cases --<br />
+              Input : solution(0)<br />
+              Output: 23571<br />
+              <br />
+              Input : solution(3)<br />
+              Output: 71113
             </div>
+
+            <p>
+              If the string of prime numbers is known, then the solution is
+              trivially given by returning the five digits starting at index
+              \(n\). Therefore, I solved this problem by defining a function
+              that firstly generated this string of primes. This function works
+              by checking the primality of all integers from \(2\) to
+              \(m=20+\lfloor n \ln 10 \rfloor \). This choice of \(m\) ensures
+              that the resulting string of primes is at least \(n+5\) characters
+              long, without too much excessive computation.<br />
+              <br />
+              This is a result of the prime number theorem which gives an
+              asymptotic expression for the prime counting function,
+              \[\pi(m)\sim{m\over \ln m},\] which counts the number of prime
+              numbers \(\leqslant m\). The maximum number of digits each prime
+              can have is \(\log m\) (base 10). Therefore, having \(n+5<
+              \pi(m)\log m\) should ensure the resulting string is long enough
+              when \(n\) is large. This condition is satisfied by \[m=20+\lfloor
+              n \ln 10 \rfloor ,\] which I checked empirically worked for when
+              \(n\) is low.<br />
+              <br />
+              Each integer is considered prime if no previously identified prime
+              numbers divide it. This involves checking all previously
+              identified prime numbers less than or equal to the square-root of
+              the current candidate number (there is no point checking factors
+              higher than the square-root because they all pair with divisors
+              less than the square-root). Once the list of prime numbers is
+              generated then the integers are converted to strings before being
+              joined into a single string.
+            </p>
+            <!--http://tohtml.com/python/-->
+            <pre
+              class="code_syntax"
+              style="color: #d1d1d1; background: #000000"
+            ><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; ">"""</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Returns a string of consecutive prime numbers with a target</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        length of at least n + 5.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        """</span></span>
+<span class="line_wrapper">        prime_list <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># prime density * log(n) approximates the length of the string</span></span>
+<span class="line_wrapper">        max_num <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">20</span> <span style="color:#00dddd; ">+</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span><span style="color:#009f00; ">2.303</span><span style="color:#00dddd; ">*</span>n<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> num_check <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">,</span> max_num <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            prime <span style="color:#d2cd86; ">=</span> True</span>
+<span class="line_wrapper">            <span style="color:#9999a9; "># no need to check larger factors</span></span>
+<span class="line_wrapper">            max_factor <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span>num_check<span style="color:#00dddd; ">**</span><span style="color:#009f00; ">0.5</span> <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">if</span> num_check <span style="color:#00dddd; ">%</span> p <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                    prime <span style="color:#d2cd86; ">=</span> False</span>
+<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">break</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">elif</span> p <span style="color:#00dddd; ">&gt;</span> max_factor<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">break</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> prime<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                prime_list<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>num_check<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#00c4c4; ">""</span><span style="color:#d2cd86; ">.</span>join<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span><span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span>p<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">[</span>n<span style="color:#d2cd86; ">:</span>n<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">5</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper"></span></pre>
           </section>
         </section>
-        <section class="foobar-challenge">
+        <section class="foobar-challenge" id="sec-challenge2">
           <h2>Challenge 2</h2>
-          <section class="foobar-task">
+          <div class="table-of-contents toc-layer2">
+            <a href="#sec-task-2">Please Pass the Coded Messages</a>
+            <a href="#sec-task-3">Bunny Worker Locations</a>
+          </div>
+          <section class="foobar-task" id="sec-task-2">
             <div class="foobar-task-description">
               Please Pass the Coded Messages<br />
               ==============================<br />
@@ -68,7 +162,7 @@
               Output: 94311<br />
             </div>
           </section>
-          <section class="foobar-task">
+          <section class="foobar-task" id="sec-task-3">
             <div class="foobar-task-description">
               Bunny Worker Locations<br />
               ======================<br />
@@ -99,9 +193,14 @@
             </div>
           </section>
         </section>
-        <section class="foobar-challenge">
+        <section class="foobar-challenge" id="sec-challenge3">
           <h2>Challenge 3</h2>
-          <section class="foobar-task">
+          <div class="table-of-contents toc-layer2">
+            <a href="#sec-task-4">Prepare the Bunnies' Escape</a>
+            <a href="#sec-task-5">The Grandest Staircase Of Them All</a>
+            <a href="#sec-task-6">Fuel Injection Perfection</a>
+          </div>
+          <section class="foobar-task" id="sec-task-4">
             <div class="foobar-task-description">
               Prepare the Bunnies' Escape<br />
               ===========================<br />
@@ -129,7 +228,7 @@
               Output: 11
             </div>
           </section>
-          <section class="foobar-task">
+          <section class="foobar-task" id="sec-task-5">
             <div class="foobar-task-description">
               The Grandest Staircase Of Them All<br />
               ==================================<br />
@@ -180,7 +279,7 @@
               Output: 1
             </div>
           </section>
-          <section class="foobar-task">
+          <section class="foobar-task" id="sec-task-6">
             <div class="foobar-task-description">
               Fuel Injection Perfection<br />
               =========================<br />
@@ -204,9 +303,13 @@
             </div>
           </section>
         </section>
-        <section class="foobar-challenge">
+        <section class="foobar-challenge" id="sec-challenge4">
           <h2>Challenge 4</h2>
-          <section class="foobar-task">
+          <div class="table-of-contents toc-layer2">
+            <a href="#sec-task-7">Bringing a Gun to a Trainer Fight</a>
+            <a href="#sec-task-8">Free the Bunny Workers</a>
+          </div>
+          <section class="foobar-task" id="sec-task-7">
             <div class="foobar-task-description">
               Bringing a Gun to a Trainer Fight<br />
               =================================<br />
@@ -248,7 +351,7 @@
               Output: 9
             </div>
           </section>
-          <section class="foobar-task">
+          <section class="foobar-task" id="sec-task-8">
             <div class="foobar-task-description">
               Free the Bunny Workers<br />
               ======================<br />
@@ -314,9 +417,12 @@
             </div>
           </section>
         </section>
-        <section class="foobar-challenge">
+        <section class="foobar-challenge" id="sec-challenge5">
           <h2>Challenge 5</h2>
-          <section class="foobar-task">
+          <div class="table-of-contents toc-layer2">
+            <a href="#sec-task-9">Dodge the Lasers!</a>
+          </div>
+          <section class="foobar-task" id="sec-task-9">
             <div class="foobar-task-description">
               Dodge the Lasers!<br />
               =================<br />
