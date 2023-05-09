@@ -1,0 +1,16 @@
+header nav {
+  display: flex;
+  height: 4rem;
+  padding: 0 2rem;
+  align-items: center;
+}
+
+header nav img {
+  margin-right: auto;
+  height: 65%;
+}
+
+header nav a {
+  color: white;
+  margin: 0 1rem;
+}
