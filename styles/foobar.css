@@ -93,12 +93,13 @@ p {
 
 .table-of-contents {
   position: sticky;
-  overflow: hidden;
   background-color: rgb(32, 33, 36);
   border-bottom: solid 1px #444;
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .toc-layer1 {
@@ -116,16 +117,21 @@ p {
 .table-of-contents a {
   color: rgb(137, 156, 212);
   text-align: center;
-  padding: 0;
-  padding: 0 1rem;
   height: 100%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 10rem;
 }
 
 .table-of-contents a:hover {
   background-color: #ddd;
   color: rgb(35, 39, 51);
+}
+
+@media only screen and (max-width: 500px) {
+  .table-of-contents {
+    font-size: 1rem;
+  }
 }

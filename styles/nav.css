@@ -21,3 +21,15 @@ header nav a {
   color: white;
   margin: 0 0 0 1rem;
 }
+
+#lachlan-nav-text {
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 400px) {
+  #lachlan-nav-text {
+    font-size: 1rem;
+    width: 3rem;
+    white-space: normal;
+  }
+}
