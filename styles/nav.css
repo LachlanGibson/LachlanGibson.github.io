@@ -1,16 +1,23 @@
 header nav {
   display: flex;
   height: 4rem;
-  padding: 0 2rem;
+  padding: 0 1rem;
   align-items: center;
 }
 
-header nav img {
+header nav div {
   margin-right: auto;
-  height: 65%;
+  height: 55%;
+  display: flex;
+  align-items: center;
+}
+
+header nav div img {
+  height: 100%;
+  margin-right: 1rem;
 }
 
 header nav a {
   color: white;
-  margin: 0 1rem;
+  margin: 0 0 0 1rem;
 }

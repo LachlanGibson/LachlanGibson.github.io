@@ -12,24 +12,32 @@
   <body>
     <header>
       <nav>
-        <img src="./images/name_logo.svg" alt="Lachlan Gibson" />
+        <div>
+          <img src="./images/logo.svg" alt="Lachlan Gibson" />
+          <span id="lachlan-nav-text">Lachlan Gibson</span>
+        </div>
         <a href="/">Home</a>
         <a href="/foobar">Google FooBar</a>
       </nav>
     </header>
     <main>
-      <div id="intro-div">
-        <div>
-          <img
-            src="./images/Lachlan_Gibson.png"
-            alt="An image of Lachlan Gibson"
-          />
-        </div>
-        <div>
-          <p>
-            "fg dfg df gsdfg sdfg sdjf hskjd fshkdf jhsdkfj shdkjf hskdjf
-            hskjdfh sd" - sdfsd
-          </p>
+      <div class="container">
+        <div id="intro-div">
+          <div class="img-div">
+            <img
+              src="./images/Lachlan_Gibson.png"
+              alt="An image of Lachlan Gibson"
+            />
+          </div>
+          <div class="quote-div">
+            <div>
+              <p id="quote-text">"Generated quote"</p>
+              <span id="quote-author">Author</span>
+              <span id="quote-version">Version</span>
+              <span id="loading-bar"></span>
+              <script src="./scripts/quotes.js"></script>
+            </div>
+          </div>
         </div>
       </div>
     </main>

@@ -18,7 +18,7 @@ body {
   color: #e8eaed;
   margin: auto;
   padding: 1.6rem;
-  max-width: 100rem;
+  max-width: 90rem;
 }
 
 img {
@@ -69,28 +69,77 @@ summary,
 }
 
 #intro-div {
-  display: inline-flex;
-  height: 48rem;
+  display: flex;
   width: 100%;
+  background-color: white;
   align-content: center;
-  border-bottom: solid 0.1rem grey;
+  flex-direction: row;
+  padding-top: 2rem;
+  justify-content: start;
+  color: black;
+  padding-right: 2rem;
+  margin: 0 1rem;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
 }
 
 #intro-div div {
-  height: 100%;
+  height: 38rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #intro-div div img {
-  height: 100%;
-  width: 50rem;
-  min-width: fit-content;
+  height: 38rem;
+  object-fit: cover;
+}
+
+.quote-div {
+  width: 100%;
+  align-items: center;
+}
+
+.img-div {
+  margin-right: -5rem;
 }
 
 #intro-div div p {
-  font-size: 3rem;
   text-align: center;
   font-style: italic;
-  max-width: 30rem;
+  max-width: 40rem;
+  margin: 0 0 1rem 1rem;
+  padding: 0;
+  font-size: 2.4rem;
+}
+
+#intro-div div span {
+  text-align: end;
+  font-size: 1rem;
+  margin: 0 0 0 0;
+  padding: 0;
+}
+
+#loading-bar {
+  background-color: rgba(0, 0, 0, 4%);
+  height: 1rem;
+  width: 100%;
+  margin-top: 10rem;
+}
+
+footer {
+  padding: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+  #intro-div div p {
+    font-size: 1.6rem;
+  }
+  #lachlan-nav-text {
+    display: none;
+  }
 }
