@@ -84,10 +84,7 @@ summary,
   color: #fff;
   padding: 1rem;
   margin: 2rem 0;
-}
-
-.code_syntax {
-  padding: 1rem;
+  overflow-x: auto;
 }
 
 p {
@@ -103,6 +100,7 @@ p {
   margin: 0;
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 .toc-layer1 {
@@ -135,12 +133,12 @@ p {
 
 pre {
   overflow: hidden;
-  max-height: 50rem;
   min-height: 10rem;
   height: 10rem;
   position: relative;
   color: #d1d1d1;
   background: black;
+  padding: 1rem;
 }
 
 .no-before {
@@ -162,6 +160,10 @@ pre::before {
 
 .no-before::before {
   display: none;
+}
+
+p {
+  overflow-x: auto;
 }
 
 @media only screen and (max-width: 500px) {

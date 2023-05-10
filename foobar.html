@@ -116,32 +116,29 @@
               joined into a single string.
             </p>
             <!--http://tohtml.com/python/-->
-            <pre
-              class="code_syntax"
-            ><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">  <span style="color:#e66170; font-weight:bold; ">def</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">    <span style="color:#9999a9; ">"""</span></span>
-<span class="line_wrapper"><span style="color:#9999a9; ">    Returns a string of consecutive prime numbers with a target</span></span>
-<span class="line_wrapper"><span style="color:#9999a9; ">    length of at least n + 5.</span></span>
-<span class="line_wrapper"><span style="color:#9999a9; ">    """</span></span>
-<span class="line_wrapper">    prime_list <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span></span>
-<span class="line_wrapper">    <span style="color:#9999a9; "># prime density * log(n) approximates the length of the string</span></span>
-<span class="line_wrapper">    max_num <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">20</span> <span style="color:#00dddd; ">+</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span><span style="color:#009f00; ">2.303</span><span style="color:#00dddd; ">*</span>n<span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> num_check <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">,</span> max_num <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">      prime <span style="color:#d2cd86; ">=</span> True</span>
-<span class="line_wrapper">      <span style="color:#9999a9; "># no need to check larger factors</span></span>
-<span class="line_wrapper">      max_factor <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span>num_check<span style="color:#00dddd; ">**</span><span style="color:#009f00; ">0.5</span> <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">      <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> num_check <span style="color:#00dddd; ">%</span> p <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">          prime <span style="color:#d2cd86; ">=</span> False</span>
-<span class="line_wrapper">          <span style="color:#e66170; font-weight:bold; ">break</span></span>
-<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">elif</span> p <span style="color:#00dddd; ">&gt;</span> max_factor<span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">          <span style="color:#e66170; font-weight:bold; ">break</span></span>
-<span class="line_wrapper">      <span style="color:#e66170; font-weight:bold; ">if</span> prime<span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">        prime_list<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>num_check<span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#00c4c4; ">""</span><span style="color:#d2cd86; ">.</span>join<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span><span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span>p<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">  <span style="color:#e66170; font-weight:bold; ">return</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">[</span>n<span style="color:#d2cd86; ">:</span>n<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">5</span><span style="color:#d2cd86; ">]</span></span>
-<span class="line_wrapper"></span></pre>
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; ">"""</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Returns a string of consecutive prime numbers with a target</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        length of at least n + 5.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        """</span></span>
+<span class="line_wrapper">        prime_list <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># prime density * log(n) approximates the length of the string</span></span>
+<span class="line_wrapper">        max_num <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">20</span> <span style="color:#00dddd; ">+</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span><span style="color:#009f00; ">2.303</span><span style="color:#00dddd; ">*</span>n<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> num_check <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">,</span> max_num <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            prime <span style="color:#d2cd86; ">=</span> True</span>
+<span class="line_wrapper">            <span style="color:#9999a9; "># no need to check larger factors</span></span>
+<span class="line_wrapper">            max_factor <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span>num_check<span style="color:#00dddd; ">**</span><span style="color:#009f00; ">0.5</span> <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">if</span> num_check <span style="color:#00dddd; ">%</span> p <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                    prime <span style="color:#d2cd86; ">=</span> False</span>
+<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">break</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">elif</span> p <span style="color:#00dddd; ">&gt;</span> max_factor<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">break</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> prime<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                prime_list<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>num_check<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#00c4c4; ">""</span><span style="color:#d2cd86; ">.</span>join<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span><span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span>p<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">[</span>n<span style="color:#d2cd86; ">:</span>n<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">5</span><span style="color:#d2cd86; ">]</span></span></pre>
           </section>
         </section>
         <section class="foobar-challenge" id="sec-challenge2">
@@ -170,6 +167,37 @@
               Input : solution([3, 1, 4, 1, 5, 9])<br />
               Output: 94311<br />
             </div>
+
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>L<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    L <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sorted</span><span style="color:#d2cd86; ">(</span>L<span style="color:#d2cd86; ">,</span> reverse<span style="color:#d2cd86; ">=</span>True<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    remainder <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>L<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">%</span> <span style="color:#00a800; ">3</span></span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">if</span> remainder <span style="color:#00dddd; ">!=</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># split L into three lists based on remainder</span></span>
+<span class="line_wrapper">        L0 <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>l <span style="color:#e66170; font-weight:bold; ">for</span> l <span style="color:#e66170; font-weight:bold; ">in</span> L <span style="color:#e66170; font-weight:bold; ">if</span> l<span style="color:#00dddd; ">%</span><span style="color:#00a800; ">3</span><span style="color:#00dddd; ">==</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        L1 <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>l <span style="color:#e66170; font-weight:bold; ">for</span> l <span style="color:#e66170; font-weight:bold; ">in</span> L <span style="color:#e66170; font-weight:bold; ">if</span> l<span style="color:#00dddd; ">%</span><span style="color:#00a800; ">3</span><span style="color:#00dddd; ">==</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        L2 <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>l <span style="color:#e66170; font-weight:bold; ">for</span> l <span style="color:#e66170; font-weight:bold; ">in</span> L <span style="color:#e66170; font-weight:bold; ">if</span> l<span style="color:#00dddd; ">%</span><span style="color:#00a800; ">3</span><span style="color:#00dddd; ">==</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> remainder <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>L1<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">&gt;=</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                L1<span style="color:#d2cd86; ">.</span>pop<span style="color:#d2cd86; ">(</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">elif</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>L2<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">&gt;=</span> <span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                L2<span style="color:#d2cd86; ">.</span>pop<span style="color:#d2cd86; ">(</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">                L2<span style="color:#d2cd86; ">.</span>pop<span style="color:#d2cd86; ">(</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">else</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#00a800; ">0</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">elif</span> remainder <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>L2<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">&gt;=</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                L2<span style="color:#d2cd86; ">.</span>pop<span style="color:#d2cd86; ">(</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">elif</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>L1<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">&gt;=</span> <span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                L1<span style="color:#d2cd86; ">.</span>pop<span style="color:#d2cd86; ">(</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">                L1<span style="color:#d2cd86; ">.</span>pop<span style="color:#d2cd86; ">(</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">else</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#00a800; ">0</span></span>
+<span class="line_wrapper">        L <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sorted</span><span style="color:#d2cd86; ">(</span>L0 <span style="color:#00dddd; ">+</span> L1 <span style="color:#00dddd; ">+</span> L2<span style="color:#d2cd86; ">,</span> reverse<span style="color:#d2cd86; ">=</span>True<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>L<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#00a800; ">0</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span><span style="color:#00c4c4; ">""</span><span style="color:#d2cd86; ">.</span>join<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span>i<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> L<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span></span></pre>
           </section>
           <section class="foobar-task" id="sec-task-3">
             <div class="foobar-task-description">
@@ -200,6 +228,25 @@
               Input : solution(3, 2)<br />
               Output: 9
             </div>
+
+            <p>
+              The grid changes by 1 each step along a diagonal, which gives the
+              following recursive relationships \[f(x,y)=f(x+1,y-1)-1,\]
+              \[f(x,y)=f(x+k,y-k)-k,\] where \(k\) can be any integer satisfying
+              \(0 &lt; k &lt; y\). The grid coordinates can be as large as
+              100000 so generating the entire grid would probably be much slower
+              than directly calculating the values from a closed form expression
+              for \(f(x,y)\). To find one, I first noticed that the first row is
+              given by the triangular numbers. This makes sense since the values
+              are given by the size of each diagonal, which grow by 1 each time.
+              Therefore, \[f(x,1)=\sum_{k=1}^xk={x(x+1)\over 2}.\] So, we can
+              get a closed form expression by choosing \(k=y-1\) in the
+              recursive relationship and then using the result for \(f(x,1)\) by
+              substituting \(x\rightarrow x+y-1\) \[f(x,y)={(x+y-1)(x+y)\over
+              2}-y+1.\]
+            </p>
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>x<span style="color:#d2cd86; ">,</span> y<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">(</span>x<span style="color:#00dddd; ">+</span>y<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">*</span><span style="color:#d2cd86; ">(</span>x<span style="color:#00dddd; ">+</span>y<span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">//</span><span style="color:#00a800; ">2</span><span style="color:#00dddd; ">-</span>y<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span></pre>
           </section>
         </section>
         <section class="foobar-challenge" id="sec-challenge3">
