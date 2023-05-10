@@ -29,6 +29,26 @@ const quotes = [
   "The true measure of success is not in the number of accolades we receive, but in the impact we have on the world around us, for it is through our actions that we leave a lasting legacy.",
   "There is no limit to what we can achieve when we combine our unique perspectives and talents towards a common goal, for it is through collaboration that we unlock the full potential of human innovation.",
   "Believe in the power of your curiosity, for it is the spark that ignites the flames of innovation and fuels the journey of discovery.",
+  "Knowledge is power, but intelligence is the key to unlocking its full potential.",
+  "Science is not just about discovering the truth, it's about embracing the unknown.",
+  "In the pursuit of knowledge, we discover the beauty of the universe.",
+  "The greatest scientific discoveries often arise from the most unexpected questions.",
+  "Intelligence is not just about what you know, it's about how you use what you know.",
+  "The beauty of science lies in its ability to challenge our assumptions and expand our minds.",
+  "To truly understand the world around us, we must be willing to explore the unknown.",
+  "The mind is a powerful tool - use it wisely and it will take you places you never thought possible.",
+  "Science is not just a subject, it's a way of thinking.",
+  "Intelligence is not just a measure of knowledge, it's a measure of curiosity and creativity.",
+  "In science, there are no failures - only opportunities to learn and grow.",
+  "The most powerful force in the universe is not gravity, it's the human mind.",
+  "The more we learn, the more we realize how much we still have to discover.",
+  "Science is the pursuit of knowledge, and knowledge is the key to unlocking the mysteries of the universe.",
+  "Intelligence is not a gift - it's a skill that can be developed through hard work and dedication.",
+  "The beauty of science is that it challenges us to question everything we think we know.",
+  "In the pursuit of scientific discovery, failure is just another step towards success.",
+  "The greatest scientific minds are those who are never satisfied with what they already know.",
+  "Intelligence is not about being the smartest person in the room - it's about being the most curious and open-minded.",
+  "Science is the art of asking questions, and intelligence is the art of finding the answers.",
 ];
 
 const author = "ChatGPT";
@@ -42,7 +62,7 @@ const versionElement = document.getElementById("quote-version");
 const barElement = document.getElementById("loading-bar");
 
 if (authorElement) {
-  authorElement.innerHTML = author;
+  authorElement.innerHTML = `&#8212; ${author}`;
 }
 
 if (versionElement) {

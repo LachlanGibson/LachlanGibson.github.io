@@ -89,9 +89,10 @@ summary,
 
 #intro-div div {
   height: 38rem;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   justify-content: center;
+  gap: 0.3rem;
 }
 
 #intro-div div img {
@@ -109,10 +110,11 @@ summary,
 }
 
 #intro-div div p {
-  text-align: center;
+  text-align: start;
+  word-wrap: break-word;
   font-style: italic;
   max-width: 40rem;
-  margin: 0 0 1rem 1rem;
+  margin: 0;
   padding: 0;
   font-size: 2.4rem;
 }
@@ -120,22 +122,21 @@ summary,
 #intro-div div span {
   text-align: end;
   font-size: 1rem;
-  margin: 0 0 0 0;
+  margin: 0;
   padding: 0;
 }
 
 #loading-bar {
-  background-color: rgba(0, 0, 0, 4%);
-  height: 1rem;
+  background-color: black;
+  height: 0.1rem;
   width: 100%;
-  margin-top: 10rem;
 }
 
 footer {
   padding: 1rem;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 500px) {
   #intro-div div p {
     font-size: 1.6rem;
   }
