@@ -38,7 +38,7 @@
     </header>
     <main>
       <article>
-        <h1>Google FooBar</h1>
+        <h1>The Google FooBar Challenge</h1>
         <p>
           I completed Google's
           <a href="https://foobar.withgoogle.com/" target="_blank">FooBar</a>
@@ -118,30 +118,29 @@
             <!--http://tohtml.com/python/-->
             <pre
               class="code_syntax"
-              style="color: #d1d1d1; background: #000000"
             ><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">        <span style="color:#9999a9; ">"""</span></span>
-<span class="line_wrapper"><span style="color:#9999a9; ">        Returns a string of consecutive prime numbers with a target</span></span>
-<span class="line_wrapper"><span style="color:#9999a9; ">        length of at least n + 5.</span></span>
-<span class="line_wrapper"><span style="color:#9999a9; ">        """</span></span>
-<span class="line_wrapper">        prime_list <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span></span>
-<span class="line_wrapper">        <span style="color:#9999a9; "># prime density * log(n) approximates the length of the string</span></span>
-<span class="line_wrapper">        max_num <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">20</span> <span style="color:#00dddd; ">+</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span><span style="color:#009f00; ">2.303</span><span style="color:#00dddd; ">*</span>n<span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> num_check <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">,</span> max_num <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">            prime <span style="color:#d2cd86; ">=</span> True</span>
-<span class="line_wrapper">            <span style="color:#9999a9; "># no need to check larger factors</span></span>
-<span class="line_wrapper">            max_factor <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span>num_check<span style="color:#00dddd; ">**</span><span style="color:#009f00; ">0.5</span> <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">if</span> num_check <span style="color:#00dddd; ">%</span> p <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">                    prime <span style="color:#d2cd86; ">=</span> False</span>
-<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">break</span></span>
-<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">elif</span> p <span style="color:#00dddd; ">&gt;</span> max_factor<span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">break</span></span>
-<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> prime<span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">                prime_list<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>num_check<span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#00c4c4; ">""</span><span style="color:#d2cd86; ">.</span>join<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span><span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span>p<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">[</span>n<span style="color:#d2cd86; ">:</span>n<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">5</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">  <span style="color:#e66170; font-weight:bold; ">def</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; ">"""</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Returns a string of consecutive prime numbers with a target</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    length of at least n + 5.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    """</span></span>
+<span class="line_wrapper">    prime_list <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># prime density * log(n) approximates the length of the string</span></span>
+<span class="line_wrapper">    max_num <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">20</span> <span style="color:#00dddd; ">+</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span><span style="color:#009f00; ">2.303</span><span style="color:#00dddd; ">*</span>n<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> num_check <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">,</span> max_num <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">      prime <span style="color:#d2cd86; ">=</span> True</span>
+<span class="line_wrapper">      <span style="color:#9999a9; "># no need to check larger factors</span></span>
+<span class="line_wrapper">      max_factor <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span>num_check<span style="color:#00dddd; ">**</span><span style="color:#009f00; ">0.5</span> <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">      <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> num_check <span style="color:#00dddd; ">%</span> p <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">          prime <span style="color:#d2cd86; ">=</span> False</span>
+<span class="line_wrapper">          <span style="color:#e66170; font-weight:bold; ">break</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">elif</span> p <span style="color:#00dddd; ">&gt;</span> max_factor<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">          <span style="color:#e66170; font-weight:bold; ">break</span></span>
+<span class="line_wrapper">      <span style="color:#e66170; font-weight:bold; ">if</span> prime<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        prime_list<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>num_check<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#00c4c4; ">""</span><span style="color:#d2cd86; ">.</span>join<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span><span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span>p<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> p <span style="color:#e66170; font-weight:bold; ">in</span> prime_list<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">  <span style="color:#e66170; font-weight:bold; ">return</span> generate_prime_string<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">[</span>n<span style="color:#d2cd86; ">:</span>n<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">5</span><span style="color:#d2cd86; ">]</span></span>
 <span class="line_wrapper"></span></pre>
           </section>
         </section>
@@ -470,6 +469,8 @@
         </section>
       </article>
     </main>
-    <footer></footer>
+    <footer>
+      <script src="./scripts/foobar.js"></script>
+    </footer>
   </body>
 </html>
