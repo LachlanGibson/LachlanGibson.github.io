@@ -16,13 +16,14 @@ html {
   text-size-adjust: none; /* for other mobile browsers */
   font-family: Arial, Helvetica, sans-serif;
   scroll-padding-top: 3rem;
+  overflow-y: scroll;
 }
 
 body {
   font-size: 1.6rem;
   background-color: rgb(32, 33, 36);
   color: #e8eaed;
-  max-width: 90rem;
+  max-width: 100rem;
   margin: auto;
 }
 
@@ -54,7 +55,15 @@ article ul {
 
 a {
   text-underline-position: under;
-  text-decoration-thickness: 8;
+  text-decoration-thickness: 0.1rem;
+  /* color: rgb(124, 212, 179); */
+  color: rgb(76, 192, 212);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 0.1rem;
 }
 
 :focus:not(:focus-visible) {

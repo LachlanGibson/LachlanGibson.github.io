@@ -1,6 +1,6 @@
 header nav {
   display: flex;
-  height: 4rem;
+  height: 6rem;
   padding: 0 1rem;
   align-items: center;
   overflow: hidden;
@@ -8,7 +8,7 @@ header nav {
 
 header nav div {
   margin-right: auto;
-  height: 55%;
+  height: 1.6rem;
   display: flex;
   align-items: center;
 }
@@ -21,6 +21,20 @@ header nav div img {
 header nav a {
   color: white;
   margin: 0 0 0 1rem;
+  text-decoration: none;
+}
+
+header nav a:hover {
+  color: rgb(137, 156, 212);
+  text-decoration: none;
+}
+
+.current-page {
+  text-decoration: underline;
+}
+
+.current-page:hover {
+  text-decoration: underline;
 }
 
 #lachlan-nav-text {

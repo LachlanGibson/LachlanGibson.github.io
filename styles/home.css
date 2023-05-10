@@ -10,6 +10,7 @@ html {
   -webkit-text-size-adjust: none; /* for iOS Safari */
   text-size-adjust: none; /* for other mobile browsers */
   font-family: Arial, Helvetica, sans-serif;
+  overflow-y: scroll;
 }
 
 body {
@@ -17,8 +18,7 @@ body {
   background-color: rgb(32, 33, 36);
   color: #e8eaed;
   margin: auto;
-  padding: 1.6rem;
-  max-width: 90rem;
+  max-width: 100rem;
 }
 
 img {
@@ -46,6 +46,7 @@ article ul {
 a {
   text-underline-position: under;
   text-decoration-thickness: 8;
+  text-decoration: none;
 }
 
 :focus:not(:focus-visible) {
@@ -84,7 +85,6 @@ summary,
 .container {
   display: flex;
   justify-content: center;
-  padding: 1rem 0;
 }
 
 #intro-div div {
