@@ -91,7 +91,7 @@ summary,
   font-size: 1.6rem;
   background-color: #111111;
   color: #fff;
-  padding: 1rem;
+  padding: 1.6rem;
   margin: 2rem 0;
   overflow-x: auto;
 }
@@ -147,7 +147,7 @@ pre {
   position: relative;
   color: #d1d1d1;
   background: black;
-  padding: 1rem;
+  padding: 1.6rem;
 }
 
 .no-before {
