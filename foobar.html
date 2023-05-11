@@ -224,6 +224,45 @@
               Output: 94311<br />
             </div>
 
+            <p>
+              To solve this problem, let's first consider the simpler problem of
+              finding the largest number containing all the digits in the list
+              L. Obviously, this is achieved by sorting the list with the
+              largest on the left to the smallest on the right, so that the
+              larger digits correspond to the higher decimal positions. Removing
+              any digit will strictly decrease the size of the number (except
+              when all digits are zero). Therefore, this result forms an upper
+              bound to the original problem of finding the largest number that
+              is also divisible by three.<br />
+              <br />
+              Now we can make use of the property of decimal numbers that they
+              are divisible by 3 if and only if the sum of their digits is also
+              divisible by three. Or, more generally, that the number is
+              congruent modulo 3 to its digit sum. Since the order of a
+              summation does not effect the result, we can use this rule to
+              check the modularity of a list of numbers without knowing the
+              order. Next we note that removing any two digits never lowers the
+              value by less than only removing any one digit. Also note that
+              removing a larger digit will lower the value by more than removing
+              a lower digit. Therefore, we can solve the problem by firstly
+              minimising the number of digits that need to be removed, and then
+              minimising the values of the removed digits.<br />
+              <br />
+              The sum of digits can be congruent to 0, 1 or 2 (mod 3). In the
+              first case, any permutation of all digits is divisible by 3
+              without removing any digits. Therefore, the solution returns the
+              number containing all the digits in descending order. If the sum
+              is congruent to 1 or 2, then there are three cases. Firstly, one
+              of the digits is congruent to the sum, in which case, we just
+              remove the smallest such digit. Secondly, two of the digits are
+              congruent to twice the sum, in which case we remove the two
+              smallest such digits. Thirdly, no combination of digits is
+              divisible by 3, so return 0. After removing any digits, the
+              solution is the number containing all the remaining digits in
+              descending order. Note, that if there are no remaining digits,
+              then return 0.
+            </p>
+
             <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>L<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">    L <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sorted</span><span style="color:#d2cd86; ">(</span>L<span style="color:#d2cd86; ">,</span> reverse<span style="color:#d2cd86; ">=</span>True<span style="color:#d2cd86; ">)</span></span>
 <span class="line_wrapper">    remainder <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>L<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">%</span> <span style="color:#00a800; ">3</span></span>
