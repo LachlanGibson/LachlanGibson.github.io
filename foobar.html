@@ -172,11 +172,11 @@
               asymptotic expression for the prime counting function,
               \[\pi(m)\sim{m\over \ln m},\] which counts the number of prime
               numbers \(\leqslant m\). The maximum number of digits each prime
-              can have is \(\log m\) (base 10). Therefore, having \(n+5<
-              \pi(m)\log m\) should ensure the resulting string is long enough
-              when \(n\) is large. This condition is satisfied by \[m=20+\lfloor
-              n \ln 10 \rfloor ,\] which I checked empirically worked for when
-              \(n\) is low.<br />
+              can have is \(\lceil \log m \rceil\) (base 10). Therefore, having
+              \(n+5< \pi(m)\lceil \log m \rceil\) should ensure the resulting
+              string is long enough when \(n\) is large. This condition is
+              satisfied by \[m=20+\lfloor n \ln 10 \rfloor ,\] which I checked
+              empirically worked for when \(n\) is low.<br />
               <br />
               Each integer is considered prime if no previously identified prime
               numbers divide it. This involves checking all previously
@@ -646,7 +646,10 @@
             <p>
               The key insight into solving this problem is to identify the
               summand as a
-              <a href="https://en.wikipedia.org/wiki/Beatty_sequence">
+              <a
+                href="https://en.wikipedia.org/wiki/Beatty_sequence"
+                target="_blank"
+              >
                 Beatty sequence</a
               >. The trick is to exploit the complementary Beatty sequence to
               create a recursive formula to compute the series. Let the largest
