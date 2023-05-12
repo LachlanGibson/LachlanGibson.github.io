@@ -643,6 +643,23 @@
               Input : solution('5')<br />
               Output: 19
             </div>
+            <p>
+              The key insight into solving this problem is to identify the
+              summand as a
+              <a href="https://en.wikipedia.org/wiki/Beatty_sequence">
+                Beatty sequence</a
+              >. The trick is to exploit the complementary Beatty sequence to
+              create a recursive formula to compute the series. Let the largest
+              term be \(m=\lfloor n\sqrt{2} \rfloor\), $$\begin{aligned} f(n) &=
+              \sum_{k=1}^n \lfloor k\sqrt{2} \rfloor, \\ &= \sum_{k=1}^m k -
+              \sum_{k=1}^{m-n} \lfloor k(2+\sqrt{2}) \rfloor, \\ &= \sum_{k=1}^m
+              k - 2\sum_{k=1}^{m-n} k - \sum_{k=1}^{m-n} \lfloor k\sqrt{2}
+              \rfloor, \\ &= {m(m+1)\over 2} - (m-n)(m-n+1) - f(m-n).
+              \end{aligned}$$ The size of the function argument is reduced by a
+              factor of at least \(\sqrt{2}-1 &lt; 0.5 \). Therefore, the depth
+              of the recursion is bounded by \(\log_2 n\) for large enough
+              \(n\), and is approximately \(-\log_2 n / \log_2(\sqrt{2}-1)\).
+            </p>
             <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>str_n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> f<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> n <span style="color:#00dddd; ">&lt;=</span> <span style="color:#00a800; ">6</span><span style="color:#d2cd86; ">:</span></span>
