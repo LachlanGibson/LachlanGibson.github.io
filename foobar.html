@@ -54,6 +54,15 @@
     <main>
       <article>
         <h1>The Google FooBar Challenge</h1>
+        <span
+          style="
+            font-style: italic;
+            font-size: 1rem;
+            font-weight: lighter;
+            margin: 0;
+          "
+          >This article is a work in progress. Last updated 16/05/2023.</span
+        >
         <p>
           Recently I completed Google's
           <a href="https://foobar.withgoogle.com/" target="_blank">FooBar</a>
@@ -96,6 +105,14 @@
           hours or even several days to solve. Have fun!
         </p>
 
+        <div class="table-of-contents toc-layer1">
+          <a href="#sec-challenge1">Challenge 1</a>
+          <a href="#sec-challenge2">Challenge 2</a>
+          <a href="#sec-challenge3">Challenge 3</a>
+          <a href="#sec-challenge4">Challenge 4</a>
+          <a href="#sec-challenge5">Challenge 5</a>
+        </div>
+
         <div class="foobar-task-description">
           Python Constraints<br />
           ==================<br />
@@ -118,14 +135,6 @@
           processes and changes to the execution environment are not allowed.
           Your solution must be under 32000 characters in length including new
           lines and other non-printing characters.
-        </div>
-
-        <div class="table-of-contents toc-layer1">
-          <a href="#sec-challenge1">Challenge 1</a>
-          <a href="#sec-challenge2">Challenge 2</a>
-          <a href="#sec-challenge3">Challenge 3</a>
-          <a href="#sec-challenge4">Challenge 4</a>
-          <a href="#sec-challenge5">Challenge 5</a>
         </div>
 
         <section class="foobar-challenge" id="sec-challenge1">
@@ -168,15 +177,20 @@
               that the resulting string of primes is at least \(n+5\) characters
               long, without too much excessive computation.<br />
               <br />
-              This is a result of the prime number theorem which gives an
-              asymptotic expression for the prime counting function,
-              \[\pi(m)\sim{m\over \ln m},\] which counts the number of prime
-              numbers \(\leqslant m\). The maximum number of digits each prime
-              can have is \(\lceil \log m \rceil\) (base 10). Therefore, having
-              \(n+5< \pi(m)\lceil \log m \rceil\) should ensure the resulting
-              string is long enough when \(n\) is large. This condition is
-              satisfied by \[m=20+\lfloor n \ln 10 \rfloor ,\] which I checked
-              empirically worked for when \(n\) is low.<br />
+              This is a result of the
+              <a
+                href="https://mathworld.wolfram.com/PrimeNumberTheorem.html"
+                target="_blank"
+                >prime number theorem</a
+              >
+              which gives an asymptotic expression for the prime counting
+              function, \[\pi(m)\sim{m\over \ln m},\] which counts the number of
+              prime numbers \(\leqslant m\). The maximum number of digits each
+              prime can have is \(\lceil \log m \rceil\) (base 10). Therefore,
+              having \(n+5 &lt; \pi(m)\lceil \log m \rceil\) should ensure the
+              resulting string is long enough when \(n\) is large. This
+              condition is satisfied by \[m=20+\lfloor n \ln 10 \rfloor ,\]
+              which I checked empirically worked for when \(n\) is low.<br />
               <br />
               Each integer is considered prime if no previously identified prime
               numbers divide it. This involves checking all previously
@@ -353,11 +367,16 @@
               100000 so generating the entire grid would probably be much slower
               than directly calculating the values from a closed form expression
               for \(f(x,y)\). To find one, I first noticed that the first row is
-              given by the triangular numbers. This makes sense since the values
-              are given by the size of each diagonal, which grow by 1 each time.
-              Therefore, \[f(x,1)=\sum_{k=1}^xk={x(x+1)\over 2}.\] So, we can
-              get a closed form expression by choosing \(k=y-1\) in the
-              recursive relationship and then using the result for \(f(x,1)\) by
+              given by the
+              <a
+                href="https://en.wikipedia.org/wiki/Triangular_number"
+                target="_blank"
+                >triangular numbers</a
+              >. This makes sense since the values are given by the size of each
+              diagonal, which grow by 1 each time. Therefore,
+              \[f(x,1)=\sum_{k=1}^xk={x(x+1)\over 2}.\] So, we can get a closed
+              form expression by choosing \(k=y-1\) in the recursive
+              relationship and then using the result for \(f(x,1)\) by
               substituting \(x\rightarrow x+y-1\) \[f(x,y)={(x+y-1)(x+y)\over
               2}-y+1.\]
             </p>
@@ -405,6 +424,97 @@
               0, 0]])<br />
               Output: 11
             </div>
+            <p>
+              To solve this problem I represent maps as
+              <a
+                href="https://en.wikipedia.org/wiki/Graph_theory"
+                target="_blank"
+                >graphs</a
+              >
+              where nodes correspond to passable spaces and edges correspond to
+              adjacent passable spaces. Then I use the
+              <a
+                href="https://en.wikipedia.org/wiki/A*_search_algorithm"
+                target="_blank"
+                >A* algorithm</a
+              >
+              to find the shortest path length from the start and end nodes. To
+              improve the efficiency of the algorithm I use the
+              <a
+                href="https://simple.wikipedia.org/wiki/Manhattan_distance"
+                target="_blank"
+                >Manhattan distance</a
+              >
+              as a lower bound to the remaining distance between any node and
+              the end node. After implementing the A* algorithm I use it to find
+              the shortest path lengths of all possible maps with exactly 1 or 0
+              walls removed. The function then returns the smallest of these
+              path lengths.
+            </p>
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> a_star<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">def</span> manhattan_dist<span style="color:#d2cd86; ">(</span>a<span style="color:#d2cd86; ">,</span> b<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span><span style="color:#e66170; font-weight:bold; ">abs</span><span style="color:#d2cd86; ">(</span>i<span style="color:#00dddd; ">-</span>j<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> i<span style="color:#d2cd86; ">,</span> j <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">zip</span><span style="color:#d2cd86; ">(</span>a<span style="color:#d2cd86; ">,</span>b<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">def</span> passable<span style="color:#d2cd86; ">(</span>p<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            x<span style="color:#d2cd86; ">,</span> y <span style="color:#d2cd86; ">=</span> p</span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">return</span> x<span style="color:#00dddd; ">&gt;=</span><span style="color:#00a800; ">0</span> <span style="color:#e66170; font-weight:bold; ">and</span> x<span style="color:#00dddd; ">&lt;</span>w <span style="color:#e66170; font-weight:bold; ">and</span> y<span style="color:#00dddd; ">&gt;=</span><span style="color:#00a800; ">0</span> <span style="color:#e66170; font-weight:bold; ">and</span> y<span style="color:#00dddd; ">&lt;</span>h <span style="color:#e66170; font-weight:bold; ">and</span> <span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">[</span>y<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>x<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">0</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># Generate graph</span></span>
+<span class="line_wrapper">        edges <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">dict</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> x <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>w<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">for</span> y <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>h<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                edges<span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">(</span>x<span style="color:#d2cd86; ">,</span>y<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">for</span> c <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">(</span>x<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">,</span>y<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span><span style="color:#d2cd86; ">(</span>x<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">,</span>y<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span><span style="color:#d2cd86; ">(</span>x<span style="color:#d2cd86; ">,</span>y<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span><span style="color:#d2cd86; ">(</span>x<span style="color:#d2cd86; ">,</span>y<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">if</span> passable<span style="color:#d2cd86; ">(</span>c<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                        edges<span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">(</span>x<span style="color:#d2cd86; ">,</span>y<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>c<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># Initialise algorithm</span></span>
+<span class="line_wrapper">        start <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">(</span>w<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">,</span>h<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        finish <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">,</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        v_open <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">set</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span>start<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        v_closed <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">set</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        dist_t <span style="color:#d2cd86; ">=</span> <span style="color:#b060b0; ">{</span>start <span style="color:#d2cd86; ">:</span> <span style="color:#00a800; ">0</span><span style="color:#b060b0; ">}</span></span>
+<span class="line_wrapper">        dist_h <span style="color:#d2cd86; ">=</span> <span style="color:#b060b0; ">{</span>start <span style="color:#d2cd86; ">:</span> manhattan_dist<span style="color:#d2cd86; ">(</span>start<span style="color:#d2cd86; ">,</span>finish<span style="color:#d2cd86; ">)</span><span style="color:#b060b0; ">}</span></span>
+<span class="line_wrapper">        prev <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">dict</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        continue_loop <span style="color:#d2cd86; ">=</span> True</span>
+<span class="line_wrapper">        c <span style="color:#d2cd86; ">=</span> start</span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">while</span> continue_loop<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">for</span> adj <span style="color:#e66170; font-weight:bold; ">in</span> edges<span style="color:#d2cd86; ">[</span>c<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                t <span style="color:#d2cd86; ">=</span> dist_t<span style="color:#d2cd86; ">[</span>c<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">if</span> adj <span style="color:#e66170; font-weight:bold; ">in</span> v_open<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">if</span> t <span style="color:#00dddd; ">&lt;</span> dist_t<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                        dist_t<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> t</span>
+<span class="line_wrapper">                        dist_h<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> t <span style="color:#00dddd; ">+</span> manhattan_dist<span style="color:#d2cd86; ">(</span>adj<span style="color:#d2cd86; ">,</span>finish<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">                        prev<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> c</span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">elif</span> adj <span style="color:#e66170; font-weight:bold; ">not</span> <span style="color:#e66170; font-weight:bold; ">in</span> v_closed<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                    v_open<span style="color:#d2cd86; ">.</span>add<span style="color:#d2cd86; ">(</span>adj<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">                    dist_t<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> t</span>
+<span class="line_wrapper">                    dist_h<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> t <span style="color:#00dddd; ">+</span> manhattan_dist<span style="color:#d2cd86; ">(</span>adj<span style="color:#d2cd86; ">,</span>finish<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">                    prev<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> c</span>
+<span class="line_wrapper">            v_closed<span style="color:#d2cd86; ">.</span>add<span style="color:#d2cd86; ">(</span>c<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            v_open<span style="color:#d2cd86; ">.</span>remove<span style="color:#d2cd86; ">(</span>c<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            </span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>v_open<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">&lt;</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                continue_loop <span style="color:#d2cd86; ">=</span> False</span>
+<span class="line_wrapper">                distance <span style="color:#d2cd86; ">=</span> <span style="color:#00dddd; ">-</span><span style="color:#00a800; ">2</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">else</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                c <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">min</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">(</span>dist_h<span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">,</span> v<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> v <span style="color:#e66170; font-weight:bold; ">in</span> v_open<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">if</span> c <span style="color:#00dddd; ">==</span> finish<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                    continue_loop <span style="color:#d2cd86; ">=</span> False</span>
+<span class="line_wrapper">                    distance <span style="color:#d2cd86; ">=</span> dist_t<span style="color:#d2cd86; ">[</span>finish<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">                    next_coord <span style="color:#d2cd86; ">=</span> c</span>
+<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">while</span> prev<span style="color:#d2cd86; ">[</span>next_coord<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">!=</span> start<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                        next_coord <span style="color:#d2cd86; ">=</span> prev<span style="color:#d2cd86; ">[</span>next_coord<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> distance <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Run A* on all possible maps</span></span>
+<span class="line_wrapper">    h <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    w <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    dist_list <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>a_star<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> x <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>w<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> y <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>h<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> <span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">[</span>y<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>x<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">[</span>y<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>x<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">0</span></span>
+<span class="line_wrapper">                dist_list<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>a_star<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">[</span>y<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>x<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">min</span><span style="color:#d2cd86; ">(</span>d <span style="color:#e66170; font-weight:bold; ">for</span> d <span style="color:#e66170; font-weight:bold; ">in</span> dist_list <span style="color:#e66170; font-weight:bold; ">if</span> d <span style="color:#00dddd; ">&gt;=</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">)</span></span></pre>
           </section>
           <section class="foobar-task" id="sec-task-5">
             <div class="foobar-task-description">
