@@ -22,12 +22,14 @@ body {
   font-size: 1.6rem;
   background-color: rgb(32, 33, 36);
   color: #e8eaed;
-  margin: auto;
   max-width: 100rem;
+  margin: auto;
 }
 
 main {
   padding: 0 1rem;
+  max-width: 100rem;
+  margin: auto;
 }
 
 img {
