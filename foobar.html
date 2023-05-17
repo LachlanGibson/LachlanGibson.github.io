@@ -473,13 +473,9 @@
 <span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">if</span> passable<span style="color:#d2cd86; ">(</span>c<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">                        edges<span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">(</span>x<span style="color:#d2cd86; ">,</span>y<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>c<span style="color:#d2cd86; ">)</span></span>
 <span class="line_wrapper">        <span style="color:#9999a9; "># Initialise algorithm</span></span>
-<span class="line_wrapper">        start <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">(</span>w<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">,</span>h<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">        finish <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">,</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">        v_open <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">set</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span>start<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">        v_closed <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">set</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">        dist_t <span style="color:#d2cd86; ">=</span> <span style="color:#b060b0; ">{</span>start <span style="color:#d2cd86; ">:</span> <span style="color:#00a800; ">0</span><span style="color:#b060b0; ">}</span></span>
-<span class="line_wrapper">        dist_h <span style="color:#d2cd86; ">=</span> <span style="color:#b060b0; ">{</span>start <span style="color:#d2cd86; ">:</span> manhattan_dist<span style="color:#d2cd86; ">(</span>start<span style="color:#d2cd86; ">,</span>finish<span style="color:#d2cd86; ">)</span><span style="color:#b060b0; ">}</span></span>
-<span class="line_wrapper">        prev <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">dict</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        start<span style="color:#d2cd86; ">,</span> finish <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">(</span>w<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">,</span>h<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> <span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">,</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        v_open<span style="color:#d2cd86; ">,</span> v_closed <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">set</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span>start<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> <span style="color:#e66170; font-weight:bold; ">set</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        dist_t<span style="color:#d2cd86; ">,</span> dist_h <span style="color:#d2cd86; ">=</span> <span style="color:#b060b0; ">{</span>start <span style="color:#d2cd86; ">:</span> <span style="color:#00a800; ">0</span><span style="color:#b060b0; ">}</span><span style="color:#d2cd86; ">,</span> <span style="color:#b060b0; ">{</span>start <span style="color:#d2cd86; ">:</span> manhattan_dist<span style="color:#d2cd86; ">(</span>start<span style="color:#d2cd86; ">,</span>finish<span style="color:#d2cd86; ">)</span><span style="color:#b060b0; ">}</span></span>
 <span class="line_wrapper">        continue_loop <span style="color:#d2cd86; ">=</span> True</span>
 <span class="line_wrapper">        c <span style="color:#d2cd86; ">=</span> start</span>
 <span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">while</span> continue_loop<span style="color:#d2cd86; ">:</span></span>
@@ -489,12 +485,10 @@
 <span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">if</span> t <span style="color:#00dddd; ">&lt;</span> dist_t<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">                        dist_t<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> t</span>
 <span class="line_wrapper">                        dist_h<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> t <span style="color:#00dddd; ">+</span> manhattan_dist<span style="color:#d2cd86; ">(</span>adj<span style="color:#d2cd86; ">,</span>finish<span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">                        prev<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> c</span>
 <span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">elif</span> adj <span style="color:#e66170; font-weight:bold; ">not</span> <span style="color:#e66170; font-weight:bold; ">in</span> v_closed<span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">                    v_open<span style="color:#d2cd86; ">.</span>add<span style="color:#d2cd86; ">(</span>adj<span style="color:#d2cd86; ">)</span></span>
 <span class="line_wrapper">                    dist_t<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> t</span>
 <span class="line_wrapper">                    dist_h<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> t <span style="color:#00dddd; ">+</span> manhattan_dist<span style="color:#d2cd86; ">(</span>adj<span style="color:#d2cd86; ">,</span>finish<span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">                    prev<span style="color:#d2cd86; ">[</span>adj<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> c</span>
 <span class="line_wrapper">            v_closed<span style="color:#d2cd86; ">.</span>add<span style="color:#d2cd86; ">(</span>c<span style="color:#d2cd86; ">)</span></span>
 <span class="line_wrapper">            v_open<span style="color:#d2cd86; ">.</span>remove<span style="color:#d2cd86; ">(</span>c<span style="color:#d2cd86; ">)</span></span>
 <span class="line_wrapper">            </span>
@@ -506,13 +500,9 @@
 <span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">if</span> c <span style="color:#00dddd; ">==</span> finish<span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">                    continue_loop <span style="color:#d2cd86; ">=</span> False</span>
 <span class="line_wrapper">                    distance <span style="color:#d2cd86; ">=</span> dist_t<span style="color:#d2cd86; ">[</span>finish<span style="color:#d2cd86; ">]</span></span>
-<span class="line_wrapper">                    next_coord <span style="color:#d2cd86; ">=</span> c</span>
-<span class="line_wrapper">                    <span style="color:#e66170; font-weight:bold; ">while</span> prev<span style="color:#d2cd86; ">[</span>next_coord<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">!=</span> start<span style="color:#d2cd86; ">:</span></span>
-<span class="line_wrapper">                        next_coord <span style="color:#d2cd86; ">=</span> prev<span style="color:#d2cd86; ">[</span>next_coord<span style="color:#d2cd86; ">]</span></span>
 <span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> distance <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span></span>
 <span class="line_wrapper">    <span style="color:#9999a9; "># Run A* on all possible maps</span></span>
-<span class="line_wrapper">    h <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">)</span></span>
-<span class="line_wrapper">    w <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    h<span style="color:#d2cd86; ">,</span> w <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
 <span class="line_wrapper">    dist_list <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>a_star<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span></span>
 <span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> x <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>w<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> y <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>h<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
@@ -572,6 +562,58 @@
               Input : solution(3)<br />
               Output: 1
             </div>
+            <p>
+              To solve this problem I used the principles of
+              <a
+                href="https://en.wikipedia.org/wiki/Dynamic_programming"
+                target="_blank"
+                >dynamic programming</a
+              >
+              to write a recursive function which relied on
+              <a
+                href="https://en.wikipedia.org/wiki/Memoization"
+                target="_blank"
+                >memoisation</a
+              >
+              to run efficiently. Consider the function \(w(n,m,s)\) which
+              calculates the number of valid staircases that can be built with
+              \(n\) bricks, with each stair containing a maximum of \(m\) bricks
+              and at least \(s\) more steps. We can express \(w\) as a recursive
+              function. Specifically, the number of staircases that can be built
+              is the sum of the number of staircases that can be built given the
+              size of the next step. For example, if there are 5 bricks, then
+              the number of possible staircases is the number of staircases that
+              end with a height of 1, plus the number that end with a height of
+              2, plus a height of 3 and plus a height of 4.<br />
+              <br />
+              There are two base cases to this recursion. The first occurs when
+              there are too many bricks. This occurs when the number of bricks
+              is more than a maximal staircase with a constant step size of 1,
+              \(n &gt; m(m+1)/2\). In this case, the number of valid staircases
+              is 0. The second base case occurs when there are no bricks
+              (\(n=0\)), and the minimum number of additional steps is less than
+              zero (\(s\leqslant 0\)). In this case, the number of valid
+              staircases is 1. Therefore, \[ w(n,m,s)=\begin{cases} 0,\quad n
+              &gt; m(m+1)/2\\[0.5em] 1,\quad n=0 \text{ and } s\leqslant 0
+              \\[0.5em] \sum_{k=1}^{\min(n,m)} w(n-k,k-1,s-1) \end{cases} \]
+              with the solution is given by \(w(n,n,2)\).
+            </p>
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    _ways <span style="color:#d2cd86; ">=</span> <span style="color:#b060b0; ">{</span><span style="color:#b060b0; ">}</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> ways<span style="color:#d2cd86; ">(</span>x<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> x <span style="color:#e66170; font-weight:bold; ">in</span> _ways<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">return</span> _ways<span style="color:#d2cd86; ">[</span>x<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        N<span style="color:#d2cd86; ">,</span> M<span style="color:#d2cd86; ">,</span> S <span style="color:#d2cd86; ">=</span> x</span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> N <span style="color:#00dddd; ">&gt;</span> M<span style="color:#00dddd; ">*</span><span style="color:#d2cd86; ">(</span>M<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">//</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            result <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">0</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">elif</span> S <span style="color:#00dddd; ">&lt;=</span> <span style="color:#00a800; ">0</span> <span style="color:#e66170; font-weight:bold; ">and</span> N <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            result <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">else</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            heights <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">,</span> <span style="color:#e66170; font-weight:bold; ">min</span><span style="color:#d2cd86; ">(</span>M<span style="color:#d2cd86; ">,</span>N<span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            result <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>ways<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">(</span>N<span style="color:#00dddd; ">-</span>k<span style="color:#d2cd86; ">,</span> k<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">,</span> <span style="color:#e66170; font-weight:bold; ">max</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">,</span> S<span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> k <span style="color:#e66170; font-weight:bold; ">in</span> heights<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        _ways<span style="color:#d2cd86; ">[</span>x<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> result</span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> result</span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> ways<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">,</span> n<span style="color:#d2cd86; ">,</span> <span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span></span></pre>
           </section>
           <section class="foobar-task" id="sec-task-6">
             <div class="foobar-task-description">
