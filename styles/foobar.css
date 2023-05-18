@@ -34,6 +34,7 @@ a:hover {
 
 p {
   text-align: justify;
+  overflow-y: hidden;
 }
 
 .table-of-contents {
@@ -110,6 +111,11 @@ pre::before {
 p {
   overflow-x: auto;
   overflow-y: visible;
+}
+
+.tikz-diagram {
+  margin: auto;
+  filter: invert();
 }
 
 @media only screen and (max-width: 500px) {
