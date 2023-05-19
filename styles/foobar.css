@@ -47,6 +47,7 @@ p {
   display: flex;
   justify-content: center;
   overflow: hidden;
+  display: flex;
 }
 
 .toc-layer1 {
@@ -69,7 +70,9 @@ p {
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 10rem;
+  margin: 0 0.1rem;
+  width: 100%;
+  max-width: 12rem;
 }
 
 .table-of-contents a:hover {
@@ -114,12 +117,46 @@ p {
 }
 
 .tikz-diagram {
+  display: flex;
   margin: auto;
   filter: invert();
+  max-width: 40rem;
+  min-width: 27rem;
+  width: 100%;
 }
 
-@media only screen and (max-width: 500px) {
-  .table-of-contents {
+@media only screen and (max-width: 600px) {
+  .table-of-contents a {
     font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .table-of-contents a {
+    font-size: 0;
+  }
+  #a-challenge1:after {
+    content: "1";
+    font-size: 1.6rem;
+  }
+  #a-challenge2:after {
+    content: "2";
+    font-size: 1.6rem;
+  }
+  #a-challenge3:after {
+    content: "3";
+    font-size: 1.6rem;
+  }
+  #a-challenge4:after {
+    content: "4";
+    font-size: 1.6rem;
+  }
+  #a-challenge5:after {
+    content: "5";
+    font-size: 1.6rem;
+  }
+  #a-bonus:after {
+    content: "B";
+    font-size: 1.6rem;
   }
 }

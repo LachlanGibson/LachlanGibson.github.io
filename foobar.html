@@ -112,11 +112,12 @@
         </p>
 
         <div class="table-of-contents toc-layer1">
-          <a href="#sec-challenge1">Challenge 1</a>
-          <a href="#sec-challenge2">Challenge 2</a>
-          <a href="#sec-challenge3">Challenge 3</a>
-          <a href="#sec-challenge4">Challenge 4</a>
-          <a href="#sec-challenge5">Challenge 5</a>
+          <a href="#sec-challenge1" id="a-challenge1">Challenge 1</a>
+          <a href="#sec-challenge2" id="a-challenge2">Challenge 2</a>
+          <a href="#sec-challenge3" id="a-challenge3">Challenge 3</a>
+          <a href="#sec-challenge4" id="a-challenge4">Challenge 4</a>
+          <a href="#sec-challenge5" id="a-challenge5">Challenge 5</a>
+          <a href="#sec-bonus" id="a-bonus">Bonus</a>
         </div>
 
         <div class="foobar-task-description">
@@ -984,6 +985,90 @@
 <span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">while</span> e0 <span style="color:#00dddd; ">&lt;</span> e<span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">        e0<span style="color:#d2cd86; ">,</span> e <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">(</span>e0 <span style="color:#00dddd; ">+</span> k<span style="color:#00dddd; ">//</span>e0<span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">//</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">,</span> e0</span>
 <span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> e</span></pre>
+          </section>
+        </section>
+        <section class="foobar-challenge" id="sec-bonus">
+          <h2>Bonus Tasks</h2>
+          <p>
+            After completing all five levels of the challenge, I found that I
+            could still request new tasks. I believe these bonus tasks are
+            alternative or old level 5 tasks.
+          </p>
+          <section class="foobar-task" id="sec-task-10">
+            <div class="foobar-task-description">
+              Expanding Nebula<br />
+              ================<br />
+              The gas of the steadily expanding nebula can be modelled as a 2D
+              grid. You find that the current existence of gas in a cell of the
+              grid is determined exactly by its 4 nearby cells, specifically,
+              (1) that cell, (2) the cell below it, (3) the cell to the right of
+              it, and (4) the cell below and to the right of it. If, in the
+              current state, exactly 1 of those 4 cells in the 2x2 block has
+              gas, then it will also have gas in the next state. Otherwise, the
+              cell will be empty in the next state.<br />
+              <br />
+              For example, let's say the previous state of the grid (p) was:<br />
+              .O..<br />
+              ..O.<br />
+              ...O<br />
+              O...<br />
+              <br />
+              To see how this grid will change to become the current grid (c)
+              over the next time step, consider the 2x2 blocks of cells around
+              each cell. Of the 2x2 block of [p[0][0], p[0][1], p[1][0],
+              p[1][1]], only p[0][1] has gas in it, which means this 2x2 block
+              would become cell c[0][0] with gas in the next time step:<br />
+              .O -> O<br />
+              ..<br />
+              <br />
+              Likewise, in the next 2x2 block to the right consisting of
+              [p[0][1], p[0][2], p[1][1], p[1][2]], two of the containing cells
+              have gas, so in the next state of the grid, c[0][1] will NOT have
+              gas:<br />
+              O. -> .<br />
+              .O<br />
+              <br />
+              Following this pattern to its conclusion, from the previous state
+              p, the current state of the grid c will be:<br />
+              O.O<br />
+              .O.<br />
+              O.O<br />
+              <br />
+              Note that the resulting output will have 1 fewer row and column,
+              since the bottom and rightmost cells do not have a cell below and
+              to the right of them, respectively.<br />
+              <br />
+              Write a function solution(g) where g is an array of array of bools
+              saying whether there is gas in each cell (the current scan of the
+              nebula), and return an int with the number of possible previous
+              states that could have resulted in that grid after 1 time step.
+              For instance, if the function were given the current state c
+              above, it would deduce that the possible previous states were p
+              (given above) as well as its horizontal and vertical reflections,
+              and would return 4. The width of the grid will be between 3 and 50
+              inclusive, and the height of the grid will be between 3 and 9
+              inclusive. The solution will always be less than one billion
+              (10^9).<br />
+              <br />
+              -- Test cases --<br />
+              Input: solution([[True, True, False, True, False, True, False,
+              True, True, False], [True, True, False, False, False, False, True,
+              True, True, False], [True, True, False, False, False, False,
+              False, False, False, True], [False, True, False, False, False,
+              False, True, True, False, False]])<br />
+              Output: 11567<br />
+              <br />
+              Input: solution([[True, False, True], [False, True, False], [True,
+              False, True]])<br />
+              Output: 4<br />
+              <br />
+              Input: solution([[True, False, True, False, False, True, True,
+              True], [True, False, True, False, False, False, True, False],
+              [True, True, True, False, False, False, True, False], [True,
+              False, True, False, False, False, True, False], [True, False,
+              True, False, False, True, True, True]])<br />
+              Output: 254
+            </div>
           </section>
         </section>
       </article>
