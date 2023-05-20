@@ -67,7 +67,7 @@
             font-weight: lighter;
             margin: 0;
           "
-          >This article is a work in progress. Last updated 19/05/2023.</span
+          >This article is a work in progress. Last updated 20/05/2023.</span
         >
         <p>
           Recently I completed Google's
@@ -972,6 +972,16 @@
               Input : solution(2, 1)<br />
               Output: [[0], [0]]
             </div>
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">from</span> itertools <span style="color:#e66170; font-weight:bold; ">import</span> combinations</span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>num_buns<span style="color:#d2cd86; ">,</span> num_required<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    specification <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span> <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>num_buns<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    comb <span style="color:#d2cd86; ">=</span> combinations<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>num_buns<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> num_buns <span style="color:#00dddd; ">-</span> num_required <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> i<span style="color:#d2cd86; ">,</span> c <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">enumerate</span><span style="color:#d2cd86; ">(</span>comb<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> ind <span style="color:#e66170; font-weight:bold; ">in</span> c<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            specification<span style="color:#d2cd86; ">[</span>ind<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>i<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> specification</span></pre>
           </section>
         </section>
         <section class="foobar-challenge" id="sec-challenge5">
