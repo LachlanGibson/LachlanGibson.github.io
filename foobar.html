@@ -1145,6 +1145,173 @@
               True, False, False, True, True, True]])<br />
               Output: 254
             </div>
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">from</span> collections <span style="color:#e66170; font-weight:bold; ">import</span> defaultdict</span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>g<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; ">"""Returns the number of unique states that can step into g</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    g is a boolean array (list of lists of bools) that is an outcome of a</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    previous state, s, such that for all rows and cols g[row][col] is True</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    if and only if exactly one of the following is True:</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    s[row][col], s[row+1][col], s[row][col+1], s[row+1][col+1].</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    solution(g) returns the number of unique previous states s that can</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    produce g. It does this efficiently in four steps:</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Firstly, rows of g and s are represented as the decimal integers that</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        are equal to a binary integer where each digit is given by the column</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        of that row. For example, [True, False, True] is "101" in binary which</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        is equal to 5 in decimal. Representing the rows as integers allows</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        efficient boolean computations using the bitwise operations</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        &amp;, |, &lt;&lt;, &gt;&gt;.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Secondly, every combination of row pairs of s is simulated to generate</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        a possible row in g. If such a row exists in g, then these potential</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        row pairs are recorded in a dictionary called potentials.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Thirdly, for every row in g, all possible values of the corresponding</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        row in g are tracked as well as the number of unique ways to reach that</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        combination, given all the previous rows.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Fourthly, the total number of unique states, s, is given by adding up</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        the number of ways the last row of s is possible for each possible</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        value of that last row.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Parameters</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    ----------</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    g : list</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        list of lists of boolean values with 3-9 rows inclusive, and 3-50</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        columns inclusive.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Returns</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    -------</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    num_states : int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        The number of possible previous states that could have resulted in g.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        The solution will always be less than one billion (10^9).</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    """</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Minimise the number of columns by transposition</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># This minimizes the number of combinations in two rows</span></span>
+<span class="line_wrapper">    n<span style="color:#d2cd86; ">,</span> m <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>g<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>g<span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">if</span> m <span style="color:#00dddd; ">&gt;</span> n<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        g <span style="color:#d2cd86; ">=</span> transpose<span style="color:#d2cd86; ">(</span>g<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        n<span style="color:#d2cd86; ">,</span> m <span style="color:#d2cd86; ">=</span> m<span style="color:#d2cd86; ">,</span> n</span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Represent each row of g as an integer</span></span>
+<span class="line_wrapper">    g_ints <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>bool_list2int<span style="color:#d2cd86; ">(</span>bl<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> bl <span style="color:#e66170; font-weight:bold; ">in</span> g<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Find all row pairs that can step into rows of g</span></span>
+<span class="line_wrapper">    potentials <span style="color:#d2cd86; ">=</span> find_potentials<span style="color:#d2cd86; ">(</span>g_ints<span style="color:#d2cd86; ">,</span> m<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Go through each row of g_ints, keeping track of possible rows of the</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># previous row in the previous time step, and the number of ways that row</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># is possible.</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Initially the first row of the previous timestep could be anything with</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># 1 way for each possibility.</span></span>
+<span class="line_wrapper">    previous_row <span style="color:#d2cd86; ">=</span> <span style="color:#b060b0; ">{</span>i <span style="color:#d2cd86; ">:</span> <span style="color:#00a800; ">1</span> <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">2</span><span style="color:#00dddd; ">**</span><span style="color:#d2cd86; ">(</span>m<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#b060b0; ">}</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> row <span style="color:#e66170; font-weight:bold; ">in</span> g_ints<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># current_row tracks the possible values of the current row in the</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># previous timestep as keys, and the number of ways to reach that</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># state as the value.</span></span>
+<span class="line_wrapper">        current_row <span style="color:#d2cd86; ">=</span> defaultdict<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> previous_row<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">for</span> j <span style="color:#e66170; font-weight:bold; ">in</span> potentials<span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">(</span>row<span style="color:#d2cd86; ">,</span> i<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                <span style="color:#9999a9; "># Accumulate the num of ways of every potential row combination</span></span>
+<span class="line_wrapper">                current_row<span style="color:#d2cd86; ">[</span>j<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">+</span><span style="color:#d2cd86; ">=</span> previous_row<span style="color:#d2cd86; ">[</span>i<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        previous_row <span style="color:#d2cd86; ">=</span> current_row</span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># The total number of states that can produce the current state is the</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># sum of all ways each potential last row could be produced.</span></span>
+<span class="line_wrapper">    num_states <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>previous_row<span style="color:#d2cd86; ">.</span>values<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> num_states</span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> find_potentials<span style="color:#d2cd86; ">(</span>g_ints<span style="color:#d2cd86; ">,</span> m<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; ">"""Find all row pairs that can step into a row in the current boolean array</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Parameters</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    ----------</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    g_ints : list</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        A list of integers where each integer represents a row in the boolean</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        array of a latter timestep.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    m : int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        The number of columns in the latter array.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Returns</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    -------</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    potentials : defaultdict(list)</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        A defaultdict containing all combinations of rows that step into a </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        row in g_ints. For a given key of the form (row, i), where row is an</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        integer in g_ints, the value is a list of integers that work with i to</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        step into row.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    """</span></span>
+<span class="line_wrapper">    potentials <span style="color:#d2cd86; ">=</span> defaultdict<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">list</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">2</span><span style="color:#00dddd; ">**</span><span style="color:#d2cd86; ">(</span>m<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> j <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">2</span><span style="color:#00dddd; ">**</span><span style="color:#d2cd86; ">(</span>m<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            s <span style="color:#d2cd86; ">=</span> step_row_int<span style="color:#d2cd86; ">(</span>i<span style="color:#d2cd86; ">,</span>j<span style="color:#d2cd86; ">,</span>m<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> s <span style="color:#e66170; font-weight:bold; ">in</span> g_ints<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                potentials<span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">(</span>s<span style="color:#d2cd86; ">,</span>i<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span>j<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> potentials</span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> step_row_int<span style="color:#d2cd86; ">(</span>r1<span style="color:#d2cd86; ">,</span> r2<span style="color:#d2cd86; ">,</span> n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; ">"""</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Imagine the two boolean rows:</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    [</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">      [r1c1,r1c2,r1c3,...,r1cn,r1cn+1],</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">      [r2c1,r2c2,r2c3,...,r2cn,r2cn+1]</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    ]</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    r1 is the int rep of [r1c1,r1c2,r1c3,...,r1cn,r1cn+1],</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    r2 is the int rep of [r2c1,r2c2,r2c3,...,r2cn,r2cn+1],</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    a  is the int rep of [r1c1,r1c2,r1c3,...,r1cn],</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    b  is the int rep of      [r1c2,r1c3,...,r1cn,r1cn+1],</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    c is the int rep of [r2c1,r2c2,r2c3,...,r2cn],</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    d is the int rep of      [r2c2,r2c3,...,r2cn,r2cn+1],</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Parameters</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    ----------</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    r1 : int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Integer representation of a row of booleans.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    r2 : int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Integer representation of the next row of booleans.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    n : int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        The number of elements in the row after the step.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Returns</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    -------</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Integer representation of the boolean row after a time step.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    """</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># [[a,b],[c,d]]</span></span>
+<span class="line_wrapper">    b<span style="color:#d2cd86; ">,</span> d<span style="color:#d2cd86; ">,</span> a<span style="color:#d2cd86; ">,</span> c <span style="color:#d2cd86; ">=</span> r1 <span style="color:#00dddd; ">&amp;</span> <span style="color:#00dddd; ">~</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">1</span> <span style="color:#00dddd; ">&lt;&lt;</span> n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> r2 <span style="color:#00dddd; ">&amp;</span> <span style="color:#00dddd; ">~</span><span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">1</span> <span style="color:#00dddd; ">&lt;&lt;</span> n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> r1 <span style="color:#00dddd; ">&gt;&gt;</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">,</span> r2 <span style="color:#00dddd; ">&gt;&gt;</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">    na<span style="color:#d2cd86; ">,</span> nb<span style="color:#d2cd86; ">,</span> nc<span style="color:#d2cd86; ">,</span> nd <span style="color:#d2cd86; ">=</span> <span style="color:#00dddd; ">~</span>a<span style="color:#d2cd86; ">,</span> <span style="color:#00dddd; ">~</span>b<span style="color:#d2cd86; ">,</span> <span style="color:#00dddd; ">~</span>c<span style="color:#d2cd86; ">,</span> <span style="color:#00dddd; ">~</span>d</span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#d2cd86; ">(</span>a<span style="color:#00dddd; ">&amp;</span>nb<span style="color:#00dddd; ">&amp;</span>nc<span style="color:#00dddd; ">&amp;</span>nd<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">|</span> <span style="color:#d2cd86; ">(</span>na<span style="color:#00dddd; ">&amp;</span>b<span style="color:#00dddd; ">&amp;</span>nc<span style="color:#00dddd; ">&amp;</span>nd<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">|</span> <span style="color:#d2cd86; ">(</span>na<span style="color:#00dddd; ">&amp;</span>nb<span style="color:#00dddd; ">&amp;</span>c<span style="color:#00dddd; ">&amp;</span>nd<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">|</span> <span style="color:#d2cd86; ">(</span>na<span style="color:#00dddd; ">&amp;</span>nb<span style="color:#00dddd; ">&amp;</span>nc<span style="color:#00dddd; ">&amp;</span>d<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> bool_list2int<span style="color:#d2cd86; ">(</span>bool_list<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Convert list of bools to an integer (inverse of int2bool_list)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span><span style="color:#00c4c4; ">""</span><span style="color:#d2cd86; ">.</span>join<span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">lambda</span> b <span style="color:#d2cd86; ">:</span> <span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span>b<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span>bool_list<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span><span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> int2bool_list<span style="color:#d2cd86; ">(</span>k<span style="color:#d2cd86; ">,</span> n <span style="color:#d2cd86; ">=</span> None<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Convert an integer to a list of bools (inverse of bool_list2int)</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># n is the desired list length</span></span>
+<span class="line_wrapper">    bl <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">list</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">map</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">lambda</span> b <span style="color:#d2cd86; ">:</span> <span style="color:#e66170; font-weight:bold; ">bool</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">int</span><span style="color:#d2cd86; ">(</span>b<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span>format<span style="color:#d2cd86; ">(</span>k<span style="color:#d2cd86; ">,</span><span style="color:#00c4c4; ">"b"</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">if</span> n <span style="color:#e66170; font-weight:bold; ">is</span> <span style="color:#e66170; font-weight:bold; ">not</span> None<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        bl <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">(</span>n<span style="color:#00dddd; ">-</span><span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>bl<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">*</span><span style="color:#d2cd86; ">[</span>False<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">+</span> bl</span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> bl</span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> transpose<span style="color:#d2cd86; ">(</span>arr<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Transpose a 2D list (list of lists of the same length)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#d2cd86; ">[</span><span style="color:#e66170; font-weight:bold; ">list</span><span style="color:#d2cd86; ">(</span>x<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> x <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">zip</span><span style="color:#d2cd86; ">(</span><span style="color:#00dddd; ">*</span>arr<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> step<span style="color:#d2cd86; ">(</span>s<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Given a state s, returns the next state g</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># This function is for checking, rather than part of the solution</span></span>
+<span class="line_wrapper">    m <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>s<span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">-</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">    n <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>s<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">-</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">    ints <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>bool_list2int<span style="color:#d2cd86; ">(</span>bl<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> bl <span style="color:#e66170; font-weight:bold; ">in</span> s<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    ints2 <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>step_row_int<span style="color:#d2cd86; ">(</span>ints<span style="color:#d2cd86; ">[</span>i<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">,</span>ints<span style="color:#d2cd86; ">[</span>i<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">,</span> m<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#d2cd86; ">[</span>int2bool_list<span style="color:#d2cd86; ">(</span>k<span style="color:#d2cd86; ">,</span> m<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> k <span style="color:#e66170; font-weight:bold; ">in</span> ints2<span style="color:#d2cd86; ">]</span></span></pre>
           </section>
         </section>
       </article>
