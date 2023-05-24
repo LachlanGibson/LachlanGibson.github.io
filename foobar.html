@@ -1228,6 +1228,21 @@
               Input : solution(2, 1)<br />
               Output: [[0], [0]]
             </div>
+            <p>
+              We know that no combination of num_required - 1 bunnies will
+              collectively have all the required keys, they must be missing at
+              least one key for a required lock. However, including any other
+              additional bunny will complete the set of keys. Therefore, for
+              every combination of num_required - 1 bunnies, every other bunny
+              holds the missing keys. Therefore, we can minimally issue keys by
+              assigning a set of keys for each lock to a unique combination of
+              num_buns - num_required + 1. In this way, every possible
+              combination of num_required will hold all required keys, and every
+              possible combination of num_required - 1 will not. We know this
+              minimises the total number of keys because removing any key will
+              result in a combination of bunnies that cannot open that lock,
+              regardless of how the keys are assigned.
+            </p>
             <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">from</span> itertools <span style="color:#e66170; font-weight:bold; ">import</span> combinations</span>
 <span class="line_wrapper"></span>
 <span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>num_buns<span style="color:#d2cd86; ">,</span> num_required<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
