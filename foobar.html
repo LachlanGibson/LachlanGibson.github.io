@@ -1299,6 +1299,36 @@
               Output: 19
             </div>
             <p>
+              In my first attempt to solve this problem I used the Fourier
+              series to derive an approximate solution, and then guess and
+              checked to "hack" the verification process to tweak the result to
+              pass the checks. The fractional part of a number \(x\), the
+              difference between the number and its floor, forms a
+              <a
+                href="https://en.wikipedia.org/wiki/Sawtooth_wave"
+                target="_blank"
+                >sawtooth function</a
+              >
+              with a known
+              <a
+                href="https://en.wikipedia.org/wiki/Fourier_series"
+                target="_blank"
+                >Fourier series</a
+              >, \[\lbrace x\rbrace = x - \lfloor x \rfloor = {1 \over 2} - {1
+              \over \pi} \sum_{k=1}^\infty{\sin(2\pi k x) \over k}.\] Therefore,
+              we can express the function \(f(n)\) as an infinite series,
+              $$\begin{aligned} f(n) &= \sum_{i=1}^n \lfloor i \sqrt{2} \rfloor,
+              \\ &= \sum_{i=1}^n \left[ i \sqrt{2} -{1 \over 2} + {1 \over \pi}
+              \sum_{k=1}^\infty{\sin(2\pi k i \sqrt{2}) \over k} \right], \\ &=
+              {n(n+1)\over \sqrt{2}} -{n \over 2} + {1 \over \pi}
+              \sum_{k=1}^\infty {\sin\left(\sqrt{2}\pi k n\right)
+              \sin\left(\sqrt{2}\pi k (n+1)\right)\over k \sin\left(\sqrt{2}\pi
+              k\right)}. \end{aligned}$$ The problem with this approach is that
+              the infinite series sometimes converged very slowly, requiring too
+              many terms to stabilise. Furthermore, passing the checks via guess
+              and check did not leave me with a satisfying ending to an
+              otherwise rewarding challenge. Therefore, I continued working on
+              the problem, and during some research I discovered a breakthrough.
               The key insight into solving this problem is to identify the
               summand as a
               <a
