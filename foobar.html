@@ -1614,6 +1614,163 @@
 <span class="line_wrapper">    ints2 <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span>step_row_int<span style="color:#d2cd86; ">(</span>ints<span style="color:#d2cd86; ">[</span>i<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">,</span>ints<span style="color:#d2cd86; ">[</span>i<span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">,</span> m<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span></span>
 <span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#d2cd86; ">[</span>int2bool_list<span style="color:#d2cd86; ">(</span>k<span style="color:#d2cd86; ">,</span> m<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> k <span style="color:#e66170; font-weight:bold; ">in</span> ints2<span style="color:#d2cd86; ">]</span></span></pre>
           </section>
+          <section class="foobar-task" id="sec-task-11">
+            <div class="foobar-task-description">
+              Disorderly Escape<br />
+              =================<br />
+              Write a function solution(w, h, s) that takes 3 integers and
+              returns the number of unique, non-equivalent configurations that
+              can be found on a star grid w blocks wide and h blocks tall where
+              each celestial body has s possible states. Equivalency is defined
+              as above: any two star grids with each celestial body in the same
+              state where the actual order of the rows and columns do not matter
+              (and can thus be freely swapped around). Star grid standardization
+              means that the width and height of the grid will always be between
+              1 and 12, inclusive. And while there are a variety of celestial
+              bodies in each grid, the number of states of those bodies is
+              between 2 and 20, inclusive. The solution can be over 20 digits
+              long, so return it as a decimal string. The intermediate values
+              can also be large, so you will likely need to use at least 64-bit
+              integers.<br />
+              <br />
+              For example, consider w=2, h=2, s=2. We have a 2x2 grid where each
+              celestial body is either in state 0 (for instance, silent) or
+              state 1 (for instance, noisy). We can examine which grids are
+              equivalent by swapping rows and columns.<br />
+              <br />
+              00<br />
+              00<br />
+              <br />
+              In the above configuration, all celestial bodies are "silent" -
+              that is, they have a state of 0 - so any swap of row or column
+              would keep it in the same state.<br />
+              <br />
+              00 00 01 10<br />
+              01 10 00 00<br />
+              <br />
+              1 celestial body is emitting noise - that is, has a state of 1 -
+              so swapping rows and columns can put it in any of the 4 positions.
+              All four of the above configurations are equivalent.<br />
+              <br />
+              00 11<br />
+              11 00<br />
+              <br />
+              2 celestial bodies are emitting noise side-by-side. Swapping
+              columns leaves them unchanged, and swapping rows simply moves them
+              between the top and bottom. In both, the *groupings* are the same:
+              one row with two bodies in state 0, one row with two bodies in
+              state 1, and two columns with one of each state.<br />
+              <br />
+              01 10<br />
+              01 10<br />
+              <br />
+              2 noisy celestial bodies adjacent vertically. This is symmetric to
+              the side-by-side case, but it is different because there's no way
+              to transpose the grid.<br />
+              <br />
+              01 10<br />
+              10 01<br />
+              <br />
+              2 noisy celestial bodies diagonally. Both have 2 rows and 2
+              columns that have one of each state, so they are equivalent to
+              each other.<br />
+              <br />
+              01 10 11 11<br />
+              11 11 01 10<br />
+              <br />
+              3 noisy celestial bodies, similar to the case where only one of
+              four is noisy.<br />
+              <br />
+              11<br />
+              11<br />
+              <br />
+              4 noisy celestial bodies.<br />
+              <br />
+              There are 7 distinct, non-equivalent grids in total, so
+              solution(2, 2, 2) would return 7.<br />
+              <br />
+              -- Test cases --<br />
+              Input: solution(2, 3, 4)<br />
+              Output: 430<br />
+              <br />
+              Input: solution(2, 2, 2)<br />
+              Output: 7
+            </div>
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">from</span> math <span style="color:#e66170; font-weight:bold; ">import</span> factorial</span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">from</span> collections <span style="color:#e66170; font-weight:bold; ">import</span> Counter</span>
+<span class="line_wrapper"></span>
+<span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>w<span style="color:#d2cd86; ">,</span> h<span style="color:#d2cd86; ">,</span> s<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; ">"""Returns the number of unique, non-equivalent configurations</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    The number of unique, non-equivalent configurationsthat can be found on a</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    grid w blocks wide and h blocks tall where each point has s possible</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    states. Equivalency is defined as above: any two grids with each point in</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    the same state where the actual order of the rows and columns do not matter</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    (and can thus be freely swapped around).</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    The symmetries of grids form a group. Specifically, the direct product of</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    two finite symmetric groups Sw x Sh. This is because grids are symmetric</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    under row permutations and column permutations independently. A symmetric</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    group of degree n has an order of n!, so the order of Sw x Sh is w!h!.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    The number of configurations is equivalent to the number of orbits in the</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    group Sw x Sh. This can be computed using Burnside's counting theorem.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    = 1/w!h! * sum(s^(number of cycles in g)) for every g in Sw x Sh.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Therefore, the computation can be accellerated by combining the number of </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    permutations that share the same cycles.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Parameters</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    ----------</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    w : int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Grid width, [1,12].</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    h : int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Grid height, [1,12].</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    s : int</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Number of allowed states, [2,20].</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Returns</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    -------</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    config : str</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">        Number of unique, non-equivalent configurations as a decimal string.</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    """</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> gcd<span style="color:#d2cd86; ">(</span>a<span style="color:#d2cd86; ">,</span> b<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># Euclidean algorithm finds the greatest common divisor of +ints a &amp; b</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">while</span> b <span style="color:#00dddd; ">!=</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            a<span style="color:#d2cd86; ">,</span> b <span style="color:#d2cd86; ">=</span> b<span style="color:#d2cd86; ">,</span> a <span style="color:#00dddd; ">%</span> b</span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> a</span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> generate_cycle_lengths<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">,</span> m<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># returns a list of lists containing all combinations of cycle lengths</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># in descending order that add to n without exceeding m.</span></span>
+<span class="line_wrapper">        h <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">min</span><span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">,</span> m<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> h <span style="color:#00dddd; ">&lt;=</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        combinations <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> l <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>h<span style="color:#d2cd86; ">,</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">,</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">for</span> c <span style="color:#e66170; font-weight:bold; ">in</span> generate_cycle_lengths<span style="color:#d2cd86; ">(</span>n<span style="color:#00dddd; ">-</span>l<span style="color:#d2cd86; ">,</span> l<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                combinations<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span>l<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">+</span> c<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> combinations</span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> num_perms<span style="color:#d2cd86; ">(</span>cycle_counter<span style="color:#d2cd86; ">,</span> n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># Number of permutations that contain the cycles in cycle_counter</span></span>
+<span class="line_wrapper">        num <span style="color:#d2cd86; ">=</span> factorial<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> length<span style="color:#d2cd86; ">,</span> ammount <span style="color:#e66170; font-weight:bold; ">in</span> cycle_counter<span style="color:#d2cd86; ">.</span>items<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            num <span style="color:#d2cd86; ">=</span> num<span style="color:#00dddd; ">//</span><span style="color:#d2cd86; ">(</span>length<span style="color:#00dddd; ">**</span>ammount<span style="color:#00dddd; ">*</span>factorial<span style="color:#d2cd86; ">(</span>ammount<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> num</span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    config <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">0</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> w_combs <span style="color:#e66170; font-weight:bold; ">in</span> generate_cycle_lengths<span style="color:#d2cd86; ">(</span>w<span style="color:#d2cd86; ">,</span>w<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        w_num <span style="color:#d2cd86; ">=</span> num_perms<span style="color:#d2cd86; ">(</span>Counter<span style="color:#d2cd86; ">(</span>w_combs<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> w<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> h_combs <span style="color:#e66170; font-weight:bold; ">in</span> generate_cycle_lengths<span style="color:#d2cd86; ">(</span>h<span style="color:#d2cd86; ">,</span>h<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            h_num <span style="color:#d2cd86; ">=</span> num_perms<span style="color:#d2cd86; ">(</span>Counter<span style="color:#d2cd86; ">(</span>h_combs<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">,</span> h<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            num_cycles <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>gcd<span style="color:#d2cd86; ">(</span>a<span style="color:#d2cd86; ">,</span>b<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> a <span style="color:#e66170; font-weight:bold; ">in</span> h_combs<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> b <span style="color:#e66170; font-weight:bold; ">in</span> w_combs<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            config <span style="color:#00dddd; ">+</span><span style="color:#d2cd86; ">=</span> w_num<span style="color:#00dddd; ">*</span>h_num<span style="color:#00dddd; ">*</span>s<span style="color:#00dddd; ">**</span>num_cycles</span>
+<span class="line_wrapper">    config <span style="color:#d2cd86; ">=</span> config<span style="color:#00dddd; ">//</span><span style="color:#d2cd86; ">(</span>factorial<span style="color:#d2cd86; ">(</span>w<span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">*</span>factorial<span style="color:#d2cd86; ">(</span>h<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span>config<span style="color:#d2cd86; ">)</span></span></pre>
+          </section>
         </section>
       </article>
     </main>
