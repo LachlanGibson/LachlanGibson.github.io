@@ -125,6 +125,87 @@ p {
   width: 100%;
 }
 
+.grid-table {
+  margin: 0 auto;
+}
+
+.grid-table td {
+  text-align: center;
+  vertical-align: middle;
+  width: 2rem;
+}
+.grid-table a {
+  color: inherit;
+}
+.grid-table .s6 {
+  border-bottom: 0.1rem solid white;
+  background-color: #ff9900;
+}
+.grid-table .s12 {
+  font-weight: bold;
+}
+.grid-table .s10 {
+  border-right: 0.1rem solid white;
+  background-color: #00ff00;
+}
+
+.grid-table .s14 {
+  border-bottom: 0.1rem solid white;
+  border-right: 0.1rem solid white;
+  background-color: #ff9900;
+}
+.grid-table .s7 {
+  background-color: #00ff00;
+}
+.grid-table .s1 {
+  border-right: 0.1rem solid white;
+}
+.grid-table .s9 {
+  background-color: #ff9900;
+}
+.grid-table .s8 {
+  border-right: 0.1rem solid white;
+  background-color: #ff0000;
+}
+.grid-table .s4 {
+  background-color: #ff0000;
+}
+.grid-table .s3 {
+  border-bottom: 0.1rem solid white;
+  border-right: 0.1rem solid white;
+}
+.grid-table .s13 {
+  border-bottom: 0.1rem solid white;
+  background-color: #ff9900;
+}
+.grid-table .s2 {
+  border-bottom: 0.1rem solid white;
+}
+.grid-table .s11 {
+  background-color: #ff9900;
+}
+.grid-table .s5 {
+  border-bottom: 0.1rem solid white;
+  border-right: 0.1rem solid white;
+  background-color: #ff9900;
+}
+.grid-table tr {
+  height: 2rem;
+}
+
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+figcaption {
+  max-width: 50rem;
+  margin: 0.5rem auto;
+  text-align: justify;
+  font-style: italic;
+  padding: 0;
+}
+
 @media only screen and (max-width: 600px) {
   .table-of-contents a {
     font-size: 1rem;

@@ -67,7 +67,7 @@
             font-weight: lighter;
             margin: 0;
           "
-          >This article is a work in progress. Last updated 20/05/2023.</span
+          >This article is a work in progress. Last updated 24/05/2023.</span
         >
         <p>
           Recently I completed Google's
@@ -814,12 +814,13 @@
               elite trainer, given the maximum distance that the beam can
               travel.<br />
               <br />
-              The room has integer dimensions [1 < x_dim <= 1250, 1 < y_dim <=
-              1250]. You and the elite trainer are both positioned on the
-              integer lattice at different distinct positions (x, y) inside the
-              room such that [0 < x < x_dim, 0 < y < y_dim]. Finally, the
-              maximum distance that the beam can travel before becoming harmless
-              will be given as an integer 1 < distance <= 10000.<br />
+              The room has integer dimensions [1 &lt; x_dim &lt;= 1250, 1 &lt;
+              y_dim &lt;= 1250]. You and the elite trainer are both positioned
+              on the integer lattice at different distinct positions (x, y)
+              inside the room such that [0 &lt; x &lt; x_dim, 0 &lt; y &lt;
+              y_dim]. Finally, the maximum distance that the beam can travel
+              before becoming harmless will be given as an integer 1 &lt;
+              distance &lt;= 10000.<br />
               <br />
               For example, if you and the elite trainer were positioned in a
               room with dimensions [3, 2], your_position [1, 1],
@@ -841,6 +842,261 @@
               Input : solution([300,275], [150,150], [185,100], 500)<br />
               Output: 9
             </div>
+            <p>
+              The key insight which helped me solve this problem was to view
+              reflections as additional rooms (but mirrored). Therefore, the
+              reflections form an infinite grid of repeated mirror copies of the
+              room. This concept is illustrated below using the example in the
+              task description. Therefore, I solved this problem by following
+              these steps. Firstly, I generated all coordinates corresponding to
+              all positions (both yours and the targets, both real and
+              reflected) in a square shape with side length larger than the
+              allowed distance. Then I filtered these coordinates to only allow
+              points within the allowed distance to you. From these coordinates,
+              I identified a set of directions, which were the vectors from you
+              to the coordinate, scaled by the greatest common divisor of both
+              dimensions. For each direction the shortest distance was saved.
+              Next I removed any directions to hit the target that would hit
+              yourself first (directions that appear in both sets in which the
+              distance to hit yourself was shorter.) The final result is the
+              size of the set of directions to hit the target.
+              <figure>
+                <table class="grid-table" cellspacing="0" cellpadding="0">
+                  <tbody>
+                    <tr>
+                      <td>7</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s0">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s0">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s0">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s4">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s0">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                      <td class="s5">—</td>
+                      <td class="s6">+</td>
+                      <td class="s6">—</td>
+                      <td class="s5">—</td>
+                      <td class="s6">+</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s7">T</td>
+                      <td class="s8">Y</td>
+                      <td class="s9">|</td>
+                      <td class="s4">Y</td>
+                      <td class="s10">T</td>
+                      <td class="s9">|</td>
+                      <td class="s7">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s6">—</td>
+                      <td class="s5">—</td>
+                      <td class="s6">+</td>
+                      <td class="s6">—</td>
+                      <td class="s5">—</td>
+                      <td class="s6">+</td>
+                      <td class="s6">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s9">|</td>
+                      <td class="s4">T</td>
+                      <td class="s8">Y</td>
+                      <td class="s11">|</td>
+                      <td class="s12">Y</td>
+                      <td class="s10">T</td>
+                      <td class="s9">|</td>
+                      <td class="s9">T</td>
+                      <td class="s8">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                    </tr>
+                    <tr>
+                      <td>0</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s6">—</td>
+                      <td class="s5">—</td>
+                      <td class="s13">+</td>
+                      <td class="s13">—</td>
+                      <td class="s14">—</td>
+                      <td class="s6">+</td>
+                      <td class="s6">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                    </tr>
+                    <tr>
+                      <td>-1</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s7">T</td>
+                      <td class="s8">Y</td>
+                      <td class="s9">|</td>
+                      <td class="s4">Y</td>
+                      <td class="s10">T</td>
+                      <td class="s9">|</td>
+                      <td class="s7">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                    </tr>
+                    <tr>
+                      <td class="table-y-axis">-2</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                      <td class="s5">—</td>
+                      <td class="s6">+</td>
+                      <td class="s6">—</td>
+                      <td class="s5">—</td>
+                      <td class="s6">+</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                    </tr>
+                    <tr>
+                      <td class="table-y-axis">-3</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s0">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s4">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s0">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                    </tr>
+                    <tr>
+                      <td class="table-y-axis">-4</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                      <td class="s3">—</td>
+                      <td class="s2">+</td>
+                      <td class="s2">—</td>
+                    </tr>
+                    <tr>
+                      <td class="table-y-axis">-5</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s0">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                      <td class="s1">T</td>
+                      <td class="s0">|</td>
+                      <td class="s0">T</td>
+                      <td class="s1">Y</td>
+                      <td class="s0">|</td>
+                      <td class="s0">Y</td>
+                    </tr>
+                    <tr>
+                      <td class="table-bottom-left"></td>
+                      <td class="table-x-axis">-5</td>
+                      <td class="table-x-axis">-4</td>
+                      <td class="table-x-axis">-3</td>
+                      <td class="table-x-axis">-2</td>
+                      <td class="table-x-axis">-1</td>
+                      <td class="table-x-axis">0</td>
+                      <td class="table-x-axis">1</td>
+                      <td class="table-x-axis">2</td>
+                      <td class="table-x-axis">3</td>
+                      <td class="table-x-axis">4</td>
+                      <td class="table-x-axis">5</td>
+                      <td class="table-x-axis">6</td>
+                      <td class="table-x-axis">7</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <figcaption>
+                  Illustrated example from the task description. The shaded
+                  region represents cells in range of you. Cells shaded in green
+                  denote the directions which would hit the target.
+                </figcaption>
+              </figure>
+            </p>
+
             <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>dimensions<span style="color:#d2cd86; ">,</span> your_position<span style="color:#d2cd86; ">,</span> trainer_position<span style="color:#d2cd86; ">,</span> distance<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> norm<span style="color:#d2cd86; ">(</span>v<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">        <span style="color:#9999a9; "># Euclidean norm</span></span>
