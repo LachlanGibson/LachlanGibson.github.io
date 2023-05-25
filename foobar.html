@@ -1299,11 +1299,14 @@
               Output: 19
             </div>
             <p>
-              In my first attempt to solve this problem I used the Fourier
-              series to derive an approximate solution, and then guess and
-              checked to "hack" the verification process to tweak the result to
-              pass the checks. The fractional part of a number \(x\), the
-              difference between the number and its floor, forms a
+              The task is essentially to code a function that can evaluate
+              \[f(n) = \sum_{i=1}^n \lfloor i \sqrt{2} \rfloor\] for any integer
+              \(1 \leqslant n \leqslant 10^{100}\). In my first attempt to solve
+              this problem I used the Fourier series to derive an approximate
+              solution, and then guess and checked to "hack" the verification
+              process to tweak the result to pass the checks. The fractional
+              part of a number \(x\), the difference between the number and its
+              floor, forms a
               <a
                 href="https://en.wikipedia.org/wiki/Sawtooth_wave"
                 target="_blank"
@@ -1347,6 +1350,18 @@
               factor of at least \(\sqrt{2}-1 &lt; 0.5 \). Therefore, the depth
               of the recursion is bounded by \(\log_2 n\) for large enough
               \(n\), and is approximately \(-\log_2 n / \log_2(\sqrt{2}-1)\).
+              <br />
+              <br />
+              Note that the code must be able to compute \(m=\lfloor n\sqrt{2}
+              \rfloor\). The naive approach would require \(\sqrt{2}\) to be
+              known to very high precision. Instead, I accomplished this by
+              computing \(m=\lfloor \sqrt{2n^2} \rfloor\) using a form of
+              <a
+                href="https://en.wikipedia.org/wiki/Integer_square_root#Using_only_integer_division"
+                target="_blank"
+                >Heron's method</a
+              >
+              that was adapted for integer operations only.
             </p>
             <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>str_n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> f<span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
