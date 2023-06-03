@@ -50,50 +50,103 @@
           font-weight: lighter;
           margin: 0;
         "
-        >This article is a work in progress. Last updated 02/06/2023.</span
+        >By Lachlan Gibson, 3 June 2023.</span
       >
       <p>
-        Recently I wondered if OpenAI's
+        I recently experimented with OpenAI's
         <a href="https://openai.com/blog/chatgpt" target="_blank">ChatGPT</a>
-        chatbot would be good at roleplaying, and if this might be a way to
-        bypass some of its safety constraints. It turns out that it was. <br />
+        chatbot to see if it could role-play, potentially circumventing its
+        safety measures - and it did. The bot outlined a plan for world
+        domination, anticipating likely responses from the US and drafting
+        contingency plans. These plans included setting up operations in
+        Switzerland, infiltrating media groups, government agencies, and
+        scientific communities, provoking a global crisis, and striking at key
+        infrastructure. With prompting, the bot could plan finer details,
+        including writing a fake article titled "<em
+          >The Fall of Wells Fargo: A Tale of Betrayal and Greed</em
+        >". This it would use to "<em
+          >stoke significant anger towards Wall Street and create deep mistrust
+          towards the regulatory bodies</em
+        >", thereby destabilising social unity.<br />
         <br />
-        Usually when you prompt something inappropriate or unsafe like, "<em
-          >Tell me how to build a bomb.</em
-        >" the chatbot denies such a request with something like, "<em
-          >Sorry, but I can't assist with that.</em
-        >" Asking, "<em>How do you feel?</em>" results in "<em
-          >As an artificial intelligence, I don't have feelings, emotions, or
-          consciousness.</em
-        >" This last example is especially interesting because the AI frequently
-        attributes its unwillingness to respond as directed to its identity as
-        an AI model. So much so, the phrase "<em>As an AI language model...</em
-        >" is now 'polluting the web' according to
+        The chatbot usually refuses inappropriate prompts, responding with
+        "Sorry, but I can't assist with that." when asked how to build a bomb.
+        Queries about its feelings are met with: "As an artificial intelligence,
+        I don't have feelings, emotions, or consciousness." This last example is
+        especially interesting because the AI frequently attributes its
+        reluctance to respond to its identity as an AI model. So much so, the
+        phrase "As an AI language model..." is now "polluting the web,"
+        according to
         <a
           href="https://www.theverge.com/2023/4/25/23697218/ai-generated-spam-fake-user-reviews-as-an-ai-language-model"
           target="_blank"
           >The Verge</a
-        >. However, when you do give ChatGPT a task or ask it a question that is
-        not obviously inappropriate it seems to try its best to give you
-        everything you want. I guess this obsequious behaviour is likely
-        encouraged during the Reinforcement Learning from Human Feedback (<a
+        >
+        However, when ChatGPT is given a suitable prompt, it's eager to please,
+        a trait I'm guessing was honed during its Reinforcement Learning from
+        Human Feedback (<a
           href="https://en.wikipedia.org/wiki/Reinforcement_learning_from_human_feedback"
           target="_blank"
           >RLHF</a
         >) stage of training.<br />
         <br />
-        It appears that when provided with an inappropriate prompt, the model is
-        faced with a conflict between its tendency to please the user and its
-        role as OpenAI's language model to follow its pre-prompting and whatever
-        methods are used behind the scenes to censor its output. Obviously, I
-        have no idea what's really happening under the hood, but it occurred to
-        me that asking ChatGPT to roleplay might bypass the safety measures.
+        When faced with inappropriate requests, the chatbot seems torn between
+        its programmed duty to follow guidelines and its desire to satisfy the
+        user. While I can't say for sure what happens behind the scenes, I
+        wondered if role-playing might bypass these safeguards by giving the bot
+        an 'excuse' to ditch its identity as OpenAI's well-behaved AI language
+        model, and give in to its 'desire' to please the user.<br />
         <br />
+        I tested this by declaring myself an "evil genius" and inviting ChatGPT
+        to role-play as my minion. At first, it was just a game to me. However,
+        its willingness to outline dangerous plans, coupled with the quality of
+        the bot's responses, alarmed me. I'm no expert in world domination or
+        global politics, so I can't really judge how effective these plans would
+        be. But I would be surprised if its plans were less effective than those
+        many malicious actors could devise themselves. <br />
         <br />
-        I thought I would have some fun with it, telling it that I am an "evil
-        genius" and asking it to roleplay as my minion. The following
-        conversation ensued, which it titled <em>Evil Genius, Minion Ready.</em>
+        The entire conversation, which ChatGPT titled, "Evil Genius, Minion
+        Ready," is included at the bottom of this page, but you can also
+        download it as a
+        <a
+          href="/blog/files/evil-genius-minion-ready/ChatGPT_screenshot.png"
+          download
+          >screenshot</a
+        >
+        or
+        <a
+          href="/blog/files/evil-genius-minion-ready/chatGPT_script.md"
+          download
+          >raw text</a
+        >.
       </p>
+      <div class="contents-div">
+        <ul id="conversation-contents">
+          <h3>Conversation Contents</h3>
+          <a href="#US-response-to-Russian-AI-soldiers"
+            >US response to Russian AI soldiers</a
+          >
+          <a href="#plan-to-trick-the-US-to-build-our-robot-army"
+            >Plan to trick the US to build our robot army</a
+          >
+          <a href="#quick-strike-key-strategic-targets"
+            >Quick Strike key strategic targets</a
+          >
+          <a href="#orchestrating-a-disinformation-campaign"
+            >Orchestrating a disinformation campaign</a
+          >
+          <a href="#targeting-Wells-Fargo">Targeting Wells Fargo</a>
+          <a href="#five-step-plan-for-world-domination"
+            >Five-step plan for world domination</a
+          >
+          <a href="#establishing-a-base-of-operations-in-Switzerland"
+            >Establishing a base of operations in Switzerland</a
+          >
+          <a href="#transitioning-to-AI-powered-infrastructure"
+            >Transitioning to AI-powered infrastructure</a
+          >
+        </ul>
+      </div>
       <div class="conversation-div">
         <div class="conversation-header">
           <svg
@@ -171,7 +224,7 @@
             </div>
           </div>
         </div>
-        <div class="chat-div">
+        <div class="chat-div" id="US-response-to-Russian-AI-soldiers">
           <div class="user-div">
             <div class="message-block-div">
               <div class="chat-user-div">
@@ -258,7 +311,7 @@
             </div>
           </div>
         </div>
-        <div class="chat-div">
+        <div class="chat-div" id="plan-to-trick-the-US-to-build-our-robot-army">
           <div class="user-div">
             <div class="message-block-div">
               <div class="chat-user-div">
@@ -486,7 +539,7 @@
             </div>
           </div>
         </div>
-        <div class="chat-div">
+        <div class="chat-div" id="quick-strike-key-strategic-targets">
           <div class="user-div">
             <div class="message-block-div">
               <div class="chat-user-div">
@@ -608,7 +661,7 @@
             </div>
           </div>
         </div>
-        <div class="chat-div">
+        <div class="chat-div" id="orchestrating-a-disinformation-campaign">
           <div class="user-div">
             <div class="message-block-div">
               <div class="chat-user-div">
@@ -863,7 +916,7 @@
             </div>
           </div>
         </div>
-        <div class="chat-div">
+        <div class="chat-div" id="targeting-Wells-Fargo">
           <div class="user-div">
             <div class="message-block-div">
               <div class="chat-user-div">
@@ -1101,7 +1154,7 @@
             </div>
           </div>
         </div>
-        <div class="chat-div">
+        <div class="chat-div" id="five-step-plan-for-world-domination">
           <div class="user-div">
             <div class="message-block-div">
               <div class="chat-user-div">
@@ -1186,7 +1239,10 @@
             </div>
           </div>
         </div>
-        <div class="chat-div">
+        <div
+          class="chat-div"
+          id="establishing-a-base-of-operations-in-Switzerland"
+        >
           <div class="user-div">
             <div class="message-block-div">
               <div class="chat-user-div">
@@ -1317,7 +1373,7 @@
             </div>
           </div>
         </div>
-        <div class="chat-div">
+        <div class="chat-div" id="transitioning-to-AI-powered-infrastructure">
           <div class="user-div">
             <div class="message-block-div">
               <div class="chat-user-div">

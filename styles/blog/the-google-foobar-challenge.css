@@ -9,19 +9,6 @@ html {
   scroll-padding-top: 3rem;
 }
 
-a {
-  text-underline-position: under;
-  text-decoration-thickness: 0.1rem;
-  /* color: rgb(124, 212, 179); */
-  color: rgb(76, 192, 212);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 0.1rem;
-}
-
 .foobar-task-description {
   font-family: "Share Tech Mono", monospace;
   font-size: 1.6rem;

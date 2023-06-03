@@ -78,6 +78,38 @@
   margin: 0;
 }
 
+#conversation-contents {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: solid 1px #444;
+  width: fit-content;
+}
+
+#conversation-contents a {
+  padding: 0.5rem 1rem;
+  text-align: center;
+  width: 100%;
+  border-top: solid 1px #444;
+  color: rgb(137, 156, 212);
+}
+
+#conversation-contents a:hover {
+  background-color: #ddd;
+  color: rgb(35, 39, 51);
+}
+
+.contents-div {
+  display: flex;
+  justify-content: center;
+}
+
+#conversation-contents h3 {
+  margin: 1rem;
+  text-align: center;
+}
+
 @media only screen and (max-width: 450px) {
   .message-block-div {
     display: block;
