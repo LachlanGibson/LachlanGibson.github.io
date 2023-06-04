@@ -5,9 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Google's FooBar Challenge</title>
-    <link rel="stylesheet" href="/styles/blog/google-foobar-challenge.css" />
     <link rel="stylesheet" href="/styles/nav.css" />
+    <link rel="stylesheet" href="/styles/blog/blog-post.css" />
+    <link rel="stylesheet" href="/styles/blog/google-foobar-challenge.css" />
     <link rel="icon" href="/images/logo.svg" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -61,6 +71,8 @@
       async
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     ></script>
+
+    <script src="/scripts/blog-post.js" defer></script>
   </head>
 
   <body>
@@ -107,6 +119,22 @@
           "
           >This article is a work in progress. Last updated 24/05/2023.</span
         >
+        <div id="share-buttons">
+          <a class="facebook" target="_blank"
+            ><i class="fab fa-facebook"></i
+          ></a>
+          <a class="twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a class="linkedin" target="_blank"
+            ><i class="fab fa-linkedin"></i
+          ></a>
+          <a class="reddit" target="_blank"><i class="fab fa-reddit"></i></a>
+          <a class="whatsapp" target="_blank"
+            ><i class="fab fa-whatsapp"></i
+          ></a>
+          <a class="telegram" target="_blank"
+            ><i class="fab fa-telegram"></i
+          ></a>
+        </div>
         <p>
           Recently I completed Google's
           <a href="https://foobar.withgoogle.com/" target="_blank">FooBar</a>
