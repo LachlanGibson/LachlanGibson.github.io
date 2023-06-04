@@ -1,0 +1,34 @@
+#share-buttons .facebook {
+  color: #3b5998;
+}
+#share-buttons .twitter {
+  color: #55acee;
+}
+#share-buttons .linkedin {
+  color: #0077b5;
+}
+#share-buttons .reddit {
+  color: #cb2027;
+}
+#share-buttons .whatsapp {
+  color: #25d366;
+}
+#share-buttons .telegram {
+  color: #229ed9;
+}
+#share-buttons .facebook,
+#share-buttons .twitter,
+#share-buttons #share-buttons .linkedin,
+#share-buttons .reddit,
+#share-buttons .whatsapp,
+#share-buttons .telegram {
+  opacity: 0.6;
+}
+#share-buttons .facebook:hover,
+#share-buttons .twitter:hover,
+#share-buttons .linkedin:hover,
+#share-buttons .reddit:hover,
+#share-buttons .whatsapp:hover,
+#share-buttons .telegram:hover {
+  opacity: 0.9;
+}
