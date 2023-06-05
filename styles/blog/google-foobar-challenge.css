@@ -19,11 +19,6 @@ html {
   overflow-x: auto;
 }
 
-p {
-  text-align: justify;
-  overflow-y: hidden;
-}
-
 .table-of-contents {
   position: sticky;
   background-color: rgb(32, 33, 36);

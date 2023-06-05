@@ -1,3 +1,13 @@
+.blog-title-div {
+  text-align: center;
+}
+
+.blog-title-div h1 {
+  font-size: 3.2rem;
+  margin: 1rem;
+  padding: 0;
+}
+
 #share-buttons .facebook {
   color: #3b5998;
 }
@@ -18,11 +28,11 @@
 }
 #share-buttons .facebook,
 #share-buttons .twitter,
-#share-buttons #share-buttons .linkedin,
+#share-buttons .linkedin,
 #share-buttons .reddit,
 #share-buttons .whatsapp,
 #share-buttons .telegram {
-  opacity: 0.6;
+  opacity: 0.4;
 }
 #share-buttons .facebook:hover,
 #share-buttons .twitter:hover,
@@ -31,4 +41,36 @@
 #share-buttons .whatsapp:hover,
 #share-buttons .telegram:hover {
   opacity: 0.9;
+}
+
+#share-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: fit-content;
+  padding: 1.6rem 0 0 0;
+  margin: auto;
+  font-size: 2rem;
+  position: relative;
+}
+
+#share-buttons a {
+  position: relative;
+  padding-left: 1rem;
+  width: 3rem;
+}
+
+#share-buttons a::before {
+  content: "";
+  position: absolute;
+  border-left: solid;
+  width: 1rem;
+  height: 2rem;
+  left: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  p {
+    text-align: start;
+  }
 }

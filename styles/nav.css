@@ -89,6 +89,7 @@ summary,
 
 p {
   text-align: justify;
+  overflow-y: hidden;
 }
 
 header nav {
