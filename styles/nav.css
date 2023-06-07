@@ -46,12 +46,16 @@ ul:not(article ul) {
 menu,
 ol,
 ul {
-  padding-left: 0;
+  padding-left: 0.5em;
 }
 
 article ol,
 article ul {
-  list-style-position: inside;
+  list-style-position: outside;
+  margin-left: 1em;
+}
+li:not(:last-child) {
+  margin-bottom: 0.5em;
 }
 
 a {
@@ -162,6 +166,10 @@ header nav a:hover {
 
 #github-icon {
   filter: brightness(0) invert(1);
+}
+
+footer {
+  padding: 1rem;
 }
 
 @media only screen and (max-width: 400px) {

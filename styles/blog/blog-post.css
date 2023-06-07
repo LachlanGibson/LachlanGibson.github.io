@@ -69,8 +69,15 @@
   left: 0;
 }
 
+li {
+  text-align: justify;
+}
+
 @media only screen and (max-width: 600px) {
   p {
+    text-align: start;
+  }
+  li {
     text-align: start;
   }
 }

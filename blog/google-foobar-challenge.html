@@ -49,7 +49,7 @@
       content="https://www.lachlangibson.dev/"
     />
     <meta property="article:published_time" content="2023-05-24" />
-    <meta property="article:modified_time" content="2023-05-24" />
+    <meta property="article:modified_time" content="2023-06-07" />
     <meta property="article:tag" content="Google" />
     <meta property="article:tag" content="Foobar" />
     <meta property="article:tag" content="Coding Challenge" />
@@ -73,6 +73,7 @@
     ></script>
 
     <script src="/scripts/blog-post.js" defer></script>
+    <script src="/scripts/foobar.js" defer></script>
   </head>
 
   <body>
@@ -118,7 +119,7 @@
               font-weight: lighter;
               margin: 0;
             "
-            >This article is a work in progress. Last updated 24/05/2023.</span
+            >By Lachlan Gibson, 24 May 2023, updated 7 June 2023.</span
           >
           <div id="share-buttons">
             <a class="facebook" target="_blank"
@@ -1454,7 +1455,10 @@
           <p>
             After completing all five levels of the challenge, I found that I
             could still request new tasks. I believe these bonus tasks are
-            alternative or old level 5 tasks.
+            alternative or old level 5 tasks. These extra tasks were titled
+            <a href="#sec-task-10">Expanding Nebula</a>,
+            <a href="#sec-task-11">Disorderly Escape</a> and
+            <a href="#sec-task-12">Escape Pods</a>.
           </p>
           <section class="foobar-task" id="sec-task-10">
             <div class="foobar-task-description">
@@ -1531,6 +1535,48 @@
               True, False, False, True, True, True]])<br />
               Output: 254
             </div>
+            <p>
+              The key to solving this problem is to use bitwise operations to
+              significantly improve computational efficiency. Essentially, lists
+              of booleans can be interpreted as a binary representation of an
+              integer. For example, [True, False, True] would be 101 in binary
+              which is equivalent to 5 in decimal. Bitwise operations allows us
+              to compare two lists in a single operation. My solution works as
+              follows.<br />
+              <br />
+              g is a boolean array (list of lists of bools) that is an outcome
+              of a previous state, s, such that for all rows and cols
+              g[row][col] is True if and only if exactly one of the following is
+              True: s[row][col], s[row+1][col], s[row][col+1], s[row+1][col+1].
+              solution(g) returns the number of unique previous states s that
+              can produce g. It does this efficiently in four steps:
+            </p>
+            <ol>
+              <li>
+                Rows of g and s are represented as the decimal integers that are
+                equal to a binary integer where each digit is given by the
+                column of that row. Representing the rows as integers allows
+                efficient boolean computations using the bitwise operations &,
+                |, &lt;&lt;, &gt;&gt;.
+              </li>
+              <li>
+                Every combination of row pairs of s is simulated to generate a
+                possible row in g. If such a row exists in g, then these
+                potential row pairs are recorded in a dictionary called
+                potentials.
+              </li>
+              <li>
+                For every row in g, all possible values of the corresponding row
+                in g are tracked as well as the number of unique ways to reach
+                that combination, given all the previous rows.
+              </li>
+              <li>
+                The total number of unique states, s, is given by adding up the
+                number of ways the last row of s is possible for each possible
+                value of that last row.
+              </li>
+            </ol>
+
             <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">from</span> collections <span style="color:#e66170; font-weight:bold; ">import</span> defaultdict</span>
 <span class="line_wrapper"></span>
 <span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>g<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
@@ -1781,13 +1827,68 @@
               Input: solution(2, 2, 2)<br />
               Output: 7
             </div>
+            <p>
+              To solve this problem I had to brush-up on my
+              <a
+                href="https://en.wikipedia.org/wiki/Group_theory"
+                target="_blank"
+                >group theory</a
+              >. I found the
+              <a
+                href="https://youtube.com/playlist?list=PL8yHsr3EFj51pjBvvCPipgAT3SYpIiIsJ"
+                target="_blank"
+                >Group Theory</a
+              >
+              course on YouTube by Fields Medalist Professor Richard Borcherds a
+              helpful resource. The symmetries of grids form a group.
+              Specifically, the direct product of two finite
+              <a
+                href="https://en.wikipedia.org/wiki/Symmetric_group"
+                target="_blank"
+                >symmetric groups</a
+              >
+              \(S_w \times S_h\). This is because grids are symmetric under row
+              permutations and column permutations independently. A symmetric
+              group of degree \(n\) has an order of \(n!\), so the order of
+              \(S_w \times S_h\) is \(w!h!\).<br />
+              <br />
+              The number of configurations is equivalent to the number of orbits
+              in the group \(S_w \times S_h\). This can be computed using
+              <a
+                href="https://en.wikipedia.org/wiki/Burnside%27s_lemma"
+                target="_blank"
+                >Burnside's counting theorem</a
+              >. \[N(w,h,s)= {1 \over w!h!} \sum_{g_w\in S_w } \sum_{g_h\in S_h
+              }s^{C(g_w,g_h)}\] where \(C(g_w,g_h)\) is the number of cycles in
+              \(g_h \times g_w\). Many permutations contain the same combination
+              of cycles, so we can group these terms to significantly reduce the
+              size of the sum.<br />
+              <br />
+              For example, the permutation, \(g_w = (2, 1, 4,5,3)\),contains two
+              cycles: one of length 2 and one of length 3. The total length of
+              the permutation is the sum of the cycle lengths, \(5 = 2+3\). Let
+              \(Q_w\) and \(Q_h\) be the sets of unique combinations of cycle
+              lengths in \(S_w\) and \(S_h\) respectively. For example,
+              \[Q_4=\{(4), (3, 1), (2, 2), (2, 1, 1), (1, 1, 1, 1)\},\]
+              \[Q_5=\{(5), (4, 1), (3, 2), (3, 1, 1), (2, 2, 1), (2, 1, 1, 1),
+              (1, 1, 1, 1, 1)\}.\] When combining the row and column
+              permutations, every cycle in the row permutation is paired with
+              every cycle in the column permutation. The number of cycles in the
+              array formed by a pairing, is the greatest common divisor (gcd).
+              Therefore, the total number of configurations is \[N(w,h,s)= {1
+              \over w!h!} \sum_{q_w\in Q_w } \sum_{q_h\in Q_h } {w! \over
+              \prod_{i=1}^w i^{m_i} m_i!} {h! \over \prod_{j=1}^h j^{m_j} m_j!}
+              s^{\sum_{a \in q_w}\sum_{b \in q_h}\gcd(a,b)}\] where \(m_i\) and
+              \(m_j\) are the number of cycles of lengths \(i\) and \(j\) in
+              \(q_w\) and \(q_h\) respectively.
+            </p>
             <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">from</span> math <span style="color:#e66170; font-weight:bold; ">import</span> factorial</span>
 <span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">from</span> collections <span style="color:#e66170; font-weight:bold; ">import</span> Counter</span>
 <span class="line_wrapper"></span>
 <span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>w<span style="color:#d2cd86; ">,</span> h<span style="color:#d2cd86; ">,</span> s<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
 <span class="line_wrapper">    <span style="color:#9999a9; ">"""Returns the number of unique, non-equivalent configurations</span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
-<span class="line_wrapper"><span style="color:#9999a9; ">    The number of unique, non-equivalent configurationsthat can be found on a</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    The number of unique, non-equivalent configurations that can be found on a</span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    grid w blocks wide and h blocks tall where each point has s possible</span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    states. Equivalency is defined as above: any two grids with each point in</span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    the same state where the actual order of the rows and columns do not matter</span></span>
@@ -1803,7 +1904,7 @@
 <span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    = 1/w!h! * sum(s^(number of cycles in g)) for every g in Sw x Sh.</span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
-<span class="line_wrapper"><span style="color:#9999a9; ">    Therefore, the computation can be accellerated by combining the number of </span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Therefore, the computation can be accelerated by combining the number of </span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    permutations that share the same cycles.</span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    </span></span>
 <span class="line_wrapper"><span style="color:#9999a9; ">    Parameters</span></span>
@@ -1856,11 +1957,161 @@
 <span class="line_wrapper">    config <span style="color:#d2cd86; ">=</span> config<span style="color:#00dddd; ">//</span><span style="color:#d2cd86; ">(</span>factorial<span style="color:#d2cd86; ">(</span>w<span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">*</span>factorial<span style="color:#d2cd86; ">(</span>h<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">)</span></span>
 <span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">str</span><span style="color:#d2cd86; ">(</span>config<span style="color:#d2cd86; ">)</span></span></pre>
           </section>
+          <section class="foobar-task" id="sec-task-12">
+            <div class="foobar-task-description">
+              Escape Pods<br />
+              ===========<br />
+              Write a function solution(entrances, exits, path) that takes an
+              array of integers indexing where the entrances are, an array of
+              integers indexing where the exits are, and an array of an array of
+              integers of the corridors, returning the maximum number of bunnies
+              that can get through at each time step as an int. The entrances
+              and exits are disjoint and thus will never overlap. The path
+              element path[A][B] = C describes that the corridor going from A to
+              B can fit C bunnies at each time step. There are at most 50 rooms
+              connected by the corridors and at most 2000000 bunnies that will
+              fit at a time.<br />
+              <br />
+              For example, if you have:<br />
+              entrances = [0, 1]<br />
+              exits = [4, 5]<br />
+              path = [<br />
+              [0, 0, 4, 6, 0, 0], # Room 0: Bunnies<br />
+              [0, 0, 5, 2, 0, 0], # Room 1: Bunnies<br />
+              [0, 0, 0, 0, 4, 4], # Room 2: Intermediate room<br />
+              [0, 0, 0, 0, 6, 6], # Room 3: Intermediate room<br />
+              [0, 0, 0, 0, 0, 0], # Room 4: Escape pods<br />
+              [0, 0, 0, 0, 0, 0], # Room 5: Escape pods<br />
+              ]<br />
+              <br />
+              Then in each time step, the following might happen:<br />
+              0 sends 4/4 bunnies to 2 and 6/6 bunnies to 3<br />
+              1 sends 4/5 bunnies to 2 and 2/2 bunnies to 3<br />
+              2 sends 4/4 bunnies to 4 and 4/4 bunnies to 5<br />
+              3 sends 4/6 bunnies to 4 and 4/6 bunnies to 5<br />
+              <br />
+              So, in total, 16 bunnies could make it to the escape pods at 4 and
+              5 at each time step. (Note that in this example, room 3 could have
+              sent any variation of 8 bunnies to 4 and 5, such as 2/6 and 6/6,
+              but the final solution remains the same.)<br />
+              <br />
+              -- Test cases --<br />
+              Input: solution([0], [3], [[0, 7, 0, 0], [0, 0, 6, 0], [0, 0, 0,
+              8], [9, 0, 0, 0]])<br />
+              Output: 6<br />
+              <br />
+              Input: solution([0, 1], [4, 5], [[0, 0, 4, 6, 0, 0], [0, 0, 5, 2,
+              0, 0], [0, 0, 0, 0, 4, 4], [0, 0, 0, 0, 6, 6], [0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0]])<br />
+              Output: 16<br />
+            </div>
+            <p>
+              My first idea to solve this problem was to use
+              <a
+                href="https://en.wikipedia.org/wiki/Integer_programming"
+                target="_blank"
+                >integer linear programming</a
+              >. However, after some more thought and research I realised the
+              problem could be modelled as a
+              <a
+                href="https://en.wikipedia.org/wiki/Flow_network"
+                target="_blank"
+                >flow network</a
+              >, where the maximum flow can be efficiently computed using the
+              <a
+                href="https://en.wikipedia.org/wiki/Push%E2%80%93relabel_maximum_flow_algorithm"
+                target="_blank"
+                >push-relabel algorithm</a
+              >. I implimented the version taught in the lecture from
+              <a href="https://youtu.be/0hI89H39USg" target="_blank"
+                >A Second Course in Algorithms (Stanford CS261, Winter 2016)</a
+              >
+              found on YouTube.<br />
+              <br />
+            </p>
+            <pre><span class="line_wrapper"><span style="color:#e66170; font-weight:bold; ">def</span> solution<span style="color:#d2cd86; ">(</span>entrances<span style="color:#d2cd86; ">,</span> exits<span style="color:#d2cd86; ">,</span> path<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; ">"""</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    Push-Relabel Algorithm for Maximum Flow</span></span>
+<span class="line_wrapper"><span style="color:#9999a9; ">    """</span></span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Trivial case where there is one entrance and one exit and no other rooms</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">if</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>path<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">==</span> <span style="color:#00a800; ">2</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">min</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>row<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> row <span style="color:#e66170; font-weight:bold; ">in</span> path<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    cap <span style="color:#d2cd86; ">=</span> path</span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> add_super_node<span style="color:#d2cd86; ">(</span>nodes<span style="color:#d2cd86; ">,</span> source<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># add a single source/sink to account for all other sources/sinks</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> row <span style="color:#e66170; font-weight:bold; ">in</span> cap<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            row<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        cap<span style="color:#d2cd86; ">.</span>append<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span> <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span><span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>cap<span style="color:#d2cd86; ">)</span><span style="color:#00dddd; ">+</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> s <span style="color:#e66170; font-weight:bold; ">in</span> nodes<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> source<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                cap<span style="color:#d2cd86; ">[</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>cap<span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">else</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                cap<span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span><span style="color:#00dddd; ">-</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>row<span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span> <span style="color:#e66170; font-weight:bold; ">for</span> row <span style="color:#e66170; font-weight:bold; ">in</span> cap<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> push<span style="color:#d2cd86; ">(</span>u<span style="color:#d2cd86; ">,</span> v<span style="color:#d2cd86; ">,</span> delta <span style="color:#d2cd86; ">=</span> None<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># increase flow from node u to node v</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> delta <span style="color:#e66170; font-weight:bold; ">is</span> None<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            delta <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">min</span><span style="color:#d2cd86; ">(</span>excess<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">,</span> cap<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">-</span> flow<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        flow<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">+</span><span style="color:#d2cd86; ">=</span> delta</span>
+<span class="line_wrapper">        flow<span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">-</span><span style="color:#d2cd86; ">=</span> delta</span>
+<span class="line_wrapper">        excess<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">-</span><span style="color:#d2cd86; ">=</span> delta</span>
+<span class="line_wrapper">        excess<span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">+</span><span style="color:#d2cd86; ">=</span> delta</span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> relabel<span style="color:#d2cd86; ">(</span>u<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># change height of node u</span></span>
+<span class="line_wrapper">        height<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> <span style="color:#00a800; ">1</span> <span style="color:#00dddd; ">+</span> \</span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">min</span><span style="color:#d2cd86; ">(</span>h <span style="color:#e66170; font-weight:bold; ">for</span> v<span style="color:#d2cd86; ">,</span> h <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">enumerate</span><span style="color:#d2cd86; ">(</span>height<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">if</span> cap<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">&gt;</span> flow<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">def</span> find_excess_nodes<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># list of non-sorce/sink nodes with excess flow</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#d2cd86; ">[</span>i <span style="color:#e66170; font-weight:bold; ">for</span> i<span style="color:#d2cd86; ">,</span> e <span style="color:#e66170; font-weight:bold; ">in</span> <span style="color:#e66170; font-weight:bold; ">enumerate</span><span style="color:#d2cd86; ">(</span>excess<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">if</span> e <span style="color:#e66170; font-weight:bold; ">and</span> i<span style="color:#00dddd; ">!=</span>s <span style="color:#e66170; font-weight:bold; ">and</span> i<span style="color:#00dddd; ">!=</span>t<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># Create super source and super sink if needed</span></span>
+<span class="line_wrapper">    s<span style="color:#d2cd86; ">,</span> t <span style="color:#d2cd86; ">=</span> entrances<span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">,</span> exits<span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">if</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>entrances<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">&gt;</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        add_super_node<span style="color:#d2cd86; ">(</span>entrances<span style="color:#d2cd86; ">,</span> True<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        s <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>cap<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">-</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">if</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>exits<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">&gt;</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        add_super_node<span style="color:#d2cd86; ">(</span>exits<span style="color:#d2cd86; ">,</span> False<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        t <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>cap<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">-</span> <span style="color:#00a800; ">1</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    n <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>cap<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    nodes <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">range</span><span style="color:#d2cd86; ">(</span>n<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    graph <span style="color:#d2cd86; ">=</span> <span style="color:#b060b0; ">{</span>i <span style="color:#d2cd86; ">:</span> <span style="color:#d2cd86; ">[</span>j <span style="color:#e66170; font-weight:bold; ">for</span> j <span style="color:#e66170; font-weight:bold; ">in</span> nodes <span style="color:#e66170; font-weight:bold; ">if</span> cap<span style="color:#d2cd86; ">[</span>i<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>j<span style="color:#d2cd86; ">]</span> <span style="color:#e66170; font-weight:bold; ">or</span> cap<span style="color:#d2cd86; ">[</span>j<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>i<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">]</span> <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> nodes<span style="color:#b060b0; ">}</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#9999a9; "># initialise heights and pre-flow</span></span>
+<span class="line_wrapper">    height <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span> <span style="color:#e66170; font-weight:bold; ">for</span> u <span style="color:#e66170; font-weight:bold; ">in</span> nodes<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    height<span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span> <span style="color:#d2cd86; ">=</span> n</span>
+<span class="line_wrapper">    excess <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span> <span style="color:#e66170; font-weight:bold; ">for</span> u <span style="color:#e66170; font-weight:bold; ">in</span> nodes<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    flow <span style="color:#d2cd86; ">=</span> <span style="color:#d2cd86; ">[</span><span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">0</span> <span style="color:#e66170; font-weight:bold; ">for</span> v <span style="color:#e66170; font-weight:bold; ">in</span> nodes<span style="color:#d2cd86; ">]</span> <span style="color:#e66170; font-weight:bold; ">for</span> u <span style="color:#e66170; font-weight:bold; ">in</span> nodes<span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">for</span> v <span style="color:#e66170; font-weight:bold; ">in</span> graph<span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> cap<span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            push<span style="color:#d2cd86; ">(</span>s<span style="color:#d2cd86; ">,</span> v<span style="color:#d2cd86; ">,</span> delta <span style="color:#d2cd86; ">=</span> cap<span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    excess_nodes <span style="color:#d2cd86; ">=</span> find_excess_nodes<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">while</span> <span style="color:#e66170; font-weight:bold; ">len</span><span style="color:#d2cd86; ">(</span>excess_nodes<span style="color:#d2cd86; ">)</span> <span style="color:#00dddd; ">&gt;</span> <span style="color:#00a800; ">0</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">        relabel_check <span style="color:#d2cd86; ">=</span> True</span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># choose excess node with largest height</span></span>
+<span class="line_wrapper">        u <span style="color:#d2cd86; ">=</span> <span style="color:#e66170; font-weight:bold; ">max</span><span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">(</span>height<span style="color:#d2cd86; ">[</span>i<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">,</span>i<span style="color:#d2cd86; ">)</span> <span style="color:#e66170; font-weight:bold; ">for</span> i <span style="color:#e66170; font-weight:bold; ">in</span> excess_nodes<span style="color:#d2cd86; ">)</span><span style="color:#d2cd86; ">[</span><span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">]</span></span>
+<span class="line_wrapper">        <span style="color:#9999a9; "># prioritise push if possible</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">for</span> v <span style="color:#e66170; font-weight:bold; ">in</span> graph<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            <span style="color:#e66170; font-weight:bold; ">if</span> cap<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">&gt;</span> flow<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span> <span style="color:#e66170; font-weight:bold; ">and</span> height<span style="color:#d2cd86; ">[</span>u<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">==</span> height<span style="color:#d2cd86; ">[</span>v<span style="color:#d2cd86; ">]</span> <span style="color:#00dddd; ">+</span> <span style="color:#00a800; ">1</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">                push<span style="color:#d2cd86; ">(</span>u<span style="color:#d2cd86; ">,</span>v<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">                relabel_check <span style="color:#d2cd86; ">=</span> False</span>
+<span class="line_wrapper">                <span style="color:#e66170; font-weight:bold; ">break</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">if</span> relabel_check<span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            relabel<span style="color:#d2cd86; ">(</span>u<span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">        <span style="color:#e66170; font-weight:bold; ">else</span><span style="color:#d2cd86; ">:</span></span>
+<span class="line_wrapper">            excess_nodes <span style="color:#d2cd86; ">=</span> find_excess_nodes<span style="color:#d2cd86; ">(</span><span style="color:#d2cd86; ">)</span></span>
+<span class="line_wrapper">    </span>
+<span class="line_wrapper">    <span style="color:#e66170; font-weight:bold; ">return</span> <span style="color:#e66170; font-weight:bold; ">sum</span><span style="color:#d2cd86; ">(</span>flow<span style="color:#d2cd86; ">[</span>s<span style="color:#d2cd86; ">]</span><span style="color:#d2cd86; ">)</span></span></pre>
+          </section>
         </section>
       </article>
     </main>
     <footer>
-      <script src="/scripts/foobar.js"></script>
+      <span>&copy; Copyright 2023 Lachlan Gibson</span>
     </footer>
   </body>
 </html>
