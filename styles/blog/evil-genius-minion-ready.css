@@ -85,6 +85,7 @@
   align-items: center;
   border: solid 1px #444;
   width: fit-content;
+  padding: 0;
 }
 
 #conversation-contents a {
