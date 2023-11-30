@@ -1,0 +1,82 @@
+nav {
+  font-size: 1.6rem;
+  background-color: rgb(32, 33, 36);
+  color: #e8eaed;
+  max-width: 100rem;
+  margin: auto;
+  display: flex;
+  height: 6rem;
+  padding: 0 1rem;
+  align-items: center;
+  overflow: hidden;
+}
+
+nav div {
+  margin-right: auto;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+}
+
+nav div img {
+  height: 100%;
+  margin-right: 1rem;
+}
+
+nav a {
+  color: white;
+  margin: 0 0 0 1rem;
+  text-decoration: none;
+  word-wrap: normal;
+}
+
+.icon-link {
+  height: 1.6rem;
+}
+
+nav a img {
+  height: 1.6rem;
+}
+
+nav a:hover {
+  color: rgb(137, 156, 212);
+  text-decoration: none;
+}
+
+.current-page {
+  text-decoration: underline;
+}
+
+.current-page:hover {
+  text-decoration: underline;
+}
+
+.icon-container {
+  display: flex;
+  margin: 0 0 0 1rem;
+  padding: 0 0 0 0;
+  flex-wrap: wrap;
+  /* border-left: solid 0.1rem white; */
+  height: fit-content;
+  min-width: 3rem;
+}
+
+.icon-container a {
+  margin: 0.2rem 0.4rem 0.2rem 0;
+  padding: 0;
+}
+
+.icon-container img {
+  margin: 0;
+  padding: 0;
+}
+
+#github-icon {
+  filter: brightness(0) invert(1);
+}
+
+@media only screen and (max-width: 400px) {
+  #navbar-icon {
+    display: none;
+  }
+}
