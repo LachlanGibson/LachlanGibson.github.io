@@ -4,8 +4,10 @@ import Navbar from "./navigation/Navbar";
 import Home from "./home/Home";
 import About from "./about/About";
 import Blog from "./blog/Blog";
+import Article from "./blog/Article";
 import Footer from "./footer/Footer";
 import "./App.css";
+import ArticleNotFound from "./blog/ArticleNotFound";
 
 const App: React.FC = () => {
   return (
@@ -16,6 +18,8 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<Article />} />
+          <Route path="/blog/article-not-found" element={<ArticleNotFound />} />
         </Routes>
       </main>
       <Footer />
