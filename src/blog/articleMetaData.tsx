@@ -1,8 +1,13 @@
+import ArticleEvilGeniusMinionReady from "./articles/ArticleEvilGeniusMinionReady";
+
 type ArticleType = {
   title: string;
   author: string;
+  date: string;
   timeElement: JSX.Element;
+  imageElement: JSX.Element;
   metaElements: JSX.Element[];
+  articleElement: JSX.Element;
 };
 
 type ArticleMetaDataType = {
@@ -13,7 +18,9 @@ const articleMetaData: ArticleMetaDataType = {
   "evil-genius-minion-ready": {
     title: "Evil Genius, Minion Ready",
     author: "Lachlan Gibson",
+    date: "4 June 2023",
     timeElement: <time dateTime="2023-06-04">4 June 2023</time>,
+    imageElement: <img src="/images/blog/genius-minion.webp" alt="" />,
     metaElements: [
       <meta property="og:title" content="Evil Genius, Minion Ready" />,
       <meta property="og:type" content="article" />,
@@ -57,6 +64,7 @@ const articleMetaData: ArticleMetaDataType = {
       <meta property="article:tag" content="Power Seeking" />,
       <meta property="article:tag" content="RLHF" />,
     ],
+    articleElement: <ArticleEvilGeniusMinionReady />,
   },
 };
 

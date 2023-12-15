@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { Navigate, useParams } from "react-router-dom";
 import articleMetaData from "./articleMetaData";
 import "./Article.css";
+import ShareLinks from "./ShareLinks";
 
 const articles = Object.keys(articleMetaData);
 
@@ -64,62 +66,21 @@ const Article: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{articleMetaData[slug].title}</title>
+        {articleMetaData[slug].metaElements.map((element, index) =>
+          React.cloneElement(element, { key: index })
+        )}
+      </Helmet>
+
       <div className="blog-title-div">
         <h1>{articleMetaData[slug].title}</h1>
         <span className="author-date-span">
           By {articleMetaData[slug].author},{articleMetaData[slug].timeElement}.
         </span>
-        <div id="share-buttons">
-          <a
-            className="facebook"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={shareLinks["fb"]}
-          >
-            <i className="fab fa-facebook"></i>
-          </a>
-          <a
-            className="twitter"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={shareLinks["twitter"]}
-          >
-            <i className="fab fa-twitter"></i>
-          </a>
-          <a
-            className="linkedin"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={shareLinks["linkedIn"]}
-          >
-            <i className="fab fa-linkedin"></i>
-          </a>
-          <a
-            className="reddit"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={shareLinks["reddit"]}
-          >
-            <i className="fab fa-reddit"></i>
-          </a>
-          <a
-            className="whatsapp"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={shareLinks["whatsapp"]}
-          >
-            <i className="fab fa-whatsapp"></i>
-          </a>
-          <a
-            className="telegram"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={shareLinks["telegram"]}
-          >
-            <i className="fab fa-telegram"></i>
-          </a>
-        </div>
+        <ShareLinks shareLinks={shareLinks} />
       </div>
+      {articleMetaData[slug].articleElement}
     </>
   );
 };
