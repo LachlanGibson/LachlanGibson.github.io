@@ -76,7 +76,13 @@ const Article: React.FC = () => {
       <div className="blog-title-div">
         <h1>{articleMetaData[slug].title}</h1>
         <span className="author-date-span">
-          By {articleMetaData[slug].author},{articleMetaData[slug].timeElement}.
+          By {articleMetaData[slug].author},{articleMetaData[slug].timeElement}
+          {articleMetaData[slug].lastModifiedElement ? (
+            <>, updated {articleMetaData[slug].lastModifiedElement}</>
+          ) : (
+            ""
+          )}
+          .
         </span>
         <ShareLinks shareLinks={shareLinks} />
       </div>
