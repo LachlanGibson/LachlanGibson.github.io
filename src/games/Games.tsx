@@ -1,12 +1,26 @@
 import React from "react";
-import GameTicTacToe from "./tictactoe/GameTicTacToe";
+import { Helmet } from "react-helmet";
+import GameCard from "./GameCard";
+import gameMetaData from "./gameMetaData";
 
 const Games: React.FC = () => {
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>Lachlan Gibson - Games</title>
+      </Helmet>
       <h1>Games</h1>
-      <GameTicTacToe />
-    </div>
+      <div className="blog-list-div">
+        {Object.keys(gameMetaData).map((slug) => (
+          <GameCard
+            slug={slug}
+            title={gameMetaData[slug].title}
+            timeElement={gameMetaData[slug].timeElement}
+            imageElement={gameMetaData[slug].imageElement}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

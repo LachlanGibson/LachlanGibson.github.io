@@ -4,13 +4,15 @@
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap: 1rem;
-  width: fit-content;
+  width: 90%;
+  max-width: 500px;
   margin: 0 auto;
   background-color: #000000;
   border: 2px solid #333;
   padding: 1rem;
   align-items: center;
   justify-items: center;
+  aspect-ratio: 1 / 1;
 }
 
 .row {
@@ -26,12 +28,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 6rem;
+  font-size: 8rem;
   font-weight: bold;
   background-color: #fff;
   border: 2px solid #333;
   cursor: pointer;
-  min-width: 10rem;
+  width: 100%;
   aspect-ratio: 1 / 1;
 }
 
@@ -74,8 +76,26 @@
 .cell:not(.x, .o, .game-over):hover::before {
   content: attr(data-hover);
   color: rgba(0, 0, 0, 0.1);
-  font-size: 6rem;
+  font-size: 8rem;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media only screen and (max-width: 400px) {
+  .cell {
+    font-size: 6rem;
+  }
+  .cell:not(.x, .o, .game-over):hover::before {
+    font-size: 6rem;
+  }
+}
+
+@media only screen and (max-width: 300px) {
+  .cell {
+    font-size: 3rem;
+  }
+  .cell:not(.x, .o, .game-over):hover::before {
+    font-size: 3rem;
+  }
 }

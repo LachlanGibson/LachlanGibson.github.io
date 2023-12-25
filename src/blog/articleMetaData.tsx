@@ -71,13 +71,13 @@ const articleMetaData: ArticleMetaDataType = {
     author: "Lachlan Gibson",
     timeElement: <time dateTime="2023-05-24">24 May 2023</time>,
     lastModifiedElement: <time dateTime="2023-06-08">8 June 2023</time>,
-    imageElement: <img src="/images/blog/foobar-challenge.png" alt="" />,
+    imageElement: <img src="/images/blog/foobar-challenge.webp" alt="" />,
     metaElements: [
       <meta property="og:title" content="Google's FooBar Challenge" />,
       <meta property="og:type" content="article" />,
       <meta
         property="og:image"
-        content="https://www.lachlangibson.dev/images/blog/foobar-challenge.png"
+        content="https://www.lachlangibson.dev/images/blog/foobar-challenge.webp"
       />,
       <meta
         property="og:url"
