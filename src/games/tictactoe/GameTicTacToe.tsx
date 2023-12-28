@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import "./GameTicTacToe.css";
-
+type Player = "X" | "O";
+type GameResult = Player | "Tie" | null;
 const GameTicTacToe = () => {
-  const [board, setBoard] = React.useState<string[][]>([
+  const [board, setBoard] = useState<string[][]>([
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
   ]);
-  const [turn, setTurn] = React.useState<"X" | "O">("X");
-  const [winner, setWinner] = React.useState<"X" | "O" | "Tie" | null>(null);
-  const [gameOver, setGameOver] = React.useState(false);
-  const [isXHuman, setIsXHuman] = React.useState(true);
-  const [isOHuman, setIsOHuman] = React.useState(true);
+  const [turn, setTurn] = useState<Player>("X");
+  const [winner, setWinner] = useState<GameResult>(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [isXHuman, setIsXHuman] = useState(true);
+  const [isOHuman, setIsOHuman] = useState(true);
 
-  const makeMove = (row: number, col: number, player: "X" | "O") => {
+  const makeMove = (row: number, col: number, player: Player) => {
     const newBoard = [...board];
     newBoard[row][col] = player;
     setBoard(newBoard);
@@ -130,7 +131,24 @@ const GameTicTacToe = () => {
           ))
         )}
       </div>
-
+      <div className="checkbox-div">
+        <label>
+          X is AI
+          <input
+            type="checkbox"
+            checked={!isXHuman}
+            onChange={() => setIsXHuman((prev) => !prev)}
+          />
+        </label>
+        <label>
+          O is AI
+          <input
+            type="checkbox"
+            checked={!isOHuman}
+            onChange={() => setIsOHuman((prev) => !prev)}
+          />
+        </label>
+      </div>
       <button onClick={resetGame} className="reset-button">
         Reset Game
       </button>
