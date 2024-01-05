@@ -353,6 +353,330 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
           />
         </section>
       </section>
+      <section className="foobar-challenge" id="sec-challenge3">
+        <h2>Challenge 3</h2>
+        <p>
+          The third level contained three tasks, titled{" "}
+          <a href="#sec-task-4">Prepare the Bunnies' Escape</a>,{" "}
+          <a href="#sec-task-5">The Grandest Staircase Of Them All</a> and{" "}
+          <a href="#sec-task-6">Fuel Injection Perfection</a>.
+        </p>
+        <section className="foobar-task" id="sec-task-4">
+          <div className="foobar-task-description">
+            Prepare the Bunnies' Escape
+            <br />
+            ===========================
+            <br />
+            <br />
+            Write a function solution(map) that generates the length of the
+            shortest path along a rectangular grid from (0,0) to (w-1,h-1),
+            where w is the grid width, h is the grid height and the map is
+            represented as a matrix of 0s and 1s, where 0s are passable space
+            and 1s are impassable walls. The path may remove up to one wall. The
+            path length is the total number of nodes you pass through, counting
+            both the entrance and exit nodes. The starting and ending positions
+            are always passable (0). The map will always be solvable, though you
+            may or may not need to remove a wall. The height and width of the
+            map can be from 2 to 20. Moves can only be made in cardinal
+            directions; no diagonal moves are allowed.
+            <br />
+            <br />
+            -- Test cases --
+            <br />
+            Input : solution([[0, 1, 1, 0], [0, 0, 0, 1], [1, 1, 0, 0], [1, 1,
+            1, 0]])
+            <br />
+            Output: 7<br />
+            <br />
+            Input : solution([[0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 0], [0, 0, 0,
+            0, 0, 0], [0, 1, 1, 1, 1, 1], [0, 1, 1, 1, 1, 1], [0, 0, 0, 0, 0,
+            0]])
+            <br />
+            Output: 11
+          </div>
+          <p>
+            To solve this problem I represent maps as{" "}
+            <a
+              href="https://en.wikipedia.org/wiki/Graph_theory"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              graphs
+            </a>{" "}
+            where nodes correspond to passable spaces and edges correspond to
+            adjacent passable spaces. Then I use the{" "}
+            <a
+              href="https://en.wikipedia.org/wiki/A*_search_algorithm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              A* algorithm
+            </a>{" "}
+            to find the shortest path length from the start and end nodes. To
+            improve the efficiency of the algorithm I use the{" "}
+            <a
+              href="https://simple.wikipedia.org/wiki/Manhattan_distance"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Manhattan distance
+            </a>{" "}
+            as a lower bound to the remaining distance between any node and the
+            end node. After implementing the A* algorithm I use it to find the
+            shortest path lengths of all possible maps with exactly 1 or 0 walls
+            removed. The function then returns the smallest of these path
+            lengths.
+          </p>
+          <PythonCodeDisplay
+            codeFile={"/blog/files/google-foobar-challenge/prepareescape.py"}
+          />
+        </section>
+        <section className="foobar-task" id="sec-task-5">
+          <div className="foobar-task-description">
+            The Grandest Staircase Of Them All
+            <br />
+            ==================================
+            <br />
+            <br />
+            Write a function called solution(n) that takes a positive integer n
+            and returns the number of different staircases that can be built
+            from exactly n bricks. n will always be between 3 and 200
+            (inclusive). Each type of staircase should consist of 2 or more
+            steps with no two steps being at the same height. All steps must
+            contain at least one brick. A step's height is classified as the
+            total amount of bricks that make up that step.
+            <br />
+            <br />
+            For example, when n = 3, you have only 1 choice of how to build the
+            staircase, with the first step having a height of 2 and the second
+            step having a height of 1: (# indicates a brick)
+            <br />
+            <br />
+            #<br />
+            ##
+            <br />
+            21
+            <br />
+            <br />
+            When n = 4, you still only have 1 staircase choice:
+            <br />
+            <br />
+            #<br />
+            #<br />
+            ##
+            <br />
+            31
+            <br />
+            <br />
+            But when n = 5, there are two ways you can build a staircase from
+            the given bricks. The two staircases can have heights (4, 1) or (3,
+            2), as shown below:
+            <br />
+            <br />
+            #<br />
+            #<br />
+            #<br />
+            ##
+            <br />
+            41
+            <br />
+            <br />
+            #<br />
+            ##
+            <br />
+            ##
+            <br />
+            32
+            <br />
+            <br />
+            -- Test cases --
+            <br />
+            Input : solution(200)
+            <br />
+            Output: 487067745
+            <br />
+            <br />
+            Input : solution(3)
+            <br />
+            Output: 1
+          </div>
+          <p>
+            To solve this problem I used the principles of{" "}
+            <a
+              href="https://en.wikipedia.org/wiki/Dynamic_programming"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              dynamic programming
+            </a>{" "}
+            to write a recursive function which relied on{" "}
+            <a
+              href="https://en.wikipedia.org/wiki/Memoization"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              memoisation
+            </a>{" "}
+            to run efficiently. Consider the function{" "}
+            <InlineMath math="w(n,m,s)" /> which calculates the number of valid
+            staircases that can be built with <InlineMath math="n" /> bricks,
+            with each stair containing a maximum of <InlineMath math="m" />{" "}
+            bricks and at least <InlineMath math="s" /> more steps. We can
+            express <InlineMath math="w" /> as a recursive function.
+            Specifically, the number of staircases that can be built is the sum
+            of the number of staircases that can be built given the size of the
+            next step. For example, if there are 5 bricks, then the number of
+            possible staircases is the number of staircases that end with a
+            height of 1, plus the number that end with a height of 2, plus a
+            height of 3 and plus a height of 4.
+            <br />
+            <br />
+            There are two base cases to this recursion. The first occurs when
+            there are too many bricks. This occurs when the number of bricks is
+            more than a maximal staircase with a constant step size of 1,{" "}
+            <InlineMath math={"n > m(m+1)/2"} />. In this case, the number of
+            valid staircases is 0. The second base case occurs when there are no
+            bricks <InlineMath math="n=0" />, and the minimum number of
+            additional steps is less than zero (
+            <InlineMath math={"s\\leqslant 0"} />
+            ). In this case, the number of valid staircases is 1. Therefore,
+          </p>
+          <BlockMath
+            math={`
+              w(n,m,s)=\\begin{cases}
+              0,\\quad n > m(m+1)/2\\\\[0.5em] 1,\\quad n=0 \\text{ and } s\\leqslant 0
+              \\\\[0.5em] \\sum_{k=1}^{\\min(n,m)} w(n-k,k-1,s-1) \\end{cases}`}
+          />
+          <p>
+            with the solution is given by <InlineMath math="w(n,n,2)" />.
+          </p>
+          <PythonCodeDisplay
+            codeFile={
+              "/blog/files/google-foobar-challenge/grandeststaircase.py"
+            }
+          />
+        </section>
+        <section className="foobar-task" id="sec-task-6">
+          <div className="foobar-task-description">
+            Fuel Injection Perfection
+            <br />
+            =========================
+            <br />
+            <br />
+            Write a function called solution(n) which takes a positive integer
+            as a string and returns the minimum number of operations needed to
+            transform n to 1. Quantities will not exceed 309 digits long. The
+            three allowed operations are +1, -1 and /2 (if the quantity is
+            even).
+            <br />
+            <br />
+            For example:
+            <br />n = 4 requires two operations: 4 -{">"} 2 -{">"} 1<br />n = 15
+            requires five operations: 15 -{">"} 16 -{">"} 8 -{">"} 4 -{">"} 2 -
+            {">"} 1<br />
+            <br />
+            -- Test cases --
+            <br />
+            Input : solution('15')
+            <br />
+            Output: 5<br />
+            <br />
+            Input : solution('4')
+            <br />
+            Output: 2
+          </div>
+          <p>
+            To solve the problem we can identify several principles for
+            minimising the number of operations to reach 1. Firstly, no shortest
+            trajectory would contain a <InlineMath math="+1" /> operation
+            immediately followed by a <InlineMath math="-1" /> operation, or
+            vice versa, because any trajectory containing any such consecutive
+            operations could be shortened by 2 steps by removing them. Secondly,
+            even numbers should always be divided by 2. This is because a
+            trajectory that repeats the other operations followed by a division
+            can be shortened by dividing first. For example,
+          </p>
+          <BlockMath
+            math={`\\begin{aligned} &2k \\rightarrow 2k\\pm 1 \\rightarrow 2k\\pm
+            2 \\rightarrow k\\pm 1, \\\\ &2k \\rightarrow k \\hphantom{2 + 1}
+            \\rightarrow k\\pm 1, \\end{aligned}`}
+          />
+          <p>
+            where <InlineMath math="k" /> is any natural number. Basically, the
+            number of consecutive addition or subtraction operations can be cut
+            in half (or half plus 1) by dividing first. Note that this assumes
+            that eventually there will be another halving operation. Except in
+            the cases of <InlineMath math="n=2" /> and <InlineMath math="n=3" />{" "}
+            where both halving and subtracting 1 will work, in every other case
+            halving requires fewer operations than subtracting 1. Specifically,
+            continuously subtracting 1 requires exactly{" "}
+            <InlineMath math="n-1" /> operations, while halving every even and
+            subtracting 1 off every odd number will require no more than{" "}
+            <InlineMath math={"2\\lceil \\log_2 (n+1) \\rceil -2"} /> (when{" "}
+            <InlineMath math="n" /> is one less than a power of 2) operations
+            and no less than <InlineMath math={"\\lceil \\log_2 n \\rceil"} />{" "}
+            (when <InlineMath math="n" /> is a power of 2) operations.
+            Obviously, repeated additions can never reach 1 since they strictly
+            increase the number. Therefore, for all <InlineMath math="n>3" />{" "}
+            there exists a shortest sequence of operations whereby every even
+            value is halved, and the number of even values is at least one.
+            <br />
+            <br />
+            To decide on a rule for odd values, let us consider the two possible
+            cases where <InlineMath math={"n=4k+1"} /> and{" "}
+            <InlineMath math={"n=4k+3"} /> for any natural number,{" "}
+            <InlineMath math="k" />. In the first case we can draw the following
+            tree.
+            <br />
+            <br />
+            <img
+              src="/images/blog/google-foobar-challenge/foobar_c3c_a.svg"
+              alt="flow diagram"
+              className="tikz-diagram"
+            />
+            <br />
+            In this case adding 1 inevitably leads to either{" "}
+            <InlineMath math="k" /> or <InlineMath math="k+1" />, both of which
+            can be reached in fewer or equal number of operations by subtracting
+            1. Therefore, when <InlineMath math="n=4k+1" /> subtracting 1 is
+            weakly faster than adding 1. Given this strategy, we can make an
+            analogous decision tree for the <InlineMath math="n=4k+3" /> case.
+            <br />
+            <br />
+            <img
+              src="/images/blog/google-foobar-challenge/foobar_c3c_b.svg"
+              alt="flow diagram"
+              className="tikz-diagram"
+            />
+            <br />
+            Now choosing to subtract 1 will inevitably lead to either{" "}
+            <InlineMath math="k" /> or <InlineMath math="k+1" />, both of which
+            can be reached in fewer or equal number of operations by adding 1.
+            Therefore, when <InlineMath math="n=4k+3" /> adding 1 is weakly
+            faster than subtracting 1. <br />
+            <br />
+            Finally, let us consider the simple small cases of which cannot be
+            expressed as <InlineMath math="n=4k+r" />. When{" "}
+            <InlineMath math="n=1" /> we do not need any operations so return 0,
+            when <InlineMath math="n=2" /> follow the halving even rule to get
+            to 1 needs only 1 operation, and when <InlineMath math="n=3" />{" "}
+            subtracting 1, rather than adding 1 is faster. Therefore, we can
+            define the following recursive function to solve the problem,
+          </p>
+          <BlockMath
+            math={`f(n)=\\begin{cases} 0, & n = 1,\\\\[0.5em] 1 + f(n/2), & n
+      \\equiv 0 \\mod{2},\\\\[0.5em] 1 + f(n-1), & n \\equiv 1 \\mod{4}, \\text{ or }
+      n=3, \\\\[0.5em] 1 + f(n+1), & \\text{otherwise.} \\end{cases}`}
+          />
+          <p>
+            This solution can be implemented using a recursive function or a
+            while loop.
+          </p>
+          <PythonCodeDisplay
+            codeFile={"/blog/files/google-foobar-challenge/fuelinjection.py"}
+          />
+        </section>
+      </section>
     </>
   );
 };
