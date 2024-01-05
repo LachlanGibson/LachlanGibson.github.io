@@ -94,8 +94,14 @@ html {
 }
 
 p {
-  overflow-x: auto;
-  overflow-y: visible;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.numberedList {
+  list-style: decimal;
+  list-style-position: outside;
+  padding-left: 2rem;
 }
 
 .tikz-diagram {
@@ -115,6 +121,7 @@ p {
   text-align: center;
   vertical-align: middle;
   width: 2rem;
+  aspect-ratio: 1;
 }
 .grid-table a {
   color: inherit;
