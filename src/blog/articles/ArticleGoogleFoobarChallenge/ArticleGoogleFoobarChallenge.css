@@ -62,31 +62,9 @@ html {
   color: rgb(35, 39, 51);
 }
 
-.python-code {
-  overflow: hidden;
-  min-height: 10rem;
-  height: 10rem;
-  position: relative;
-  color: #d1d1d1;
-  background: black;
-  padding: 1.6rem;
-}
-
 .no-before {
   overflow: auto;
   height: auto;
-}
-
-.python-code::before {
-  content: "---Click to reveal code---";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background-color: #000000;
-  top: 0;
-  left: 0;
-  text-align: center;
-  padding-top: 4rem;
 }
 
 .no-before::before {
