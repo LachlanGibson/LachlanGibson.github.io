@@ -1,5 +1,5 @@
-import ArticleEvilGeniusMinionReady from "./articles/ArticleEvilGeniusMinionReady";
-import ArticleGoogleFoobarChallenge from "./articles/ArticleGoogleFoobarChallenge";
+import ArticleEvilGeniusMinionReady from "./articles/ArticleEvilGeniusMinionReady/ArticleEvilGeniusMinionReady";
+import ArticleGoogleFoobarChallenge from "./articles/ArticleGoogleFoobarChallenge/ArticleGoogleFoobarChallenge";
 
 type ArticleType = {
   title: string;
