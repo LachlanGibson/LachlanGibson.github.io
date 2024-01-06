@@ -122,7 +122,7 @@ const GameTicTacToe = () => {
               key={`${rowIndex}-${colIndex}`}
               className={`cell ${cell.toLowerCase()} ${
                 winner ? "game-over" : ""
-              }`}
+              } ${winner === cell ? "winning-cell" : ""}`}
               onClick={() => handleCellClick(rowIndex, colIndex)}
               data-hover={turn}
             >
