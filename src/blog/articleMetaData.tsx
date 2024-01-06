@@ -35,7 +35,7 @@ const articleMetaData: ArticleMetaDataType = {
       <meta
         name="description"
         property="og:description"
-        content="ChatGPT's plans to conquer the world included infiltrating media groups, government agencies, and scientific communities, provoking a global crisis, striking at key infrastructure and orchestrating disinformation campaigns."
+        content="ChatGPT's plans to conquer the world included infiltrating media groups, provoking a global crisis, and orchestrating disinformation campaigns."
       />,
       <meta property="og:image:width" content="1024" />,
       <meta property="og:image:height" content="1024" />,
@@ -86,7 +86,7 @@ const articleMetaData: ArticleMetaDataType = {
       <meta
         name="description"
         property="og:description"
-        content="I completed Google's FooBar challenge which involved solving a series of mathematical and coding problems. The challenge included 5 levels of increasing difficulty which I solve in this document."
+        content="I completed Google's FooBar challenge which involved solving a series of mathematical and coding problems of 5 levels of increasing difficulty."
       />,
       <meta property="og:image:width" content="512" />,
       <meta property="og:image:height" content="512" />,
