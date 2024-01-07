@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./GameTicTacToe.css";
 type Player = "X" | "O";
-type GameResult = Player | "Tie" | null;
+type GameResult = Player | "Tie";
 
 const miniumThinkTime = 1000;
 
@@ -12,52 +12,54 @@ const GameTicTacToe = () => {
     ["", "", ""],
   ]);
   const [turn, setTurn] = useState<Player>("X");
-  const [winner, setWinner] = useState<GameResult>(null);
+  const [winner, setWinner] = useState<GameResult>();
   const [gameOver, setGameOver] = useState(false);
   const [isXHuman, setIsXHuman] = useState(true);
   const [isOHuman, setIsOHuman] = useState(true);
   const [aiConsiderCell, setAiConsiderCell] = useState<number[]>([]);
-  const [isAiTurn, setIsAiTurn] = useState(false);
 
-  useEffect(() => {
-    if (checkAiTurn()) {
-      setIsAiTurn(() => true);
-      const options = availableActions(board);
-      const thinkInterval = setInterval(() => {
-        const cell = options[Math.floor(Math.random() * options.length)];
-        setAiConsiderCell(() => cell);
-      }, 100);
-
-      const startTime = Date.now();
-      const [placeRow, placeCol] = aiChooseMove(board);
-      const endTime = Date.now();
-      const thinkTime = endTime - startTime;
-      if (thinkTime < miniumThinkTime) {
-        setTimeout(() => {
-          clearInterval(thinkInterval);
-          makeMove(placeRow, placeCol, turn);
-        }, miniumThinkTime - thinkTime);
-      } else {
-        clearInterval(thinkInterval);
-        makeMove(placeRow, placeCol, turn);
-      }
-
-      return () => clearInterval(thinkInterval);
-    } else {
-      setIsAiTurn(() => false);
-      setAiConsiderCell(() => []);
-    }
+  const isAiTurn = useMemo(() => {
+    if (gameOver) return false;
+    if (turn === "X") return !isXHuman;
+    if (turn === "O") return !isOHuman;
+    return false;
   }, [turn, isXHuman, isOHuman, gameOver]);
 
-  const availableActions = (board: string[][]) => {
-    const actions: number[][] = [];
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        !board[i][j] && actions.push([i, j]);
-      }
+  useEffect(() => {
+    if (!isAiTurn) {
+      setAiConsiderCell(() => []);
+      return;
     }
-    return actions;
-  };
+    const options = availableActions(board);
+    const thinkInterval = setInterval(() => {
+      const cell = options[Math.floor(Math.random() * options.length)];
+      setAiConsiderCell(cell);
+    }, 100);
+
+    const startTime = Date.now();
+    const [placeRow, placeCol] = aiChooseMove(board);
+    const endTime = Date.now();
+    const thinkTime = endTime - startTime;
+    if (thinkTime >= miniumThinkTime) {
+      clearInterval(thinkInterval);
+      makeMove(placeRow, placeCol, turn);
+      return () => clearInterval(thinkInterval);
+    }
+    const timeout = setTimeout(() => {
+      clearInterval(thinkInterval);
+      makeMove(placeRow, placeCol, turn);
+    }, miniumThinkTime - thinkTime);
+    return () => {
+      clearInterval(thinkInterval);
+      clearTimeout(timeout);
+    };
+  }, [turn, isXHuman, isOHuman, gameOver]);
+
+  const availableActions = (board: string[][]): number[][] =>
+    board.reduce<number[][]>((acc, row, i) => {
+      row.forEach((cell, j) => cell || acc.push([i, j]));
+      return acc;
+    }, []);
 
   const aiChooseMove = (board: string[][]) => {
     const actions = availableActions(board);
@@ -77,6 +79,64 @@ const GameTicTacToe = () => {
       setGameOver(() => true);
     } else {
       setTurn((prev) => (prev === "X" ? "O" : "X"));
+    }
+  };
+
+  const thinkMove = (board: string[][], player: Player, action: number[]) => {
+    const newBoard = [...board];
+    newBoard[action[0]][action[1]] = player;
+    return newBoard;
+  };
+
+  const alphaBetaPruning = (
+    board: string[][],
+    alpha: number,
+    beta: number,
+    player: Player,
+    noise?: number
+  ) => {
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (!board[i][j]) {
+          if (checkWinningMove(board, i, j)) {
+            return player === "X" ? 1 : -1;
+          }
+        }
+      }
+    }
+
+    if (isBoardFull(board)) {
+      return 0;
+    }
+
+    if (player === "X") {
+      let maxValue = -Infinity;
+      for (let action of availableActions(board)) {
+        const nudge = noise ? (2 * Math.random() - 1) * noise : 0;
+        const value =
+          nudge +
+          alphaBetaPruning(thinkMove(board, player, action), alpha, beta, "O");
+        maxValue = Math.max(maxValue, value);
+        alpha = Math.max(alpha, value);
+        if (beta <= alpha) {
+          break;
+        }
+      }
+      return maxValue;
+    } else {
+      let minValue = Infinity;
+      for (let action of availableActions(board)) {
+        const nudge = noise ? (2 * Math.random() - 1) * noise : 0;
+        const value =
+          nudge +
+          alphaBetaPruning(thinkMove(board, player, action), alpha, beta, "X");
+        minValue = Math.min(minValue, value);
+        beta = Math.min(beta, value);
+        if (beta <= alpha) {
+          break;
+        }
+      }
+      return minValue;
     }
   };
 
@@ -140,10 +200,10 @@ const GameTicTacToe = () => {
       ["", "", ""],
       ["", "", ""],
     ]);
-    setTurn(() => "X");
-    setWinner(() => null);
-    setGameOver(() => false);
-    setAiConsiderCell(() => []);
+    setTurn("X");
+    setWinner(undefined);
+    setGameOver(false);
+    setAiConsiderCell([]);
   };
 
   const isBoardFull = (board: string[][]) => {
@@ -162,12 +222,26 @@ const GameTicTacToe = () => {
     return arr1.every((item, index) => item === arr2[index]);
   };
 
-  const checkAiTurn = () => {
-    if (gameOver) return false;
-    if (turn === "X") return !isXHuman;
-    if (turn === "O") return !isOHuman;
-    return false;
-  };
+  function createCellClassName(
+    cell: string,
+    rowIndex: number,
+    colIndex: number
+  ) {
+    let className = `cell ${cell.toLowerCase()}`;
+    if (gameOver) {
+      className += " game-over";
+      if (winner === cell) {
+        className += " winning-cell";
+      }
+    }
+    if (compareArrays(aiConsiderCell, [rowIndex, colIndex])) {
+      className += " ai-consider-cell";
+    }
+    if (isAiTurn) {
+      className += " ai-turn";
+    }
+    return className;
+  }
 
   return (
     <div>
@@ -184,13 +258,7 @@ const GameTicTacToe = () => {
           row.map((cell, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`cell ${cell.toLowerCase()}${
-                winner ? " game-over" : ""
-              }${winner === cell ? " winning-cell" : ""}${
-                compareArrays(aiConsiderCell, [rowIndex, colIndex])
-                  ? " ai-consider-cell"
-                  : ""
-              }${isAiTurn ? " ai-turn" : ""}`}
+              className={createCellClassName(cell, rowIndex, colIndex)}
               onClick={() => handleCellClick(rowIndex, colIndex)}
               data-hover={turn}
             >
