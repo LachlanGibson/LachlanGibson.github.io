@@ -83,6 +83,12 @@
   cursor: pointer;
 }
 
+.ai-difficulty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .checkbox-div {
   display: flex;
   align-items: center;
@@ -123,7 +129,8 @@
   .cell {
     font-size: 6rem;
   }
-  .cell:not(.x, .o, .game-over):hover::before {
+  .cell:not(.x, .o, .game-over, .ai-turn):hover::before,
+  .cell.ai-consider-cell:not(.x, .o, .game-over)::before {
     font-size: 6rem;
   }
 }
@@ -132,7 +139,8 @@
   .cell {
     font-size: 3rem;
   }
-  .cell:not(.x, .o, .game-over):hover::before {
+  .cell:not(.x, .o, .game-over, .ai-turn):hover::before,
+  .cell.ai-consider-cell:not(.x, .o, .game-over)::before {
     font-size: 3rem;
   }
 }

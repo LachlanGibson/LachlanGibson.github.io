@@ -4,6 +4,7 @@ type Player = "X" | "O";
 type GameResult = Player | "Tie";
 
 const miniumThinkTime = 1000;
+let minimaxMemo: { [key: string]: number } = {};
 
 const GameTicTacToe = () => {
   const [board, setBoard] = useState<string[][]>([
@@ -15,8 +16,9 @@ const GameTicTacToe = () => {
   const [winner, setWinner] = useState<GameResult>();
   const [gameOver, setGameOver] = useState(false);
   const [isXHuman, setIsXHuman] = useState(true);
-  const [isOHuman, setIsOHuman] = useState(true);
+  const [isOHuman, setIsOHuman] = useState(false);
   const [aiConsiderCell, setAiConsiderCell] = useState<number[]>([]);
+  const [aiNoise, setAiNoise] = useState<number>(0.05);
 
   const isAiTurn = useMemo(() => {
     if (gameOver) return false;
@@ -30,6 +32,7 @@ const GameTicTacToe = () => {
       setAiConsiderCell(() => []);
       return;
     }
+
     const options = availableActions(board);
     const thinkInterval = setInterval(() => {
       const cell = options[Math.floor(Math.random() * options.length)];
@@ -62,14 +65,44 @@ const GameTicTacToe = () => {
     }, []);
 
   const aiChooseMove = (board: string[][]) => {
+    minimaxMemo = {};
     const actions = availableActions(board);
-    return actions[Math.floor(Math.random() * actions.length)];
+    const values: [number[], number][] = actions.map((action) => {
+      const nextBoard = thinkMove(board, turn, action);
+      const value =
+        generateNoise(aiNoise) +
+        alphaBetaPruning(
+          nextBoard,
+          -Infinity,
+          Infinity,
+          turn === "X" ? "O" : "X",
+          aiNoise
+        );
+      //console.log(stringifyBoard(nextBoard));
+      //console.log(value);
+      return [action, value];
+    });
+
+    if (turn === "X") {
+      return values.reduce(
+        (acc, av) => (acc[1] > av[1] ? acc : av),
+        [[0, 0], -Infinity]
+      )[0];
+    }
+
+    return values.reduce(
+      (acc, av) => (acc[1] < av[1] ? acc : av),
+      [[0, 0], Infinity]
+    )[0];
   };
+
+  const generateNoise = (noise: number | undefined) =>
+    noise ? (2 * Math.random() - 1) * noise : 0;
 
   const makeMove = (row: number, col: number, player: Player) => {
     const newBoard = [...board];
     newBoard[row][col] = player;
-    setBoard(() => newBoard);
+    setBoard(newBoard);
     const isWinningMove = checkWinningMove(newBoard, row, col);
     if (isWinningMove) {
       setWinner(() => turn);
@@ -83,9 +116,17 @@ const GameTicTacToe = () => {
   };
 
   const thinkMove = (board: string[][], player: Player, action: number[]) => {
-    const newBoard = [...board];
+    const newBoard = copyBoard(board);
     newBoard[action[0]][action[1]] = player;
     return newBoard;
+  };
+
+  const stringifyBoard = (board: string[][]): string => {
+    return board
+      .map((row) => {
+        return row.map((cell) => (cell === "" ? "_" : cell)).join("");
+      })
+      .join("\n");
   };
 
   const alphaBetaPruning = (
@@ -95,50 +136,71 @@ const GameTicTacToe = () => {
     player: Player,
     noise?: number
   ) => {
+    const boardString = stringifyBoard(board);
+    if (minimaxMemo[boardString]) {
+      return minimaxMemo[boardString];
+    }
+
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
-        if (!board[i][j]) {
+        if (board[i][j]) {
           if (checkWinningMove(board, i, j)) {
-            return player === "X" ? 1 : -1;
+            minimaxMemo[boardString] = board[i][j] === "X" ? 1 : -1;
+            return minimaxMemo[boardString];
           }
         }
       }
     }
 
     if (isBoardFull(board)) {
-      return 0;
+      minimaxMemo[boardString] = 0;
+      return minimaxMemo[boardString];
     }
 
     if (player === "X") {
       let maxValue = -Infinity;
       for (let action of availableActions(board)) {
-        const nudge = noise ? (2 * Math.random() - 1) * noise : 0;
         const value =
-          nudge +
-          alphaBetaPruning(thinkMove(board, player, action), alpha, beta, "O");
+          generateNoise(noise) +
+          alphaBetaPruning(
+            thinkMove(board, player, action),
+            alpha,
+            beta,
+            "O",
+            noise
+          );
         maxValue = Math.max(maxValue, value);
         alpha = Math.max(alpha, value);
         if (beta <= alpha) {
           break;
         }
       }
+      minimaxMemo[boardString] = maxValue;
       return maxValue;
     } else {
       let minValue = Infinity;
       for (let action of availableActions(board)) {
-        const nudge = noise ? (2 * Math.random() - 1) * noise : 0;
         const value =
-          nudge +
-          alphaBetaPruning(thinkMove(board, player, action), alpha, beta, "X");
+          generateNoise(noise) +
+          alphaBetaPruning(
+            thinkMove(board, player, action),
+            alpha,
+            beta,
+            "X",
+            noise
+          );
         minValue = Math.min(minValue, value);
         beta = Math.min(beta, value);
         if (beta <= alpha) {
           break;
         }
       }
+      minimaxMemo[boardString] = minValue;
       return minValue;
     }
   };
+
+  const copyBoard = (board: string[][]) => board.map((row) => row.slice());
 
   const handleCellClick = (row: number, col: number) => {
     if (turn === "X" && !isXHuman) return;
@@ -207,14 +269,7 @@ const GameTicTacToe = () => {
   };
 
   const isBoardFull = (board: string[][]) => {
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        if (!board[i][j]) {
-          return false;
-        }
-      }
-    }
-    return true;
+    return board.every((row) => row.every((cell) => cell));
   };
 
   const compareArrays = (arr1: number[], arr2: number[]) => {
@@ -285,6 +340,19 @@ const GameTicTacToe = () => {
           />
         </label>
       </div>
+      <label htmlFor="ai-difficulty" className="ai-difficulty">
+        AI noise
+        <input
+          name="ai-difficulty"
+          type="range"
+          min="0.01"
+          max="0.3"
+          step="0.01"
+          value={aiNoise}
+          onChange={(e) => setAiNoise(Number(e.target.value))}
+        />
+      </label>
+
       <button onClick={resetGame} className="reset-button">
         Reset Game
       </button>
