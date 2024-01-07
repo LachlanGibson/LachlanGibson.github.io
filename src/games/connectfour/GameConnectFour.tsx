@@ -15,6 +15,7 @@ const GameConnectFour: React.FC = () => {
 
   return (
     <>
+      <p>This is a work in progress</p>
       <div className="game-board">
         {board.map((column, columnIndex) => {
           return (
