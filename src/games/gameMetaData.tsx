@@ -23,7 +23,7 @@ const gameMetaData: { [key: string]: Game } = {
   "tic-tac-toe": {
     title: "Tic Tac Toe",
     author: "Lachlan Gibson",
-    timeElement: <time dateTime="2023-12-25">25 December 2023</time>,
+    timeElement: <time dateTime="2024-01-07">7 January 2024</time>,
     imageElement: (
       <img src="/images/games/tic-tac-toe.webp" alt="Tic Tac Toe" />
     ),

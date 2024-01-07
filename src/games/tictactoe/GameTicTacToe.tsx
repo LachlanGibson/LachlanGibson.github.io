@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./GameTicTacToe.css";
 type Player = "X" | "O";
 type GameResult = Player | "Tie" | null;
+
+const miniumThinkTime = 1000;
+
 const GameTicTacToe = () => {
   const [board, setBoard] = useState<string[][]>([
     ["", "", ""],
@@ -13,20 +16,67 @@ const GameTicTacToe = () => {
   const [gameOver, setGameOver] = useState(false);
   const [isXHuman, setIsXHuman] = useState(true);
   const [isOHuman, setIsOHuman] = useState(true);
+  const [aiConsiderCell, setAiConsiderCell] = useState<number[]>([]);
+  const [isAiTurn, setIsAiTurn] = useState(false);
+
+  useEffect(() => {
+    if (checkAiTurn()) {
+      setIsAiTurn(() => true);
+      const options = availableActions(board);
+      const thinkInterval = setInterval(() => {
+        const cell = options[Math.floor(Math.random() * options.length)];
+        setAiConsiderCell(() => cell);
+      }, 100);
+
+      const startTime = Date.now();
+      const [placeRow, placeCol] = aiChooseMove(board);
+      const endTime = Date.now();
+      const thinkTime = endTime - startTime;
+      if (thinkTime < miniumThinkTime) {
+        setTimeout(() => {
+          clearInterval(thinkInterval);
+          makeMove(placeRow, placeCol, turn);
+        }, miniumThinkTime - thinkTime);
+      } else {
+        clearInterval(thinkInterval);
+        makeMove(placeRow, placeCol, turn);
+      }
+
+      return () => clearInterval(thinkInterval);
+    } else {
+      setIsAiTurn(() => false);
+      setAiConsiderCell(() => []);
+    }
+  }, [turn, isXHuman, isOHuman, gameOver]);
+
+  const availableActions = (board: string[][]) => {
+    const actions: number[][] = [];
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        !board[i][j] && actions.push([i, j]);
+      }
+    }
+    return actions;
+  };
+
+  const aiChooseMove = (board: string[][]) => {
+    const actions = availableActions(board);
+    return actions[Math.floor(Math.random() * actions.length)];
+  };
 
   const makeMove = (row: number, col: number, player: Player) => {
     const newBoard = [...board];
     newBoard[row][col] = player;
-    setBoard(newBoard);
+    setBoard(() => newBoard);
     const isWinningMove = checkWinningMove(newBoard, row, col);
     if (isWinningMove) {
-      setWinner(turn);
-      setGameOver(true);
+      setWinner(() => turn);
+      setGameOver(() => true);
     } else if (isBoardFull(newBoard)) {
-      setWinner("Tie");
-      setGameOver(true);
+      setWinner(() => "Tie");
+      setGameOver(() => true);
     } else {
-      setTurn(turn === "X" ? "O" : "X");
+      setTurn((prev) => (prev === "X" ? "O" : "X"));
     }
   };
 
@@ -85,14 +135,15 @@ const GameTicTacToe = () => {
   };
 
   const resetGame = () => {
-    setBoard([
+    setBoard(() => [
       ["", "", ""],
       ["", "", ""],
       ["", "", ""],
     ]);
-    setTurn("X");
-    setWinner(null);
-    setGameOver(false);
+    setTurn(() => "X");
+    setWinner(() => null);
+    setGameOver(() => false);
+    setAiConsiderCell(() => []);
   };
 
   const isBoardFull = (board: string[][]) => {
@@ -106,8 +157,21 @@ const GameTicTacToe = () => {
     return true;
   };
 
+  const compareArrays = (arr1: number[], arr2: number[]) => {
+    if (arr1.length !== arr2.length) return false;
+    return arr1.every((item, index) => item === arr2[index]);
+  };
+
+  const checkAiTurn = () => {
+    if (gameOver) return false;
+    if (turn === "X") return !isXHuman;
+    if (turn === "O") return !isOHuman;
+    return false;
+  };
+
   return (
     <div>
+      <p>This is a work in progress</p>
       <div className="winner">
         {winner
           ? winner === "Tie"
@@ -120,9 +184,13 @@ const GameTicTacToe = () => {
           row.map((cell, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`cell ${cell.toLowerCase()} ${
-                winner ? "game-over" : ""
-              } ${winner === cell ? "winning-cell" : ""}`}
+              className={`cell ${cell.toLowerCase()}${
+                winner ? " game-over" : ""
+              }${winner === cell ? " winning-cell" : ""}${
+                compareArrays(aiConsiderCell, [rowIndex, colIndex])
+                  ? " ai-consider-cell"
+                  : ""
+              }${isAiTurn ? " ai-turn" : ""}`}
               onClick={() => handleCellClick(rowIndex, colIndex)}
               data-hover={turn}
             >
