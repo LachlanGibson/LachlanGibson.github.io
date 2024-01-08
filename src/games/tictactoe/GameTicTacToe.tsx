@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "./GameTicTacToe.css";
+import styles from "./GameTicTacToe.module.css";
 type Player = "X" | "O";
 type GameResult = Player | "Tie";
 
@@ -282,18 +282,18 @@ const GameTicTacToe = () => {
     rowIndex: number,
     colIndex: number
   ) {
-    let className = `cell ${cell.toLowerCase()}`;
+    let className = styles.cell + ` ${styles[cell.toLowerCase()]}`;
     if (gameOver) {
-      className += " game-over";
+      className += " " + styles.gameOver;
       if (winner === cell) {
-        className += " winning-cell";
+        className += " " + styles.winningCell;
       }
     }
     if (compareArrays(aiConsiderCell, [rowIndex, colIndex])) {
-      className += " ai-consider-cell";
+      className += " " + styles.aiConsiderCell;
     }
     if (isAiTurn) {
-      className += " ai-turn";
+      className += " " + styles.aiTurn;
     }
     return className;
   }
@@ -301,14 +301,14 @@ const GameTicTacToe = () => {
   return (
     <div>
       <p>This is a work in progress</p>
-      <div className="winner">
+      <div className={styles.winner}>
         {winner
           ? winner === "Tie"
             ? "It's a Tie!"
             : `Player ${winner} wins!`
           : `Player ${turn}'s turn`}
       </div>
-      <div className="board">
+      <div className={styles.board}>
         {board.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div
@@ -322,7 +322,7 @@ const GameTicTacToe = () => {
           ))
         )}
       </div>
-      <div className="checkbox-div">
+      <div className={styles.checkboxDiv}>
         <label>
           X is AI
           <input
@@ -340,7 +340,7 @@ const GameTicTacToe = () => {
           />
         </label>
       </div>
-      <label htmlFor="ai-difficulty" className="ai-difficulty">
+      <label htmlFor="ai-difficulty" className={styles.aiDifficulty}>
         AI noise
         <input
           name="ai-difficulty"
@@ -353,7 +353,7 @@ const GameTicTacToe = () => {
         />
       </label>
 
-      <button onClick={resetGame} className="reset-button">
+      <button onClick={resetGame} className={styles.resetButton}>
         Reset Game
       </button>
     </div>

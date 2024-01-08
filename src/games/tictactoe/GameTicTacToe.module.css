@@ -34,32 +34,32 @@
   aspect-ratio: 1 / 1;
 }
 
-.cell:not(.winning-cell) {
+.cell:not(.winningCell) {
   transition: background-color 0.3s ease;
   background-color: #fff;
 }
 
-.cell.game-over.cell:not(.winning-cell) {
+.cell.gameOver.cell:not(.winningCell) {
   color: rgba(0, 0, 0, 0.3);
   transition: color 0.3s ease;
 }
 
-.cell.x:not(.game-over) {
+.cell.x:not(.gameOver) {
   color: #df4444;
   transition: color 0.3s ease;
 }
 
-.winning-cell.x {
+.winningCell.x {
   color: #df4444;
   transition: color 0.3s ease;
 }
 
-.cell.o:not(.game-over) {
+.cell.o:not(.gameOver) {
   color: #4444ce;
   transition: color 0.3s ease;
 }
 
-.winning-cell.o {
+.winningCell.o {
   color: #4444ce;
   transition: color 0.3s ease;
 }
@@ -71,7 +71,7 @@
   margin-top: 20px;
 }
 
-.reset-button {
+.resetButton {
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
@@ -83,13 +83,13 @@
   cursor: pointer;
 }
 
-.ai-difficulty {
+.aiDifficulty {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.checkbox-div {
+.checkboxDiv {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +97,7 @@
   width: 90%;
 }
 
-.checkbox-div label {
+.checkboxDiv label {
   font-size: 16px;
   font-weight: bold;
   margin: 1rem;
@@ -110,8 +110,8 @@
   display: none;
 }
 
-.cell:not(.x, .o, .game-over, .ai-turn):hover::before,
-.cell.ai-consider-cell:not(.x, .o, .game-over)::before {
+.cell:not(.x, .o, .gameOver, .aiTurn):hover::before,
+.cell.aiConsiderCell:not(.x, .o, .gameOver)::before {
   content: attr(data-hover);
   color: rgba(0, 0, 0, 0.2);
   font-size: 8rem;
@@ -120,7 +120,7 @@
   justify-content: center;
 }
 
-.winning-cell {
+.winningCell {
   background-color: #75cc96;
   transition: background-color 0.3s ease;
 }
@@ -129,8 +129,8 @@
   .cell {
     font-size: 6rem;
   }
-  .cell:not(.x, .o, .game-over, .ai-turn):hover::before,
-  .cell.ai-consider-cell:not(.x, .o, .game-over)::before {
+  .cell:not(.x, .o, .gameOver, .aiTurn):hover::before,
+  .cell.aiConsiderCell:not(.x, .o, .gameOver)::before {
     font-size: 6rem;
   }
 }
@@ -139,8 +139,8 @@
   .cell {
     font-size: 3rem;
   }
-  .cell:not(.x, .o, .game-over, .ai-turn):hover::before,
-  .cell.ai-consider-cell:not(.x, .o, .game-over)::before {
+  .cell:not(.x, .o, .gameOver, .aiTurn):hover::before,
+  .cell.aiConsiderCell:not(.x, .o, .gameOver)::before {
     font-size: 3rem;
   }
 }
