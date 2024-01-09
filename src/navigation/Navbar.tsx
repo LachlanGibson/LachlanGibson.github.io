@@ -15,6 +15,7 @@ const Navbar: React.FC<{}> = () => {
           alt="Logo for Lachlan Gibson's website"
         />
         <span id="lachlan-nav-text">Lachlan Gibson</span>
+        <span id="lachlan-nav-text-short">LG</span>
       </div>
       <NavLink className={activeLink} to="/">
         Home

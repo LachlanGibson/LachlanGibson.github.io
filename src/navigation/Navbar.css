@@ -75,8 +75,26 @@ nav a:hover {
   filter: brightness(0) invert(1);
 }
 
-@media only screen and (max-width: 400px) {
-  #navbar-icon {
+#lachlan-nav-text-short {
+  display: none;
+}
+
+@media only screen and (max-width: 500px) {
+  #lachlan-nav-text {
     display: none;
+  }
+  #lachlan-nav-text-short {
+    display: inline;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+  nav {
+    font-size: 1.05rem;
+  }
+  .icon-container,
+  .icon-container img,
+  .icon-link {
+    height: 1.05rem;
   }
 }
