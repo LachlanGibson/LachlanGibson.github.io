@@ -9,7 +9,7 @@ html {
   scroll-padding-top: 3rem;
 }
 
-.foobar-task-description {
+.foobarTaskDescription {
   font-family: "Share Tech Mono", monospace;
   font-size: 1.6rem;
   background-color: #111111;
@@ -19,7 +19,7 @@ html {
   overflow-x: auto;
 }
 
-.table-of-contents {
+.tableOfContents {
   position: sticky;
   background-color: rgb(32, 33, 36);
   border-bottom: solid 1px #444;
@@ -32,19 +32,19 @@ html {
   display: flex;
 }
 
-.toc-layer1 {
+.tocLayer1 {
   top: 0;
   height: 3rem;
   z-index: 5;
 }
 
-.toc-layer2 {
+.tocLayer2 {
   top: 3rem;
   height: 3rem;
   z-index: 4;
 }
 
-.table-of-contents a {
+.tableOfContents a {
   color: rgb(137, 156, 212);
   text-align: center;
   height: 100%;
@@ -57,17 +57,17 @@ html {
   max-width: 12rem;
 }
 
-.table-of-contents a:hover {
+.tableOfContents a:hover {
   background-color: #ddd;
   color: rgb(35, 39, 51);
 }
 
-.no-before {
+.noBefore {
   overflow: auto;
   height: auto;
 }
 
-.no-before::before {
+.noBefore::before {
   display: none;
 }
 
@@ -82,7 +82,7 @@ p {
   padding-left: 2rem;
 }
 
-.tikz-diagram {
+.tikzDiagram {
   display: flex;
   margin: auto;
   filter: invert();
@@ -91,72 +91,72 @@ p {
   width: 100%;
 }
 
-.grid-table {
+.gridTable {
   margin: 0 auto;
 }
 
-.grid-table td {
+.gridTable td {
   text-align: center;
   vertical-align: middle;
   width: 2rem;
   aspect-ratio: 1;
 }
-.grid-table a {
+.gridTable a {
   color: inherit;
 }
-.grid-table .s6 {
+.gridTable .s6 {
   border-bottom: 0.1rem solid white;
   background-color: #ff9900;
 }
-.grid-table .s12 {
+.gridTable .s12 {
   font-weight: bold;
 }
-.grid-table .s10 {
+.gridTable .s10 {
   border-right: 0.1rem solid white;
   background-color: #00ff00;
 }
 
-.grid-table .s14 {
+.gridTable .s14 {
   border-bottom: 0.1rem solid white;
   border-right: 0.1rem solid white;
   background-color: #ff9900;
 }
-.grid-table .s7 {
+.gridTable .s7 {
   background-color: #00ff00;
 }
-.grid-table .s1 {
+.gridTable .s1 {
   border-right: 0.1rem solid white;
 }
-.grid-table .s9 {
+.gridTable .s9 {
   background-color: #ff9900;
 }
-.grid-table .s8 {
+.gridTable .s8 {
   border-right: 0.1rem solid white;
   background-color: #ff0000;
 }
-.grid-table .s4 {
+.gridTable .s4 {
   background-color: #ff0000;
 }
-.grid-table .s3 {
+.gridTable .s3 {
   border-bottom: 0.1rem solid white;
   border-right: 0.1rem solid white;
 }
-.grid-table .s13 {
+.gridTable .s13 {
   border-bottom: 0.1rem solid white;
   background-color: #ff9900;
 }
-.grid-table .s2 {
+.gridTable .s2 {
   border-bottom: 0.1rem solid white;
 }
-.grid-table .s11 {
+.gridTable .s11 {
   background-color: #ff9900;
 }
-.grid-table .s5 {
+.gridTable .s5 {
   border-bottom: 0.1rem solid white;
   border-right: 0.1rem solid white;
   background-color: #ff9900;
 }
-.grid-table tr {
+.gridTable tr {
   height: 2rem;
 }
 
@@ -174,36 +174,36 @@ figcaption {
 }
 
 @media only screen and (max-width: 600px) {
-  .table-of-contents a {
+  .tableOfContents a {
     font-size: 1rem;
   }
 }
 
 @media only screen and (max-width: 380px) {
-  .table-of-contents a {
+  .tableOfContents a {
     font-size: 0;
   }
-  #a-challenge1:after {
+  #aChallenge1:after {
     content: "1";
     font-size: 1.6rem;
   }
-  #a-challenge2:after {
+  #aChallenge2:after {
     content: "2";
     font-size: 1.6rem;
   }
-  #a-challenge3:after {
+  #aChallenge3:after {
     content: "3";
     font-size: 1.6rem;
   }
-  #a-challenge4:after {
+  #aChallenge4:after {
     content: "4";
     font-size: 1.6rem;
   }
-  #a-challenge5:after {
+  #aChallenge5:after {
     content: "5";
     font-size: 1.6rem;
   }
-  #a-bonus:after {
+  #aBonus:after {
     content: "B";
     font-size: 1.6rem;
   }

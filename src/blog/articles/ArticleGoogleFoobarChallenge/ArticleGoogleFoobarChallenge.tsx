@@ -1,5 +1,5 @@
 import React from "react";
-import "./ArticleGoogleFoobarChallenge.css";
+import styles from "./ArticleGoogleFoobarChallenge.module.css";
 import "katex/dist/katex.min.css";
 import { InlineMath, BlockMath } from "react-katex";
 import PythonCodeDisplay from "./PythonCodeDisplay";
@@ -60,27 +60,27 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
         of the challenges are complex and may take several hours or even several
         days to solve. Enjoy the process!
       </p>
-      <div className="table-of-contents toc-layer1">
-        <a href="#sec-challenge1" id="a-challenge1">
+      <div className={styles.tableOfContents + " " + styles.tocLayer1}>
+        <a href="#sec-challenge1" id={styles.aChallenge1}>
           Challenge 1
         </a>
-        <a href="#sec-challenge2" id="a-challenge2">
+        <a href="#sec-challenge2" id={styles.aChallenge2}>
           Challenge 2
         </a>
-        <a href="#sec-challenge3" id="a-challenge3">
+        <a href="#sec-challenge3" id={styles.aChallenge3}>
           Challenge 3
         </a>
-        <a href="#sec-challenge4" id="a-challenge4">
+        <a href="#sec-challenge4" id={styles.aChallenge4}>
           Challenge 4
         </a>
-        <a href="#sec-challenge5" id="a-challenge5">
+        <a href="#sec-challenge5" id={styles.aChallenge5}>
           Challenge 5
         </a>
-        <a href="#sec-bonus" id="a-bonus">
+        <a href="#sec-bonus" id={styles.aBonus}>
           Bonus
         </a>
       </div>
-      <div className="foobar-task-description">
+      <div className={styles.foobarTaskDescription}>
         Python Constraints
         <br />
         ==================
@@ -108,7 +108,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
         and other non-printing characters.
       </div>
       <div style={{ overflowX: "auto", padding: "0 0.1rem" }}>
-        <section className="foobar-challenge" id="sec-challenge1">
+        <section className={styles.foobarChallenge} id="sec-challenge1">
           <h2>Challenge 1</h2>
           <p>
             The first level contained only a single task, titled&nbsp;
@@ -116,8 +116,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             generating prime numbers. A task summary, adapted from the original
             challenge instructions, is given below.
           </p>
-          <section className="foobar-task" id="sec-task-1">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-1">
+            <div className={styles.foobarTaskDescription}>
               Re-ID
               <br />
               =====
@@ -197,7 +197,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             />
           </section>
         </section>
-        <section className="foobar-challenge" id="sec-challenge2">
+        <section className={styles.foobarChallenge} id="sec-challenge2">
           <h2>Challenge 2</h2>
 
           <p>
@@ -205,8 +205,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             <a href="#sec-task-2">Please Pass the Coded Messages</a> and{" "}
             <a href="#sec-task-3">Bunny Worker Locations</a>.
           </p>
-          <section className="foobar-task" id="sec-task-2">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-2">
+            <div className={styles.foobarTaskDescription}>
               Please Pass the Coded Messages
               <br />
               ==============================
@@ -278,8 +278,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               codeFile={"/blog/files/google-foobar-challenge/codedmessages.py"}
             />
           </section>
-          <section className="foobar-task" id="sec-task-3">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-3">
+            <div className={styles.foobarTaskDescription}>
               Bunny Worker Locations
               <br />
               ======================
@@ -356,7 +356,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             />
           </section>
         </section>
-        <section className="foobar-challenge" id="sec-challenge3">
+        <section className={styles.foobarChallenge} id="sec-challenge3">
           <h2>Challenge 3</h2>
           <p>
             The third level contained three tasks, titled{" "}
@@ -364,8 +364,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             <a href="#sec-task-5">The Grandest Staircase Of Them All</a> and{" "}
             <a href="#sec-task-6">Fuel Injection Perfection</a>.
           </p>
-          <section className="foobar-task" id="sec-task-4">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-4">
+            <div className={styles.foobarTaskDescription}>
               Prepare the Bunnies' Escape
               <br />
               ===========================
@@ -434,8 +434,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               codeFile={"/blog/files/google-foobar-challenge/prepareescape.py"}
             />
           </section>
-          <section className="foobar-task" id="sec-task-5">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-5">
+            <div className={styles.foobarTaskDescription}>
               The Grandest Staircase Of Them All
               <br />
               ==================================
@@ -560,8 +560,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               }
             />
           </section>
-          <section className="foobar-task" id="sec-task-6">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-6">
+            <div className={styles.foobarTaskDescription}>
               Fuel Injection Perfection
               <br />
               =========================
@@ -639,7 +639,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               <img
                 src="/images/blog/google-foobar-challenge/foobar_c3c_a.svg"
                 alt="flow diagram"
-                className="tikz-diagram"
+                className={styles.tikzDiagram}
               />
               <br />
               In this case adding 1 inevitably leads to either{" "}
@@ -654,7 +654,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               <img
                 src="/images/blog/google-foobar-challenge/foobar_c3c_b.svg"
                 alt="flow diagram"
-                className="tikz-diagram"
+                className={styles.tikzDiagram}
               />
               <br />
               Now choosing to subtract 1 will inevitably lead to either{" "}
@@ -686,15 +686,15 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             />
           </section>
         </section>
-        <section className="foobar-challenge" id="sec-challenge4">
+        <section className={styles.foobarChallenge} id="sec-challenge4">
           <h2>Challenge 4</h2>
           <p>
             The fourth level contained two tasks, titled{" "}
             <a href="#sec-task-7">Bringing a Gun to a Trainer Fight</a> and{" "}
             <a href="#sec-task-8">Free the Bunny Workers</a>.
           </p>
-          <section className="foobar-task" id="sec-task-7">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-7">
+            <div className={styles.foobarTaskDescription}>
               Bringing a Gun to a Trainer Fight
               <br />
               =================================
@@ -763,231 +763,235 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               size of the set of directions to hit the target.
             </p>
             <figure>
-              <table className="grid-table" cellSpacing="0" cellPadding="0">
+              <table
+                className={styles.gridTable}
+                cellSpacing="0"
+                cellPadding="0"
+              >
                 <tbody>
                   <tr>
                     <td>7</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s0">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s0">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
                   </tr>
                   <tr>
                     <td>6</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
                   </tr>
                   <tr>
                     <td>5</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s0">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s4">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s0">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s4}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
                   </tr>
                   <tr>
                     <td>4</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
-                    <td className="s5">—</td>
-                    <td className="s6">+</td>
-                    <td className="s6">—</td>
-                    <td className="s5">—</td>
-                    <td className="s6">+</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s5}>—</td>
+                    <td className={styles.s6}>+</td>
+                    <td className={styles.s6}>—</td>
+                    <td className={styles.s5}>—</td>
+                    <td className={styles.s6}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
                   </tr>
                   <tr>
                     <td>3</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s7">T</td>
-                    <td className="s8">Y</td>
-                    <td className="s9">|</td>
-                    <td className="s4">Y</td>
-                    <td className="s10">T</td>
-                    <td className="s9">|</td>
-                    <td className="s7">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s7}>T</td>
+                    <td className={styles.s8}>Y</td>
+                    <td className={styles.s9}>|</td>
+                    <td className={styles.s4}>Y</td>
+                    <td className={styles.s10}>T</td>
+                    <td className={styles.s9}>|</td>
+                    <td className={styles.s7}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s6">—</td>
-                    <td className="s5">—</td>
-                    <td className="s6">+</td>
-                    <td className="s6">—</td>
-                    <td className="s5">—</td>
-                    <td className="s6">+</td>
-                    <td className="s6">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s6}>—</td>
+                    <td className={styles.s5}>—</td>
+                    <td className={styles.s6}>+</td>
+                    <td className={styles.s6}>—</td>
+                    <td className={styles.s5}>—</td>
+                    <td className={styles.s6}>+</td>
+                    <td className={styles.s6}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
                   </tr>
                   <tr>
                     <td>1</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s9">|</td>
-                    <td className="s4">T</td>
-                    <td className="s8">Y</td>
-                    <td className="s11">|</td>
-                    <td className="s12">Y</td>
-                    <td className="s10">T</td>
-                    <td className="s9">|</td>
-                    <td className="s9">T</td>
-                    <td className="s8">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s9}>|</td>
+                    <td className={styles.s4}>T</td>
+                    <td className={styles.s8}>Y</td>
+                    <td className={styles.s11}>|</td>
+                    <td className={styles.s12}>Y</td>
+                    <td className={styles.s10}>T</td>
+                    <td className={styles.s9}>|</td>
+                    <td className={styles.s9}>T</td>
+                    <td className={styles.s8}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
                   </tr>
                   <tr>
                     <td>0</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s6">—</td>
-                    <td className="s5">—</td>
-                    <td className="s13">+</td>
-                    <td className="s13">—</td>
-                    <td className="s14">—</td>
-                    <td className="s6">+</td>
-                    <td className="s6">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s6}>—</td>
+                    <td className={styles.s5}>—</td>
+                    <td className={styles.s13}>+</td>
+                    <td className={styles.s13}>—</td>
+                    <td className={styles.s14}>—</td>
+                    <td className={styles.s6}>+</td>
+                    <td className={styles.s6}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
                   </tr>
                   <tr>
                     <td>-1</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s7">T</td>
-                    <td className="s8">Y</td>
-                    <td className="s9">|</td>
-                    <td className="s4">Y</td>
-                    <td className="s10">T</td>
-                    <td className="s9">|</td>
-                    <td className="s7">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s7}>T</td>
+                    <td className={styles.s8}>Y</td>
+                    <td className={styles.s9}>|</td>
+                    <td className={styles.s4}>Y</td>
+                    <td className={styles.s10}>T</td>
+                    <td className={styles.s9}>|</td>
+                    <td className={styles.s7}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
                   </tr>
                   <tr>
-                    <td className="table-y-axis">-2</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
-                    <td className="s5">—</td>
-                    <td className="s6">+</td>
-                    <td className="s6">—</td>
-                    <td className="s5">—</td>
-                    <td className="s6">+</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
+                    <td className={styles.tableYAxis}>-2</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s5}>—</td>
+                    <td className={styles.s6}>+</td>
+                    <td className={styles.s6}>—</td>
+                    <td className={styles.s5}>—</td>
+                    <td className={styles.s6}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
                   </tr>
                   <tr>
-                    <td className="table-y-axis">-3</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s0">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s4">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s0">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
+                    <td className={styles.tableYAxis}>-3</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s4}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
                   </tr>
                   <tr>
-                    <td className="table-y-axis">-4</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
-                    <td className="s3">—</td>
-                    <td className="s2">+</td>
-                    <td className="s2">—</td>
+                    <td className={styles.tableYAxis}>-4</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
+                    <td className={styles.s3}>—</td>
+                    <td className={styles.s2}>+</td>
+                    <td className={styles.s2}>—</td>
                   </tr>
                   <tr>
-                    <td className="table-y-axis">-5</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s0">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
-                    <td className="s1">T</td>
-                    <td className="s0">|</td>
-                    <td className="s0">T</td>
-                    <td className="s1">Y</td>
-                    <td className="s0">|</td>
-                    <td className="s0">Y</td>
+                    <td className={styles.tableYAxis}>-5</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
+                    <td className={styles.s1}>T</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>T</td>
+                    <td className={styles.s1}>Y</td>
+                    <td className={styles.s0}>|</td>
+                    <td className={styles.s0}>Y</td>
                   </tr>
                   <tr>
-                    <td className="table-bottom-left"></td>
-                    <td className="table-x-axis">-5</td>
-                    <td className="table-x-axis">-4</td>
-                    <td className="table-x-axis">-3</td>
-                    <td className="table-x-axis">-2</td>
-                    <td className="table-x-axis">-1</td>
-                    <td className="table-x-axis">0</td>
-                    <td className="table-x-axis">1</td>
-                    <td className="table-x-axis">2</td>
-                    <td className="table-x-axis">3</td>
-                    <td className="table-x-axis">4</td>
-                    <td className="table-x-axis">5</td>
-                    <td className="table-x-axis">6</td>
-                    <td className="table-x-axis">7</td>
+                    <td className={styles.tableBottomLeft}></td>
+                    <td className={styles.tableXAxis}>-5</td>
+                    <td className={styles.tableXAxis}>-4</td>
+                    <td className={styles.tableXAxis}>-3</td>
+                    <td className={styles.tableXAxis}>-2</td>
+                    <td className={styles.tableXAxis}>-1</td>
+                    <td className={styles.tableXAxis}>0</td>
+                    <td className={styles.tableXAxis}>1</td>
+                    <td className={styles.tableXAxis}>2</td>
+                    <td className={styles.tableXAxis}>3</td>
+                    <td className={styles.tableXAxis}>4</td>
+                    <td className={styles.tableXAxis}>5</td>
+                    <td className={styles.tableXAxis}>6</td>
+                    <td className={styles.tableXAxis}>7</td>
                   </tr>
                 </tbody>
               </table>
@@ -1004,8 +1008,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               }
             />
           </section>
-          <section className="foobar-task" id="sec-task-8">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-8">
+            <div className={styles.foobarTaskDescription}>
               Free the Bunny Workers
               <br />
               ======================
@@ -1111,14 +1115,14 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             />
           </section>
         </section>
-        <section className="foobar-challenge" id="sec-challenge5">
+        <section className={styles.foobarChallenge} id="sec-challenge5">
           <h2>Challenge 5</h2>
           <p>
             The fifth and last level contained only a single task, titled{" "}
             <a href="#sec-task-9">Dodge the Lasers!</a>
           </p>
-          <section className="foobar-task" id="sec-task-9">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-9">
+            <div className={styles.foobarTaskDescription}>
               Dodge the Lasers!
               <br />
               =================
@@ -1265,7 +1269,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             />
           </section>
         </section>
-        <section className="foobar-challenge" id="sec-bonus">
+        <section className={styles.foobarChallenge} id="sec-bonus">
           <h2>Bonus Tasks</h2>
           <p>
             After completing all five levels of the challenge, I found that I
@@ -1275,8 +1279,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             <a href="#sec-task-11">Disorderly Escape</a> and{" "}
             <a href="#sec-task-12">Escape Pods</a>.
           </p>
-          <section className="foobar-task" id="sec-task-10">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-10">
+            <div className={styles.foobarTaskDescription}>
               Expanding Nebula
               <br />
               ================
@@ -1389,7 +1393,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               solution(g) returns the number of unique previous states s that
               can produce g. It does this efficiently in four steps:
             </p>
-            <ol className="numberedList">
+            <ol className={styles.numberedList}>
               <li>
                 Rows of g and s are represented as the decimal integers that are
                 equal to a binary integer where each digit is given by the
@@ -1421,8 +1425,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               }
             />
           </section>
-          <section className="foobar-task" id="sec-task-11">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-11">
+            <div className={styles.foobarTaskDescription}>
               Disorderly Escape
               <br />
               =================
@@ -1633,8 +1637,8 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               }
             />
           </section>
-          <section className="foobar-task" id="sec-task-12">
-            <div className="foobar-task-description">
+          <section className={styles.foobarTask} id="sec-task-12">
+            <div className={styles.foobarTaskDescription}>
               Escape Pods
               <br />
               ===========
