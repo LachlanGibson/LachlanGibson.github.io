@@ -299,64 +299,93 @@ const GameTicTacToe = () => {
   }
 
   return (
-    <div>
-      <p>This is a work in progress</p>
-      <div className={styles.winner}>
-        {winner
-          ? winner === "Tie"
-            ? "It's a Tie!"
-            : `Player ${winner} wins!`
-          : `Player ${turn}'s turn`}
-      </div>
-      <div className={styles.board}>
-        {board.map((row, rowIndex) =>
-          row.map((cell, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              className={createCellClassName(cell, rowIndex, colIndex)}
-              onClick={() => handleCellClick(rowIndex, colIndex)}
-              data-hover={turn}
-            >
-              {cell}
-            </div>
-          ))
-        )}
-      </div>
-      <div className={styles.checkboxDiv}>
-        <label>
-          X is AI
+    <>
+      <div>
+        <p>This is a work in progress</p>
+        <div className={styles.winner}>
+          {winner
+            ? winner === "Tie"
+              ? "It's a Tie!"
+              : `Player ${winner} wins!`
+            : `Player ${turn}'s turn`}
+        </div>
+        <div className={styles.board}>
+          {board.map((row, rowIndex) =>
+            row.map((cell, colIndex) => (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className={createCellClassName(cell, rowIndex, colIndex)}
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+                data-hover={turn}
+              >
+                {cell}
+              </div>
+            ))
+          )}
+        </div>
+        <div className={styles.checkboxDiv}>
+          <label>
+            AI control X
+            <input
+              type="checkbox"
+              checked={!isXHuman}
+              onChange={() => setIsXHuman((prev) => !prev)}
+            />
+          </label>
+          <label>
+            AI control O
+            <input
+              type="checkbox"
+              checked={!isOHuman}
+              onChange={() => setIsOHuman((prev) => !prev)}
+            />
+          </label>
+        </div>
+        <label htmlFor="ai-difficulty" className={styles.aiDifficulty}>
+          AI noise
           <input
-            type="checkbox"
-            checked={!isXHuman}
-            onChange={() => setIsXHuman((prev) => !prev)}
+            name="ai-difficulty"
+            type="range"
+            min="0.01"
+            max="0.3"
+            step="0.01"
+            value={aiNoise}
+            onChange={(e) => setAiNoise(Number(e.target.value))}
           />
         </label>
-        <label>
-          O is AI
-          <input
-            type="checkbox"
-            checked={!isOHuman}
-            onChange={() => setIsOHuman((prev) => !prev)}
-          />
-        </label>
-      </div>
-      <label htmlFor="ai-difficulty" className={styles.aiDifficulty}>
-        AI noise
-        <input
-          name="ai-difficulty"
-          type="range"
-          min="0.01"
-          max="0.3"
-          step="0.01"
-          value={aiNoise}
-          onChange={(e) => setAiNoise(Number(e.target.value))}
-        />
-      </label>
 
-      <button onClick={resetGame} className={styles.resetButton}>
-        Reset Game
-      </button>
-    </div>
+        <button onClick={resetGame} className={styles.resetButton}>
+          Reset Game
+        </button>
+      </div>
+      <div>
+        <h3>Rules</h3>
+        <ul>
+          <li>First player is X</li>
+          <li>Second player is O</li>
+          <li>Click on a cell to place your mark</li>
+          <li>
+            First player to fill a row, column or diagonal with their mark wins
+          </li>
+          <li>Game ends in a tie if the board is full and no player has won</li>
+        </ul>
+        <h3>AI</h3>
+        <ul>
+          <li>
+            Clicking the corresponding checkbox will toggle AI control over a
+            player
+          </li>
+          <li>
+            AI is implemented using the minimax algorithm with alpha beta
+            pruning, with added noise to distort the AI's decision making.
+          </li>
+          <li>
+            With zero noise, the AI will always win or tie, but with noise can
+            sometimes be beaten
+          </li>
+        </ul>
+      </div>
+    </>
   );
 };
 
