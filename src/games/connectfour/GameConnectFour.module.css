@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr, 6fr;
-  width: min(95%, 600px);
+  width: min(95%, 500px);
   margin: 0 auto;
   background-color: white;
   padding: min(0.5rem, 1%);
