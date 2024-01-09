@@ -78,11 +78,12 @@ const Home: React.FC<{}> = () => {
     const interval = setInterval(() => {
       setLoadingBarWidth((prevWidth) => {
         const newWidth = prevWidth + (barTime / quoteDuration) * 100;
-        return newWidth >= 100 ? 0 : newWidth;
+        return newWidth >= 100 ? 100 : newWidth;
       });
     }, barTime);
 
     const quoteInterval = setInterval(() => {
+      setLoadingBarWidth(0);
       setCurrentQuote((prevQuote) => (prevQuote + 1) % quotes.length);
     }, quoteDuration);
 
