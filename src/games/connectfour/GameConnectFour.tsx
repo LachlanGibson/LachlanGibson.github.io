@@ -164,47 +164,67 @@ const GameConnectFour: React.FC = () => {
 
   return (
     <>
-      <p>This is a work in progress</p>
-      <h2>{gameStatus}</h2>
-      <div className={styles.gameBoard}>
-        <div className={styles.inputRow}>
-          {slotAbove.map((cell, cellIndex) => (
-            <div key={-1 - cellIndex} className={styles.slotCell}>
-              <div
-                className={`${styles.circle} ${cell ? styles[player] : ""}`}
-              ></div>
-            </div>
-          ))}
-        </div>
-        <div className={styles.slots}>
-          {board.map((column, columnIndex) => {
-            return (
-              <div
-                key={columnIndex}
-                className={styles.column}
-                onClick={() => makeMove(columnIndex)}
-                onMouseEnter={() => handleMouseEnter(columnIndex)}
-                onMouseLeave={handleMouseLeave}
-              >
-                {column.map((cell, cellIndex) => {
-                  return (
-                    <div key={cellIndex} className={styles.cell}>
-                      <div
-                        className={`${styles.circle} ${
-                          cell ? styles[cell] : ""
-                        }`}
-                      ></div>
-                    </div>
-                  );
-                })}
+      <div>
+        <p>This is a work in progress</p>
+        <h2>{gameStatus}</h2>
+        <div className={styles.gameBoard}>
+          <div className={styles.inputRow}>
+            {slotAbove.map((cell, cellIndex) => (
+              <div key={-1 - cellIndex} className={styles.slotCell}>
+                <div
+                  className={`${styles.circle} ${cell ? styles[player] : ""}`}
+                ></div>
               </div>
-            );
-          })}
+            ))}
+          </div>
+          <div className={styles.slots}>
+            {board.map((column, columnIndex) => {
+              return (
+                <div
+                  key={columnIndex}
+                  className={styles.column}
+                  onClick={() => makeMove(columnIndex)}
+                  onMouseEnter={() => handleMouseEnter(columnIndex)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  {column.map((cell, cellIndex) => {
+                    return (
+                      <div key={cellIndex} className={styles.cell}>
+                        <div
+                          className={`${styles.circle} ${
+                            cell ? styles[cell] : ""
+                          }`}
+                        ></div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
         </div>
+        <button onClick={resetGame} className={styles.resetButton}>
+          Reset Game
+        </button>
       </div>
-      <button onClick={resetGame} className={styles.resetButton}>
-        Reset Game
-      </button>
+      <div>
+        <h3>Rules</h3>
+        <ul>
+          <li>Players alternate turns</li>
+          <li>
+            Players choose a column with available space to place a piece in the
+            lowest available slot
+          </li>
+          <li>
+            The first player to get four of their pieces in a row wins the game
+          </li>
+          <li>The four in a row can be horizontal, vertical, or diagonal</li>
+          <li>
+            If the board is full and neither player has four in a row, the game
+            is a tie
+          </li>
+        </ul>
+      </div>
     </>
   );
 };
