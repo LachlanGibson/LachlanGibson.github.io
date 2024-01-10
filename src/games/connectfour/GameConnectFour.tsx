@@ -47,10 +47,7 @@ for (let col = 0; col < 4; col++) {
 const evaluateMemo = {} as { [key: string]: number };
 
 const stringifyBoard = (board: string[][]): string => {
-  let transposedBoard = board[0].map((_, colIndex) =>
-    board.map((row) => row[colIndex])
-  );
-  return transposedBoard
+  return board
     .map((col) => {
       return col.map((cell) => (cell === "" ? "_" : cell)).join("");
     })
@@ -71,10 +68,12 @@ const GameConnectFour: React.FC = () => {
   const [slotAbove, setSlotAbove] = useState([...emptyRow]);
   const [player, setPlayer] = useState<Player>("R");
   const [gameStatus, setgameStatus] = useState<GameStatus>("in progress");
-  const [noise, setNoise] = useState<number>(0);
+  const [noise, setNoise] = useState<number>(0.022);
   const [depth, setDepth] = useState<number>(4);
   const [isRAI, setIsRAI] = useState<boolean>(false);
   const [isYAI, setIsYAI] = useState<boolean>(true);
+  const [actionValues, setActionValues] = useState<number[]>([]);
+  const [showActionValues, setShowActionValues] = useState<boolean>(false);
 
   useEffect(() => {
     if (gameStatus !== "in progress") {
@@ -87,8 +86,17 @@ const GameConnectFour: React.FC = () => {
       const move = aiChooseMove();
       makeMove(move);
     }
-    console.log(evaluateMemo);
   }, [player, gameStatus, isRAI, isYAI]);
+
+  useEffect(() => {
+    if (!showActionValues) {
+      return;
+    }
+    const actionValues = availableMoves(board).map((action) => {
+      return minimax(board, action, depth, -Infinity, Infinity, player, player);
+    });
+    setActionValues(actionValues);
+  }, [board]);
 
   const handleMouseEnter = (columnIndex: number) => {
     if (gameStatus !== "in progress") {
@@ -112,7 +120,11 @@ const GameConnectFour: React.FC = () => {
     }, [] as number[]);
   };
 
-  const thinkStep = (board: string[][], columnIndex: number) => {
+  const thinkStep = (
+    board: string[][],
+    columnIndex: number,
+    player: Player
+  ) => {
     const newBoard = board.map((col) => [...col]);
     for (let i = newBoard[columnIndex].length - 1; i >= 0; i--) {
       if (newBoard[columnIndex][i] === "") {
@@ -127,7 +139,7 @@ const GameConnectFour: React.FC = () => {
     if (board[columnIndex][0] !== "" || gameStatus !== "in progress") {
       return;
     }
-    const newBoard = thinkStep(board, columnIndex);
+    const newBoard = thinkStep(board, columnIndex, player);
     setBoard(newBoard);
     setPlayer((prev) => (prev === "R" ? "Y" : "R"));
     const result = checkWin(newBoard, columnIndex);
@@ -238,10 +250,11 @@ const GameConnectFour: React.FC = () => {
     depth: number,
     alpha: number,
     beta: number,
+    prevPlayer: Player,
     player: Player,
     noise?: number
   ) => {
-    const board = thinkStep(prevBoard, action);
+    const board = thinkStep(prevBoard, action, prevPlayer);
     const result = checkWin(board, action);
 
     if (result === "R wins") {
@@ -266,7 +279,8 @@ const GameConnectFour: React.FC = () => {
           depth - 1,
           alpha,
           beta,
-          player === "R" ? "Y" : "R",
+          player,
+          prevPlayer,
           noise
         );
       if (player === "R") {
@@ -302,6 +316,26 @@ const GameConnectFour: React.FC = () => {
     return evaluateMemo[boardString];
   };
 
+  const evaluateMoves = () => {
+    const moves = availableMoves(board);
+    return moves.map((action) => {
+      const nudge = noise ? (Math.random() - 0.5) * 2 * noise : 0;
+      const score =
+        nudge +
+        minimax(
+          board,
+          action,
+          depth,
+          -Infinity,
+          Infinity,
+          player,
+          player === "R" ? "Y" : "R",
+          noise
+        );
+      return [action, score];
+    });
+  };
+
   const aiChooseMove = () => {
     const moves = availableMoves(board);
     let bestScore = player === "R" ? -Infinity : Infinity;
@@ -316,14 +350,14 @@ const GameConnectFour: React.FC = () => {
           depth,
           -Infinity,
           Infinity,
+          player,
           player === "R" ? "Y" : "R",
           noise
         );
-      if (score > bestScore && player === "R") {
-        bestScore = score;
-        bestMove = action;
-      }
-      if (score < bestScore && player === "Y") {
+      if (
+        (score > bestScore && player === "R") ||
+        (score < bestScore && player === "Y")
+      ) {
         bestScore = score;
         bestMove = action;
       }
@@ -375,6 +409,58 @@ const GameConnectFour: React.FC = () => {
         <button onClick={resetGame} className={styles.resetButton}>
           Reset Game
         </button>
+        <div className={styles.checkboxDiv}>
+          <label>
+            AI control Red
+            <input
+              type="checkbox"
+              checked={isRAI}
+              onChange={() => setIsRAI((prev) => !prev)}
+            />
+          </label>
+          <label>
+            AI control Yellow
+            <input
+              type="checkbox"
+              checked={isYAI}
+              onChange={() => setIsYAI((prev) => !prev)}
+            />
+          </label>
+        </div>
+        <label htmlFor="ai-depth" className={styles.aiDifficulty}>
+          AI search depth (higher is harder)
+          <input
+            name="ai-depth"
+            type="number"
+            min="0"
+            max="6"
+            step="1"
+            value={depth}
+            onChange={(e) => setDepth(Number(e.target.value))}
+          />
+        </label>
+        <label htmlFor="ai-noise" className={styles.aiDifficulty}>
+          AI noise (higher is more random)
+          <input
+            name="ai-noise"
+            type="range"
+            min="0.001"
+            max="0.1"
+            step="0.001"
+            value={noise}
+            onChange={(e) => setNoise(Number(e.target.value))}
+          />
+        </label>
+        <div className={styles.checkboxDiv}>
+          <label>
+            Show action values
+            <input
+              type="checkbox"
+              checked={showActionValues}
+              onChange={() => setShowActionValues((prev) => !prev)}
+            />
+          </label>
+        </div>
       </div>
       <div>
         <h3>Rules</h3>
