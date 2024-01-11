@@ -46,22 +46,22 @@ const PythonCodeDisplay: React.FC<{ codeFile: string }> = ({ codeFile }) => {
 
   const buttonStyle: CSSProperties = {
     position: "absolute",
-    top: "1rem",
-    right: "1rem",
+    top: "0.6rem",
+    right: "0.6rem",
     cursor: "pointer",
-    padding: "1rem",
+    padding: "0.6rem",
     backgroundColor: "transparent",
     color: "white",
     border: "none",
     borderRadius: "1rem",
     display: showCode ? "block" : "none",
-    height: "4rem",
-    margin: "0.5rem 0 0 0",
+    height: "2.5rem",
+    margin: "0.3rem 0 0 0",
   };
 
   const copyButtonStyle: CSSProperties = {
     ...buttonStyle,
-    right: "5rem",
+    right: "3.1rem",
   };
 
   const hoverEffect: CSSProperties = {
@@ -70,21 +70,21 @@ const PythonCodeDisplay: React.FC<{ codeFile: string }> = ({ codeFile }) => {
   };
 
   const cornerIconStyle: CSSProperties = {
-    width: "2rem",
+    width: "1rem",
     filter: "invert(100%)",
   };
 
   const messageStyle: CSSProperties = {
     position: "absolute",
-    top: "5rem",
-    right: "1rem",
-    padding: "1rem",
+    top: "3.1rem",
+    right: "0.6rem",
+    padding: "0.4rem",
     backgroundColor: "rgba(0,0,0,0.3)",
     color: "white",
-    borderRadius: "1rem",
+    borderRadius: "0.6rem",
     display: "block",
-    margin: "0.5rem 0 0 0",
-    fontSize: "1.5rem",
+    margin: "0.3rem 0 0 0",
+    fontSize: "1rem",
   };
 
   const handleMouseEnterHide = () => setIsHoveringHide(true);

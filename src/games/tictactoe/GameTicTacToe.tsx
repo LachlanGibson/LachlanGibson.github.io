@@ -4,7 +4,8 @@ type Player = "X" | "O";
 type GameResult = Player | "Tie";
 type Action = [number, number];
 
-const miniumThinkTime = 700;
+const miniumThinkTime = 500;
+const decidedTime = 300;
 let minimaxMemo: { [key: string]: number } = {};
 let expectedValueMemo: { [key: string]: number } = {};
 
@@ -42,22 +43,33 @@ const GameTicTacToe = () => {
       setAiConsiderCell(cell);
     }, 100);
 
+    let decidedTimeout: NodeJS.Timeout;
     const startTime = Date.now();
     const [placeRow, placeCol] = aiChooseMove(board);
     const endTime = Date.now();
     const thinkTime = endTime - startTime;
     if (thinkTime >= miniumThinkTime) {
       clearInterval(thinkInterval);
-      makeMove(placeRow, placeCol, turn);
-      return () => clearInterval(thinkInterval);
+      setAiConsiderCell([placeRow, placeCol]);
+      decidedTimeout = setTimeout(() => {
+        makeMove(placeRow, placeCol, turn);
+      }, decidedTime);
+      return () => {
+        clearInterval(thinkInterval);
+        clearTimeout(decidedTimeout);
+      };
     }
     const timeout = setTimeout(() => {
       clearInterval(thinkInterval);
-      makeMove(placeRow, placeCol, turn);
+      setAiConsiderCell([placeRow, placeCol]);
+      decidedTimeout = setTimeout(() => {
+        makeMove(placeRow, placeCol, turn);
+      }, decidedTime);
     }, miniumThinkTime - thinkTime);
     return () => {
       clearInterval(thinkInterval);
       clearTimeout(timeout);
+      clearTimeout(decidedTimeout);
     };
   }, [turn, isXHuman, isOHuman, gameOver]);
 
@@ -262,8 +274,7 @@ const GameTicTacToe = () => {
 
   return (
     <>
-      <div>
-        <p>This is a work in progress</p>
+      <div className="border-2 border-red-500 bg-blue-500 p-2 my-1 mx-auto max-w-lg">
         <div className={styles.winner}>
           {winner
             ? winner === "Tie"

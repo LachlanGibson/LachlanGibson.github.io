@@ -2,13 +2,13 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 0.6rem;
   width: 90%;
   max-width: 500px;
   margin: 0 auto;
   background-color: #000000;
   border: 2px solid #333;
-  padding: 1rem;
+  padding: 0.6rem;
   align-items: center;
   justify-items: center;
   aspect-ratio: 1 / 1;
@@ -26,7 +26,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8rem;
+  font-size: 5rem;
   font-weight: bold;
   border: 2px solid #333;
   cursor: pointer;
@@ -100,9 +100,9 @@
 .checkboxDiv label {
   font-size: 16px;
   font-weight: bold;
-  margin: 1rem;
+  margin: 0.6rem;
   background-color: #333;
-  padding: 1rem;
+  padding: 0.6rem;
 }
 
 .cell:hover::before {
@@ -114,7 +114,7 @@
 .cell.aiConsiderCell:not(.x, .o, .gameOver)::before {
   content: attr(data-hover);
   color: rgba(0, 0, 0, 0.2);
-  font-size: 8rem;
+  font-size: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,20 +127,20 @@
 
 @media only screen and (max-width: 400px) {
   .cell {
-    font-size: 6rem;
+    font-size: 3.75rem;
   }
   .cell:not(.x, .o, .gameOver, .aiTurn):hover::before,
   .cell.aiConsiderCell:not(.x, .o, .gameOver)::before {
-    font-size: 6rem;
+    font-size: 3.75rem;
   }
 }
 
 @media only screen and (max-width: 300px) {
   .cell {
-    font-size: 3rem;
+    font-size: 1.9rem;
   }
   .cell:not(.x, .o, .gameOver, .aiTurn):hover::before,
   .cell.aiConsiderCell:not(.x, .o, .gameOver)::before {
-    font-size: 3rem;
+    font-size: 1.9rem;
   }
 }

@@ -6,16 +6,16 @@
 }
 
 html {
-  scroll-padding-top: 3rem;
+  scroll-padding-top: 1.875rem;
 }
 
 .foobarTaskDescription {
   font-family: "Share Tech Mono", monospace;
-  font-size: 1.6rem;
+  font-size: 1rem;
   background-color: #111111;
   color: #fff;
-  padding: 1.6rem;
-  margin: 2rem 0;
+  padding: 1rem;
+  margin: 1.25rem 0;
   overflow-x: auto;
 }
 
@@ -34,13 +34,13 @@ html {
 
 .tocLayer1 {
   top: 0;
-  height: 3rem;
+  height: 1.875rem;
   z-index: 5;
 }
 
 .tocLayer2 {
-  top: 3rem;
-  height: 3rem;
+  top: 1.875rem;
+  height: 1.875rem;
   z-index: 4;
 }
 
@@ -54,7 +54,7 @@ html {
   text-align: center;
   margin: 0 0.1rem;
   width: 100%;
-  max-width: 12rem;
+  max-width: 7.5rem;
 }
 
 .tableOfContents a:hover {
@@ -79,15 +79,15 @@ p {
 .numberedList {
   list-style: decimal;
   list-style-position: outside;
-  padding-left: 2rem;
+  padding-left: 1.25rem;
 }
 
 .tikzDiagram {
   display: flex;
   margin: auto;
   filter: invert();
-  max-width: 40rem;
-  min-width: 27rem;
+  max-width: 25rem;
+  min-width: 16.875rem;
   width: 100%;
 }
 
@@ -98,7 +98,8 @@ p {
 .gridTable td {
   text-align: center;
   vertical-align: middle;
-  width: 2rem;
+  width: 1.25rem;
+  height: 1.25rem;
   aspect-ratio: 1;
 }
 .gridTable a {
@@ -157,7 +158,7 @@ p {
   background-color: #ff9900;
 }
 .gridTable tr {
-  height: 2rem;
+  height: 1.25rem;
 }
 
 figure {
@@ -166,8 +167,8 @@ figure {
 }
 
 figcaption {
-  max-width: 50rem;
-  margin: 0.5rem auto;
+  max-width: 31.25rem;
+  margin: 0.3125rem auto;
   text-align: justify;
   font-style: italic;
   padding: 0;
@@ -175,7 +176,7 @@ figcaption {
 
 @media only screen and (max-width: 600px) {
   .tableOfContents a {
-    font-size: 1rem;
+    font-size: 0.625rem;
   }
 }
 
@@ -185,26 +186,26 @@ figcaption {
   }
   #aChallenge1:after {
     content: "1";
-    font-size: 1.6rem;
+    font-size: 1rem;
   }
   #aChallenge2:after {
     content: "2";
-    font-size: 1.6rem;
+    font-size: 1rem;
   }
   #aChallenge3:after {
     content: "3";
-    font-size: 1.6rem;
+    font-size: 1rem;
   }
   #aChallenge4:after {
     content: "4";
-    font-size: 1.6rem;
+    font-size: 1rem;
   }
   #aChallenge5:after {
     content: "5";
-    font-size: 1.6rem;
+    font-size: 1rem;
   }
   #aBonus:after {
     content: "B";
-    font-size: 1.6rem;
+    font-size: 1rem;
   }
 }
