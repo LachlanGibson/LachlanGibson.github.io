@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /*
 Boiler plate from
 https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
