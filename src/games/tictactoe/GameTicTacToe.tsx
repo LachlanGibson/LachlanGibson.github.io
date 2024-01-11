@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./GameTicTacToe.module.css";
+import { BlockMath, InlineMath } from "react-katex";
 type Player = "X" | "O";
 type GameResult = Player | "Tie";
 type Action = [number, number];
@@ -274,7 +275,7 @@ const GameTicTacToe = () => {
 
   return (
     <>
-      <div className="border-2 border-red-500 bg-blue-500 p-2 my-1 mx-auto max-w-lg">
+      <div className="bg-neutral-800 p-2 mt-2 mb-4 mx-auto max-w-lg rounded-xl">
         <div className={styles.winner}>
           {winner
             ? winner === "Tie"
@@ -296,87 +297,193 @@ const GameTicTacToe = () => {
             ))
           )}
         </div>
-        <div className={styles.checkboxDiv}>
-          <label>
-            AI control X
-            <input
-              type="checkbox"
-              checked={!isXHuman}
-              onChange={() => setIsXHuman((prev) => !prev)}
-            />
-          </label>
-          <label>
-            AI control O
-            <input
-              type="checkbox"
-              checked={!isOHuman}
-              onChange={() => setIsOHuman((prev) => !prev)}
-            />
-          </label>
+        <div className="flex items-center justify-center">
+          <div className={styles.checkboxDiv}>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                role="switch"
+                checked={!isXHuman}
+                onChange={() => setIsXHuman((prev) => !prev)}
+                className="sr-only peer"
+              />
+              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                X AI
+              </span>
+            </label>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                role="switch"
+                checked={!isOHuman}
+                onChange={() => setIsOHuman((prev) => !prev)}
+                className="sr-only peer"
+              />
+              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                O AI
+              </span>
+            </label>
+          </div>
+          <button
+            type="button"
+            onClick={resetGame}
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            Reset
+          </button>
+        </div>
+        <div className="mx-auto text-center text-sm font-medium text-gray-900 dark:text-gray-300">
+          Precise &harr; Chaotic
         </div>
         <label htmlFor="X-ai-difficulty" className={styles.aiDifficulty}>
-          X temperature (higher is more random)
-          <input
-            name="X-ai-difficulty"
-            type="range"
-            min="0.01"
-            max="1"
-            step="0.01"
-            value={xTemperature}
-            onChange={(e) => setXTemperature(Number(e.target.value))}
-          />
+          <div className="flex items-center justify-center">
+            <input
+              name="X-ai-difficulty"
+              type="range"
+              min="0.01"
+              max="1"
+              step="0.01"
+              value={xTemperature}
+              onChange={(e) => setXTemperature(Number(e.target.value))}
+            />
+            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              X
+            </span>
+          </div>
         </label>
         <label htmlFor="O-ai-difficulty" className={styles.aiDifficulty}>
-          O temperature (higher is more random)
-          <input
-            name="O-ai-difficulty"
-            type="range"
-            min="0.01"
-            max="1"
-            step="0.01"
-            value={oTemperature}
-            onChange={(e) => setOTemperature(Number(e.target.value))}
-          />
+          <div className="flex items-center justify-center">
+            <input
+              name="O-ai-difficulty"
+              type="range"
+              min="0.01"
+              max="1"
+              step="0.01"
+              value={oTemperature}
+              onChange={(e) => setOTemperature(Number(e.target.value))}
+            />
+            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              O
+            </span>
+          </div>
         </label>
-
-        <button onClick={resetGame} className={styles.resetButton}>
-          Reset Game
-        </button>
       </div>
-      <div>
-        <h3>Rules</h3>
-        <ul>
-          <li>First player is X</li>
-          <li>Second player is O</li>
-          <li>Click on a cell to place your mark</li>
-          <li>
-            First player to fill a row, column or diagonal with their mark wins
-          </li>
-          <li>Game ends in a tie if the board is full and no player has won</li>
-        </ul>
-        <h3>AI</h3>
-        <ul>
-          <li>
-            Clicking the corresponding checkbox will toggle AI control over a
-            player
-          </li>
-          <li>
-            AI is implemented using a Softmax-based Probabilistic variant of the
-            minimax algorithm, where the AI assumes actions are taken at random
-            based on a temperature.
-          </li>
-          <li>
-            The temperature sliders indicate how random the AI plays or expects
-            the player to play. These correspond to a temperature used in the
-            softmax function when calculating probabilities.
-          </li>
-          <li>
-            An AI player with low temperature will almost always play optimally,
-            assuming the temperature level of the opponent matches the other
-            slider. The closer both sliders are to zero, the closer the
-            algorithm follows the minimax algorithm.
-          </li>
-        </ul>
+      <div className="overflow-x-auto">
+        <p>
+          <a
+            href="https://en.wikipedia.org/wiki/Tic-tac-toe"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Tic-tac-toe
+          </a>
+          , also known as noughts and crosses, is a simple two-player game
+          played on a 3x3 grid. Each player alternates marking a space in the
+          grid with their symbol: the first player uses 'X' and the second 'O'.
+          The goal is to be the first to get three of their symbols in a row,
+          column, or diagonal. If all nine squares are filled and no player has
+          three in a row, the game is a draw. Under these rules, it is a{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/Perfect_information"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            perfect information
+          </a>{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/Zero-sum_game"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            zero-sum game
+          </a>
+          .
+          <br />
+          <br />
+          It's possible to calculate an upper bound on the total number of
+          achievable unique board states as <InlineMath math={"3^9=19683"} />,
+          since there are nine squares, each with three possible states: empty,
+          X, or O. However, many of these states are unreachable, such as those
+          where two players have three in a row simultaneously, or where the
+          total number of Xs is not equal to or one more than the number of Os.
+          Therefore, the actual number of unique board states is only{" "}
+          <InlineMath math="5478" />. This makes it feasible for the computer to
+          use a brute force approach to explore all possibilities when
+          calculating the optimal move for each board state. A typical approach
+          to solving a two-player zero-sum game is finding the{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/Nash_equilibrium"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Nash equilibrium
+          </a>{" "}
+          using the{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/Minimax"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            minimax
+          </a>{" "}
+          algorithm, which identifies the optimal move for each player, assuming
+          the opponent also plays optimally. This involves recursively exploring
+          all possible moves and their outcomes, with player X aiming to
+          maximise the score and player O aiming to minimise it. Scores are
+          assigned to each board state: a win as <InlineMath math="+1" />, a
+          loss as <InlineMath math="-1" />, and a draw as{" "}
+          <InlineMath math="0" />.
+          <br />
+          <br />
+          In tic-tac-toe, both players choosing moves this way typically results
+          in a draw. However, optimal play by one player actually depends on the
+          other player's choices, and many human players do not choose moves
+          optimally. To make the game more interesting, I implemented an AI
+          using a{" "}
+          <em>Softmax-based probabilistic variant of the minimax algorithm</em>,
+          where the AI considers actions as if they are taken randomly, based on
+          a temperature parameter. The likelihood of choosing an action is
+          determined by the expected value of that action, calculated using the{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/Softmax_function"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            softmax function
+          </a>
+          . Moves with higher expected values are more likely to be chosen, but
+          not always. The temperature parameter controls the randomness of the
+          AI's play or its expectation of the player's play. A lower temperature
+          means the AI follows the minimax algorithm more closely, while a
+          higher temperature makes all moves increasingly likely.
+          <br />
+          <br />
+          Let's get into the details of the mathematics and the algorithm. For a
+          vector with components <InlineMath math={"x_i"} /> and a temperature{" "}
+          <InlineMath math={"T"} />, the softmax function is
+        </p>
+        <BlockMath
+          math={`\\text{Softmax}(x_i, T) = \\frac{e^{x_i / T}}{\\sum_j e^{x_j / T}}.`}
+        />
+        <p>
+          This function will normalise the vector so that all probabilitis are
+          strictly positive and sum to 1. The probability,{" "}
+          <InlineMath math="P" />, of choosing to move to the board state,{" "}
+          <InlineMath math="C" /> from the board state <InlineMath math="B" />{" "}
+          is
+        </p>
+        <BlockMath math={"P(C|\\text{X})=\\text{Softmax}(V(C), T_\\text{X})"} />
+        <BlockMath
+          math={`V(B)=
+          \\begin{cases}
+            +1, & \\text{X wins}\\\\
+            -1, & \\text{O wins}\\\\
+            0, & \\text{draw}\\\\
+          \\sum_{C\\in\\mathcal{C}(B)}P(C|\\mathcal{P})V(C), & \\text{otherwise}
+          \\end{cases}`}
+        />
       </div>
     </>
   );

@@ -10,9 +10,10 @@
   padding-right: 1.25rem;
 }
 
-.container {
+.intro-container {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 #intro-div div {

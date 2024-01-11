@@ -93,7 +93,7 @@ const Home: React.FC<{}> = () => {
     };
   }, []);
   return (
-    <div className="container">
+    <div className="intro-container">
       <div id="intro-div">
         <div className="img-div">
           <img src="/home/Lachlan_Gibson.png" alt="Lachlan Gibson" />

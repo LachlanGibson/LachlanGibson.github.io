@@ -13,6 +13,7 @@ const Games: React.FC = () => {
       <div className="blog-list-div">
         {Object.keys(gameMetaData).map((slug) => (
           <GameCard
+            key={slug}
             slug={slug}
             title={gameMetaData[slug].title}
             timeElement={gameMetaData[slug].timeElement}

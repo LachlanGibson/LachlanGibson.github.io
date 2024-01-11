@@ -14,6 +14,7 @@ const Blog: React.FC<{}> = () => {
       <div className="blog-list-div">
         {Object.keys(articleMetaData).map((slug) => (
           <ArticleCard
+            key={slug}
             slug={slug}
             title={articleMetaData[slug].title}
             timeElement={articleMetaData[slug].timeElement}
