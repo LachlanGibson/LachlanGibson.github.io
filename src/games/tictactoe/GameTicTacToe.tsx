@@ -2,9 +2,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import styles from "./GameTicTacToe.module.css";
 type Player = "X" | "O";
 type GameResult = Player | "Tie";
+type Action = [number, number];
 
-const miniumThinkTime = 1000;
+const miniumThinkTime = 700;
 let minimaxMemo: { [key: string]: number } = {};
+let expectedValueMemo: { [key: string]: number } = {};
 
 const GameTicTacToe = () => {
   const [board, setBoard] = useState<string[][]>([
@@ -18,7 +20,8 @@ const GameTicTacToe = () => {
   const [isXHuman, setIsXHuman] = useState(true);
   const [isOHuman, setIsOHuman] = useState(false);
   const [aiConsiderCell, setAiConsiderCell] = useState<number[]>([]);
-  const [aiNoise, setAiNoise] = useState<number>(0.05);
+  const [xTemperature, setXTemperature] = useState<number>(0.1);
+  const [oTemperature, setOTemperature] = useState<number>(0.1);
 
   const isAiTurn = useMemo(() => {
     if (gameOver) return false;
@@ -58,46 +61,24 @@ const GameTicTacToe = () => {
     };
   }, [turn, isXHuman, isOHuman, gameOver]);
 
-  const availableActions = (board: string[][]): number[][] =>
-    board.reduce<number[][]>((acc, row, i) => {
+  const availableActions = (board: string[][]): Action[] =>
+    board.reduce<Action[]>((acc, row, i) => {
       row.forEach((cell, j) => cell || acc.push([i, j]));
       return acc;
     }, []);
 
   const aiChooseMove = (board: string[][]) => {
-    minimaxMemo = {};
-    const actions = availableActions(board);
-    const values: [number[], number][] = actions.map((action) => {
-      const nextBoard = thinkMove(board, turn, action);
-      const value =
-        generateNoise(aiNoise) +
-        alphaBetaPruning(
-          nextBoard,
-          -Infinity,
-          Infinity,
-          turn === "X" ? "O" : "X",
-          aiNoise
-        );
-      //console.log(stringifyBoard(nextBoard));
-      //console.log(value);
-      return [action, value];
-    });
-
-    if (turn === "X") {
-      return values.reduce(
-        (acc, av) => (acc[1] > av[1] ? acc : av),
-        [[0, 0], -Infinity]
-      )[0];
-    }
-
-    return values.reduce(
-      (acc, av) => (acc[1] < av[1] ? acc : av),
-      [[0, 0], Infinity]
-    )[0];
+    expectedValueMemo = {};
+    const [moves, values] = getActionValues(board, turn);
+    const probs = softMax(values, turn === "X" ? xTemperature : -oTemperature);
+    const cumProb = probs.reduce(
+      (acc, prob) => [...acc, acc[acc.length - 1] + prob],
+      [0]
+    );
+    const rand = Math.random();
+    const index = cumProb.findIndex((prob) => prob > rand) - 1;
+    return moves[index];
   };
-
-  const generateNoise = (noise: number | undefined) =>
-    noise ? (2 * Math.random() - 1) * noise : 0;
 
   const makeMove = (row: number, col: number, player: Player) => {
     const newBoard = [...board];
@@ -115,7 +96,7 @@ const GameTicTacToe = () => {
     }
   };
 
-  const thinkMove = (board: string[][], player: Player, action: number[]) => {
+  const thinkMove = (board: string[][], player: Player, action: Action) => {
     const newBoard = copyBoard(board);
     newBoard[action[0]][action[1]] = player;
     return newBoard;
@@ -127,77 +108,6 @@ const GameTicTacToe = () => {
         return row.map((cell) => (cell === "" ? "_" : cell)).join("");
       })
       .join("\n");
-  };
-
-  const alphaBetaPruning = (
-    board: string[][],
-    alpha: number,
-    beta: number,
-    player: Player,
-    noise?: number
-  ) => {
-    const boardString = stringifyBoard(board);
-    if (minimaxMemo[boardString]) {
-      return minimaxMemo[boardString];
-    }
-
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        if (board[i][j]) {
-          if (checkWinningMove(board, i, j)) {
-            minimaxMemo[boardString] = board[i][j] === "X" ? 1 : -1;
-            return minimaxMemo[boardString];
-          }
-        }
-      }
-    }
-
-    if (isBoardFull(board)) {
-      minimaxMemo[boardString] = 0;
-      return minimaxMemo[boardString];
-    }
-
-    if (player === "X") {
-      let maxValue = -Infinity;
-      for (let action of availableActions(board)) {
-        const value =
-          generateNoise(noise) +
-          alphaBetaPruning(
-            thinkMove(board, player, action),
-            alpha,
-            beta,
-            "O",
-            noise
-          );
-        maxValue = Math.max(maxValue, value);
-        alpha = Math.max(alpha, value);
-        if (beta <= alpha) {
-          break;
-        }
-      }
-      minimaxMemo[boardString] = maxValue;
-      return maxValue;
-    } else {
-      let minValue = Infinity;
-      for (let action of availableActions(board)) {
-        const value =
-          generateNoise(noise) +
-          alphaBetaPruning(
-            thinkMove(board, player, action),
-            alpha,
-            beta,
-            "X",
-            noise
-          );
-        minValue = Math.min(minValue, value);
-        beta = Math.min(beta, value);
-        if (beta <= alpha) {
-          break;
-        }
-      }
-      minimaxMemo[boardString] = minValue;
-      return minValue;
-    }
   };
 
   const copyBoard = (board: string[][]) => board.map((row) => row.slice());
@@ -254,6 +164,58 @@ const GameTicTacToe = () => {
     }
 
     return false;
+  };
+
+  const softMax = (values: number[], temperature: number) => {
+    const valuesExp = values.map((value) => Math.exp(value / temperature));
+    const valuesExpSum = valuesExp.reduce((acc, value) => acc + value, 0);
+    return valuesExp.map((value) => value / valuesExpSum);
+  };
+
+  const dotProduct = (arr1: number[], arr2: number[]) => {
+    return arr1.reduce((acc, value, index) => acc + value * arr2[index], 0);
+  };
+
+  const getActionValues = (
+    board: string[][],
+    player: Player
+  ): [Action[], number[]] => {
+    const actions = availableActions(board);
+    const values = availableActions(board).map((move) => {
+      return expectedValue(board, player, move);
+    });
+    return [actions, values];
+  };
+
+  const expectedValue = (
+    prevBoard: string[][],
+    prevPlayer: Player,
+    move: Action
+  ) => {
+    const board = thinkMove(prevBoard, prevPlayer, move);
+    const boardString = stringifyBoard(board);
+    if (expectedValueMemo[boardString]) {
+      return expectedValueMemo[boardString];
+    }
+    if (checkWinningMove(board, move[0], move[1])) {
+      minimaxMemo[boardString] = prevPlayer === "X" ? 1 : -1;
+      return minimaxMemo[boardString];
+    }
+
+    if (isBoardFull(board)) {
+      minimaxMemo[boardString] = 0;
+      return minimaxMemo[boardString];
+    }
+
+    const player = prevPlayer === "X" ? "O" : "X";
+    const [, values] = getActionValues(board, player);
+
+    const probs = softMax(
+      values,
+      player === "X" ? xTemperature : -oTemperature
+    );
+    expectedValueMemo[boardString] = dotProduct(values, probs);
+    return expectedValueMemo[boardString];
   };
 
   const resetGame = () => {
@@ -341,16 +303,28 @@ const GameTicTacToe = () => {
             />
           </label>
         </div>
-        <label htmlFor="ai-difficulty" className={styles.aiDifficulty}>
-          AI noise
+        <label htmlFor="X-ai-difficulty" className={styles.aiDifficulty}>
+          X temperature (higher is more random)
           <input
-            name="ai-difficulty"
+            name="X-ai-difficulty"
             type="range"
             min="0.01"
-            max="0.3"
+            max="1"
             step="0.01"
-            value={aiNoise}
-            onChange={(e) => setAiNoise(Number(e.target.value))}
+            value={xTemperature}
+            onChange={(e) => setXTemperature(Number(e.target.value))}
+          />
+        </label>
+        <label htmlFor="O-ai-difficulty" className={styles.aiDifficulty}>
+          O temperature (higher is more random)
+          <input
+            name="O-ai-difficulty"
+            type="range"
+            min="0.01"
+            max="1"
+            step="0.01"
+            value={oTemperature}
+            onChange={(e) => setOTemperature(Number(e.target.value))}
           />
         </label>
 
@@ -376,12 +350,20 @@ const GameTicTacToe = () => {
             player
           </li>
           <li>
-            AI is implemented using the minimax algorithm with alpha beta
-            pruning, with added noise to distort the AI's decision making.
+            AI is implemented using a Softmax-based Probabilistic variant of the
+            minimax algorithm, where the AI assumes actions are taken at random
+            based on a temperature.
           </li>
           <li>
-            With zero noise, the AI will always win or tie, but with noise can
-            sometimes be beaten
+            The temperature sliders indicate how random the AI plays or expects
+            the player to play. These correspond to a temperature used in the
+            softmax function when calculating probabilities.
+          </li>
+          <li>
+            An AI player with low temperature will almost always play optimally,
+            assuming the temperature level of the opponent matches the other
+            slider. The closer both sliders are to zero, the closer the
+            algorithm follows the minimax algorithm.
           </li>
         </ul>
       </div>
