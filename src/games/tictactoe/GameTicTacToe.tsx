@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./GameTicTacToe.module.css";
 import { BlockMath, InlineMath } from "react-katex";
+import TreeDiagram from "./TreeDiagram";
+import PythonCodeDisplay from "../../blog/articles/ArticleGoogleFoobarChallenge/PythonCodeDisplay";
 type Player = "X" | "O";
 type GameResult = Player | "Tie";
 type Action = [number, number];
@@ -275,7 +277,7 @@ const GameTicTacToe = () => {
 
   return (
     <>
-      <div className="bg-neutral-800 p-2 mt-2 mb-4 mx-auto max-w-lg rounded-xl">
+      <div className="bg-neutral-800 p-2 mt-2 mb-4 mx-auto max-w-md rounded-xl">
         <div className={styles.winner}>
           {winner
             ? winner === "Tie"
@@ -301,6 +303,7 @@ const GameTicTacToe = () => {
           <div className={styles.checkboxDiv}>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
+                id="X-AI-switch"
                 type="checkbox"
                 role="switch"
                 checked={!isXHuman}
@@ -314,6 +317,7 @@ const GameTicTacToe = () => {
             </label>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
+                id="O-AI-switch"
                 type="checkbox"
                 role="switch"
                 checked={!isOHuman}
@@ -340,7 +344,7 @@ const GameTicTacToe = () => {
         <label htmlFor="X-ai-difficulty" className={styles.aiDifficulty}>
           <div className="flex items-center justify-center">
             <input
-              name="X-ai-difficulty"
+              id="X-ai-difficulty"
               type="range"
               min="0.01"
               max="1"
@@ -356,7 +360,7 @@ const GameTicTacToe = () => {
         <label htmlFor="O-ai-difficulty" className={styles.aiDifficulty}>
           <div className="flex items-center justify-center">
             <input
-              name="O-ai-difficulty"
+              id="O-ai-difficulty"
               type="range"
               min="0.01"
               max="1"
@@ -383,8 +387,9 @@ const GameTicTacToe = () => {
           played on a 3x3 grid. Each player alternates marking a space in the
           grid with their symbol: the first player uses 'X' and the second 'O'.
           The goal is to be the first to get three of their symbols in a row,
-          column, or diagonal. If all nine squares are filled and no player has
-          three in a row, the game is a draw. Under these rules, it is a{" "}
+          column, or diagonal. The game is a draw if all nine squares are filled
+          and no player has achieved this goal. Under these rules, tic tac toe
+          is a{" "}
           <a
             href="https://en.wikipedia.org/wiki/Perfect_information"
             target="_blank"
@@ -402,7 +407,7 @@ const GameTicTacToe = () => {
           .
           <br />
           <br />
-          It's possible to calculate an upper bound on the total number of
+          It is possible to calculate an upper bound on the total number of
           achievable unique board states as <InlineMath math={"3^9=19683"} />,
           since there are nine squares, each with three possible states: empty,
           X, or O. However, many of these states are unreachable, such as those
@@ -432,58 +437,92 @@ const GameTicTacToe = () => {
           the opponent also plays optimally. This involves recursively exploring
           all possible moves and their outcomes, with player X aiming to
           maximise the score and player O aiming to minimise it. Scores are
-          assigned to each board state: a win as <InlineMath math="+1" />, a
-          loss as <InlineMath math="-1" />, and a draw as{" "}
+          assigned to each board state: a win for X as <InlineMath math="+1" />,
+          a win for O as <InlineMath math="-1" />, and a draw as{" "}
           <InlineMath math="0" />.
           <br />
           <br />
-          In tic-tac-toe, both players choosing moves this way typically results
-          in a draw. However, optimal play by one player actually depends on the
-          other player's choices, and many human players do not choose moves
+          In tic-tac-toe, both players choosing moves this way always results in
+          a draw. However, optimal play by one player can depend on the other
+          player's strategy, and many human players do not choose moves
           optimally. To make the game more interesting, I implemented an AI
           using a{" "}
           <em>Softmax-based probabilistic variant of the minimax algorithm</em>,
-          where the AI considers actions as if they are taken randomly, based on
-          a temperature parameter. The likelihood of choosing an action is
-          determined by the expected value of that action, calculated using the{" "}
+          where the AI considers actions as if they are taken randomly, with
+          probabilities based on the expected scores. More specifically, the log
+          probability of a move is proportional to its expected score, meaning
+          the probability of a move is calculated using the{" "}
           <a
             href="https://en.wikipedia.org/wiki/Softmax_function"
             target="_blank"
             rel="noreferrer noopener"
           >
             softmax function
-          </a>
-          . Moves with higher expected values are more likely to be chosen, but
-          not always. The temperature parameter controls the randomness of the
-          AI's play or its expectation of the player's play. A lower temperature
-          means the AI follows the minimax algorithm more closely, while a
-          higher temperature makes all moves increasingly likely.
+          </a>{" "}
+          with a temperature parameter. This means that moves with higher
+          expected scores are more likely to be chosen, but not every time. The
+          temperature parameter controls the randomness of the AI's play or its
+          expectation of the player's play. A lower temperature means the AI
+          follows the minimax algorithm more closely, while a higher temperature
+          makes all moves more equally likely.
           <br />
           <br />
-          Let's get into the details of the mathematics and the algorithm. For a
-          vector with components <InlineMath math={"x_i"} /> and a temperature{" "}
+          To compute the expected resulting score of a move, the AI needs to
+          predict how its opponent will play. Therefore, the AI actually
+          utilises two temperature parameters, one for choosing its own moves,
+          and the other for how it models the other player's strategy. Let's get
+          into the details of the mathematics and the algorithm. For a vector{" "}
+          <InlineMath math={"\\mathbf{x}"} /> with components{" "}
+          <InlineMath math={"x_i"} /> and a temperature{" "}
           <InlineMath math={"T"} />, the softmax function is
         </p>
         <BlockMath
           math={`\\text{Softmax}(x_i, T) = \\frac{e^{x_i / T}}{\\sum_j e^{x_j / T}}.`}
         />
         <p>
-          This function will normalise the vector so that all probabilitis are
-          strictly positive and sum to 1. The probability,{" "}
-          <InlineMath math="P" />, of choosing to move to the board state,{" "}
-          <InlineMath math="C" /> from the board state <InlineMath math="B" />{" "}
-          is
+          This function normalises the vector so that all probabilitis are
+          strictly positive and sum to 1 (try prove it yourself by adding the
+          components). The probability, <InlineMath math="P" />, that player,{" "}
+          <InlineMath math={"\\mathcal{P}"} />, choosed to move to the board
+          state, <InlineMath math="C" /> from the board state{" "}
+          <InlineMath math="B" /> is
         </p>
-        <BlockMath math={"P(C|\\text{X})=\\text{Softmax}(V(C), T_\\text{X})"} />
         <BlockMath
-          math={`V(B)=
-          \\begin{cases}
-            +1, & \\text{X wins}\\\\
-            -1, & \\text{O wins}\\\\
-            0, & \\text{draw}\\\\
-          \\sum_{C\\in\\mathcal{C}(B)}P(C|\\mathcal{P})V(C), & \\text{otherwise}
-          \\end{cases}`}
+          math={
+            "\\forall C\\in\\mathcal{C}(B),~ P(C|\\mathcal{P})=\\text{Softmax}((-1)^\\mathcal{P}S(C,1-\\mathcal{P}), T_\\mathcal{P}),"
+          }
         />
+        <p>
+          where <InlineMath math={"\\mathcal{C}(B)"} /> is the set of all board
+          states that can be reached in one move from <InlineMath math="B" />,{" "}
+          <InlineMath math={"\\mathcal{P}=0"} /> when it is player X's turn, and{" "}
+          <InlineMath math={"\\mathcal{P}=1"} /> when it is player O's turn.{" "}
+          <InlineMath math="S" /> is the expected score given a board state and
+          whos turn it is not. If the game is over then the score is{" "}
+          <InlineMath math="+1" /> if X wins, <InlineMath math="-1" /> if O
+          wins, and <InlineMath math="0" /> if it is a draw. Otherwise, we can
+          calculate the expected score as
+        </p>
+        <BlockMath
+          math={
+            "S(B,\\mathcal{P})=\\sum_{C\\in\\mathcal{C}(B)}P(C|\\mathcal{P})S(C,1-\\mathcal{P})"
+          }
+        />
+        <p>
+          These two expressions provide a recursive relationship for calculating
+          the expected score of any board state. The figure below illustrates an
+          exmaple where player X is playing less randomly than player O with{" "}
+          <InlineMath math={"T_0=0.2"} /> and <InlineMath math={"T_1=1"} />.
+        </p>
+        <TreeDiagram />
+        <figcaption>
+          The top board is the initial board state and it is X's turn. The
+          expected score of each board state is shown above each baord. The
+          probability of each move is shown as a percentage above each node in
+          the tree. X, with a temperature of 0.2, is more likely to choose
+          better moves than O which chooses with a temperature of 1.
+        </figcaption>
+        <PythonCodeDisplay codeFile="/blog/files/tic-tac-toe/example.py" />
       </div>
     </>
   );
