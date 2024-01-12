@@ -30,14 +30,6 @@ nav a {
   word-wrap: normal;
 }
 
-.icon-link {
-  height: 1rem;
-}
-
-nav a img {
-  height: 1rem;
-}
-
 nav a:hover {
   color: rgb(137, 156, 212);
   text-decoration: none;
@@ -51,30 +43,6 @@ nav a:hover {
   text-decoration: underline;
 }
 
-.icon-container {
-  display: flex;
-  margin: 0 0 0 1rem;
-  padding: 0 0 0 0;
-  flex-wrap: wrap;
-  /* border-left: solid 0.1rem white; */
-  height: fit-content;
-  min-width: 3rem;
-}
-
-.icon-container a {
-  margin: 0.2rem 0.4rem 0.2rem 0;
-  padding: 0;
-}
-
-.icon-container img {
-  margin: 0;
-  padding: 0;
-}
-
-#github-icon {
-  filter: brightness(0) invert(1);
-}
-
 #lachlan-nav-text-short {
   display: none;
 }
@@ -85,16 +53,5 @@ nav a:hover {
   }
   #lachlan-nav-text-short {
     display: inline;
-  }
-}
-
-@media only screen and (max-width: 350px) {
-  nav {
-    font-size: 1.05rem;
-  }
-  .icon-container,
-  .icon-container img,
-  .icon-link {
-    height: 1.05rem;
   }
 }

@@ -26,41 +26,6 @@ const Navbar: React.FC<{}> = () => {
       <NavLink className={activeLink} to="/blog/">
         Blog
       </NavLink>
-      <div className="icon-container">
-        <a
-          href="https://www.linkedin.com/in/lachlan-james-gibson/"
-          className="icon-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Visit Lachlan's LinkedIn profile"
-        >
-          <img src="/navbar/icons/linkedin_icon.svg" alt="LinkedIn" />
-        </a>
-        <a
-          href="https://github.com/LachlanGibson"
-          className="icon-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Visit Lachlan's GitHub profile"
-        >
-          <img
-            src="/navbar/icons/github_icon.svg"
-            alt="GitHub"
-            id="github-icon"
-          />
-        </a>
-        <a
-          href="https://scholar.google.com/citations?user=NeEMSU0AAAAJ&hl=en"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Visit Lachlan's Google Scholar profile"
-        >
-          <img
-            src="/navbar/icons/googlescholar_icon.svg"
-            alt="Google Scholar"
-          />
-        </a>
-      </div>
     </nav>
   );
 };
