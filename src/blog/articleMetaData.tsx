@@ -8,7 +8,7 @@ type ArticleType = {
   author: string;
   timeElement: JSX.Element;
   lastModifiedElement?: JSX.Element;
-  imageElement: JSX.Element;
+  imageLink: string;
   metaElements: JSX.Element[];
   articleElement: JSX.Element;
 };
@@ -22,9 +22,7 @@ const articleMetaData: ArticleMetaDataType = {
     title: "Connect Four",
     author: "Lachlan Gibson",
     timeElement: <time dateTime="2024-01-09">In progress</time>,
-    imageElement: (
-      <img src="/images/blog/connect-four.webp" alt="Connect Four" />
-    ),
+    imageLink: "/images/blog/connect-four.webp",
     metaElements: [],
     articleElement: <GameConnectFour />,
   },
@@ -32,7 +30,7 @@ const articleMetaData: ArticleMetaDataType = {
     title: "Tic Tac Toe",
     author: "Lachlan Gibson",
     timeElement: <time dateTime="2024-01-12">12 January 2024</time>,
-    imageElement: <img src="/images/blog/tic-tac-toe.webp" alt="Tic Tac Toe" />,
+    imageLink: "/images/blog/tic-tac-toe.webp",
     metaElements: [
       <meta property="og:title" content="Tic Tac Toe" />,
       <meta property="og:type" content="article" />,
@@ -80,7 +78,7 @@ const articleMetaData: ArticleMetaDataType = {
     title: "Evil Genius, Minion Ready",
     author: "Lachlan Gibson",
     timeElement: <time dateTime="2023-06-04">4 June 2023</time>,
-    imageElement: <img src="/images/blog/genius-minion.webp" alt="" />,
+    imageLink: "/images/blog/genius-minion.webp",
     metaElements: [
       <meta property="og:title" content="Evil Genius, Minion Ready" />,
       <meta property="og:type" content="article" />,
@@ -132,7 +130,7 @@ const articleMetaData: ArticleMetaDataType = {
     author: "Lachlan Gibson",
     timeElement: <time dateTime="2023-05-24">24 May 2023</time>,
     lastModifiedElement: <time dateTime="2023-06-08">8 June 2023</time>,
-    imageElement: <img src="/images/blog/foobar-challenge.webp" alt="" />,
+    imageLink: "/images/blog/foobar-challenge.webp",
     metaElements: [
       <meta property="og:title" content="Google's FooBar Challenge" />,
       <meta property="og:type" content="article" />,

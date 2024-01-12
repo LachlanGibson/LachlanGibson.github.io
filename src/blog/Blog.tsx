@@ -18,7 +18,7 @@ const Blog: React.FC<{}> = () => {
             slug={slug}
             title={articleMetaData[slug].title}
             timeElement={articleMetaData[slug].timeElement}
-            imageElement={articleMetaData[slug].imageElement}
+            imageLink={articleMetaData[slug].imageLink}
           />
         ))}
       </div>
