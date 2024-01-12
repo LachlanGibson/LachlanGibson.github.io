@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import styles from "./GameTicTacToe.module.css";
 import { BlockMath, InlineMath } from "react-katex";
 import TreeDiagram from "./TreeDiagram";
-import PythonCodeDisplay from "../../blog/articles/ArticleGoogleFoobarChallenge/PythonCodeDisplay";
+import PythonCodeDisplay from "../ArticleGoogleFoobarChallenge/PythonCodeDisplay";
 type Player = "X" | "O";
 type GameResult = Player | "Tie";
 type Action = [number, number];

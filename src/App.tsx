@@ -9,9 +9,6 @@ import Footer from "./footer/Footer";
 import "./App.css";
 import ArticleNotFound from "./blog/ArticleNotFound";
 import { Helmet } from "react-helmet";
-import Games from "./games/Games";
-import Game from "./games/Game";
-import GameNotFound from "./games/GameNotFound";
 
 const App: React.FC = () => {
   return (
@@ -27,9 +24,6 @@ const App: React.FC = () => {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<Article />} />
           <Route path="/blog/article-not-found" element={<ArticleNotFound />} />
-          <Route path="/games" element={<Games />} />
-          <Route path="/games/:slug" element={<Game />} />
-          <Route path="/games/game-not-found" element={<GameNotFound />} />
         </Routes>
       </main>
       <Footer />
