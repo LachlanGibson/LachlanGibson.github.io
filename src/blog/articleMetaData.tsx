@@ -1,5 +1,7 @@
 import ArticleEvilGeniusMinionReady from "./articles/ArticleEvilGeniusMinionReady/ArticleEvilGeniusMinionReady";
 import ArticleGoogleFoobarChallenge from "./articles/ArticleGoogleFoobarChallenge/ArticleGoogleFoobarChallenge";
+import GameConnectFour from "./articles/connectfour/GameConnectFour";
+import GameTicTacToe from "./articles/tictactoe/GameTicTacToe";
 
 type ArticleType = {
   title: string;
@@ -16,6 +18,64 @@ type ArticleMetaDataType = {
 };
 
 const articleMetaData: ArticleMetaDataType = {
+  "connect-four": {
+    title: "Connect Four",
+    author: "Lachlan Gibson",
+    timeElement: <time dateTime="2024-01-09">In progress</time>,
+    imageElement: (
+      <img src="/images/blog/connect-four.webp" alt="Connect Four" />
+    ),
+    metaElements: [],
+    articleElement: <GameConnectFour />,
+  },
+  "tic-tac-toe": {
+    title: "Tic Tac Toe",
+    author: "Lachlan Gibson",
+    timeElement: <time dateTime="2024-01-12">12 January 2024</time>,
+    imageElement: <img src="/images/blog/tic-tac-toe.webp" alt="Tic Tac Toe" />,
+    metaElements: [
+      <meta property="og:title" content="Tic Tac Toe" />,
+      <meta property="og:type" content="article" />,
+      <meta
+        property="og:image"
+        content="https://www.lachlangibson.dev/images/blog/tic-tac-toe.webp"
+      />,
+      <meta
+        property="og:url"
+        content="https://www.lachlangibson.dev/blog/tic-tac-toe"
+      />,
+      <meta
+        name="description"
+        property="og:description"
+        content="A functional game of tic-tac-toe with an interesting AI opponent and explanation."
+      />,
+      <meta property="og:image:width" content="1024" />,
+      <meta property="og:image:height" content="1024" />,
+      <meta
+        name="author"
+        property="article:author"
+        content="https://www.lachlangibson.dev/"
+      />,
+      <meta
+        property="article:publisher"
+        content="https://www.lachlangibson.dev/"
+      />,
+      <meta property="article:published_time" content="2024-01-12" />,
+      <meta property="article:modified_time" content="2024-01-12" />,
+      <meta property="article:tag" content="AI" />,
+      <meta property="article:tag" content="tic-tac-toe" />,
+      <meta property="article:tag" content="noughts and crosses" />,
+      <meta property="article:tag" content="minimax" />,
+      <meta property="article:tag" content="softmax" />,
+      <meta property="article:tag" content="dynamic programming" />,
+      <meta property="article:tag" content="tree search" />,
+      <meta property="article:tag" content="zero-sum game" />,
+      <meta property="article:tag" content="perfect information" />,
+      <meta property="article:tag" content="policy" />,
+      <meta http-equiv="content-language" content="en-au"></meta>,
+    ],
+    articleElement: <GameTicTacToe />,
+  },
   "evil-genius-minion-ready": {
     title: "Evil Genius, Minion Ready",
     author: "Lachlan Gibson",
