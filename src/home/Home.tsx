@@ -6,7 +6,7 @@ const Home: React.FC<{}> = () => {
       <div className="max-w-48 max-h-48 w-full aspect-square bg-slate-200 overflow-hidden rounded-full relative border-sky-600 border-solid border-3">
         <img
           className="w-auto object-cover h-full absolute"
-          src="/images/home/lachlan_portrait.webp"
+          src="/images/home/lachlan_gibson.webp"
           alt="Lachlan Gibson"
         />
       </div>
