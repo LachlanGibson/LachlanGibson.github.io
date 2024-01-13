@@ -10,7 +10,7 @@ const Blog: React.FC<{}> = () => {
       <Helmet>
         <title>Lachlan Gibson - Blog</title>
       </Helmet>
-      <h1>Blog</h1>
+      <h1 className="text-xl font-bold mb-3">Blog</h1>
       <div className="blog-list-div">
         {Object.keys(articleMetaData).map((slug) => (
           <ArticleCard

@@ -15,7 +15,7 @@ const ArticleCard = ({
   return (
     <>
       <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <div className="rounded-t-lg aspect-[6/5] overflow-hidden relative">
+        <div className="rounded-t-lg aspect-[5/4] overflow-hidden relative">
           <Link to={`/blog/${slug}`}>
             <img
               src={imageLink}
@@ -24,13 +24,13 @@ const ArticleCard = ({
             />
           </Link>
         </div>
-        <div className="p-3">
+        <div className="px-2 pt-2 pb-1">
           <Link to={`/blog/${slug}`}>
-            <h5 className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h5 className="text-lg tracking-tight text-gray-900 dark:text-white">
               {title}
             </h5>
           </Link>
-          <p className="font-normal text-gray-700 dark:text-gray-400">
+          <p className="font-normal text-gray-700 dark:text-gray-400 text-xs">
             <span>{timeElement}</span>
           </p>
         </div>
