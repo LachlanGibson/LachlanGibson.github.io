@@ -8,7 +8,9 @@ const About: React.FC<{}> = () => {
         <title>Lachlan Gibson - About</title>
       </Helmet>
       <section>
-        <h1>ChatGPT's Introduction to Lachlan</h1>
+        <h1 className="text-xl font-bold mb-3">
+          ChatGPT's Introduction to Lachlan
+        </h1>
         <p>
           Dr. Lachlan Gibson, an Australian citizen, is a scholar and researcher
           in the field of Physics and Data Science. He began his educational
@@ -39,20 +41,18 @@ const About: React.FC<{}> = () => {
           Following his academic pursuits, Dr. Gibson embarked on a career as a
           Postdoctoral Research Fellow at the University of Queensland from
           August 2020 to December 2022. His work involved researching rare-event
-          simulation via generative neural networks and reinforcement learning
-          applied to AI safety. His research also delved into environmental
-          effects on fishery risk and reinforcement learning methods for
-          controlling restless multi-armed bandits. He also served as an
-          Academic Tutor from 2016 to 2020 for various Mathematics and Physics
-          courses, highlighting his commitment to educating others.
+          simulation via generative neural networks, environmental effects on
+          fishery risk, and reinforcement learning methods for controlling
+          restless multi-armed bandits. He also served as an Academic Tutor from
+          2016 to 2020 for various Mathematics and Physics courses.
           <br />
           <br />
           Besides his professional accomplishments, Dr. Gibson has shown a
           commendable spirit of volunteerism. He has taken on roles such as
           Assistant Secretary and Sound Technician at Salisbury Baptist Church
-          from 2013 to 2022, providing administrative and technical support for
-          the organization. He has also volunteered as a Youth Leader, mentoring
-          high school students from the church and local community.
+          between 2013 and 2022, providing administrative and technical support
+          for the organization. He has also volunteered as a Youth Leader,
+          mentoring high school students from the church and local community.
           Additionally, he contributed to Scripture Union as a camp leader, and
           as an English Conversation Club Volunteer Helper at UQ's Institute of
           Continuing & TESOL Education.
@@ -60,7 +60,7 @@ const About: React.FC<{}> = () => {
           <br />
           With his impressive educational qualifications, extensive research
           experience, and a strong commitment to service, Dr. Lachlan Gibson
-          stands as an accomplished physicist and data scientist, dedicated to
+          stands as an accomplished researcher and data scientist, dedicated to
           advancing knowledge and improving the community.
           <br />
         </p>
