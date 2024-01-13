@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./GameConnectFour.module.css";
 
 type GameStatus = "in progress" | "R wins" | "Y wins" | "tie";
 type Player = "R" | "Y";
 
 const emptyRow = ["", "", "", "", "", "", ""];
+const miniumThinkTime = 600;
+const decidedTime = 400;
 
 const winPossibilities = [] as number[][][];
 for (let col = 0; col < 7; col++) {
@@ -74,18 +76,58 @@ const GameConnectFour: React.FC = () => {
   const [isYAI, setIsYAI] = useState<boolean>(true);
   const [actionValues, setActionValues] = useState<number[]>([]);
   const [showActionValues, setShowActionValues] = useState<boolean>(false);
+  const [aiConsiderCell, setAiConsiderCell] = useState<number>();
+
+  const isAiTurn = useMemo(() => {
+    if (gameStatus !== "in progress") return false;
+    if (player === "R") return isRAI;
+    if (player === "Y") return isYAI;
+    return false;
+  }, [player, isRAI, isYAI, gameStatus]);
 
   useEffect(() => {
-    if (gameStatus !== "in progress") {
+    if (!isAiTurn) {
+      setAiConsiderCell(undefined);
       return;
     }
-    if (player === "R" && isRAI) {
-      const move = aiChooseMove();
-      makeMove(move);
-    } else if (player === "Y" && isYAI) {
-      const move = aiChooseMove();
-      makeMove(move);
+
+    const options = availableMoves(board);
+    let optionIndex = 0;
+    const thinkInterval = setInterval(() => {
+      //const cell = options[Math.floor(Math.random() * options.length)];
+      const cell = options[optionIndex];
+      optionIndex = (optionIndex + 1) % options.length;
+      setAiConsiderCell(cell);
+    }, Math.floor(140 / options.length));
+
+    let decidedTimeout: NodeJS.Timeout;
+    const startTime = Date.now();
+    const placeCol = aiChooseMove();
+    const endTime = Date.now();
+    const thinkTime = endTime - startTime;
+    if (thinkTime >= miniumThinkTime) {
+      clearInterval(thinkInterval);
+      setAiConsiderCell(placeCol);
+      decidedTimeout = setTimeout(() => {
+        makeMove(placeCol);
+      }, decidedTime);
+      return () => {
+        clearInterval(thinkInterval);
+        clearTimeout(decidedTimeout);
+      };
     }
+    const timeout = setTimeout(() => {
+      clearInterval(thinkInterval);
+      setAiConsiderCell(placeCol);
+      decidedTimeout = setTimeout(() => {
+        makeMove(placeCol);
+      }, decidedTime);
+    }, miniumThinkTime - thinkTime);
+    return () => {
+      clearInterval(thinkInterval);
+      clearTimeout(timeout);
+      clearTimeout(decidedTimeout);
+    };
   }, [player, gameStatus, isRAI, isYAI]);
 
   useEffect(() => {
@@ -182,7 +224,7 @@ const GameConnectFour: React.FC = () => {
     }
 
     // check row
-    let [_, win] = board.reduce(
+    let [, win] = board.reduce(
       (acc, col): [number, boolean] => {
         let [count, win] = acc;
         if (col[row] === player) {
@@ -365,18 +407,34 @@ const GameConnectFour: React.FC = () => {
     return bestMove;
   };
 
+  const previewCellClassName = (cell: string, cellIndex: number) => {
+    let className = styles.circle;
+    if (isAiTurn) {
+      if (cellIndex === aiConsiderCell) {
+        className += " " + styles[player];
+      }
+    } else {
+      className += ` ${cell ? styles[player] : ""}`;
+    }
+    return className;
+  };
+
   return (
     <>
-      <div>
-        <p>This is a work in progress</p>
-        <h2>{gameStatus}</h2>
+      <p>This is a work in progress</p>
+      <div className="bg-slate-700 p-2 mt-2 mb-4 mx-auto max-w-md rounded-xl">
+        <div className="text-2xl text-center">
+          {gameStatus !== "in progress"
+            ? gameStatus === "tie"
+              ? "It's a Tie!"
+              : `${gameStatus === "R wins" ? "Red" : "Yellow"} wins!`
+            : `${player === "R" ? "Red" : "Yellow"}'s turn`}
+        </div>
         <div className={styles.gameBoard}>
           <div className={styles.inputRow}>
             {slotAbove.map((cell, cellIndex) => (
               <div key={-1 - cellIndex} className={styles.slotCell}>
-                <div
-                  className={`${styles.circle} ${cell ? styles[player] : ""}`}
-                ></div>
+                <div className={previewCellClassName(cell, cellIndex)}></div>
               </div>
             ))}
           </div>
@@ -406,58 +464,117 @@ const GameConnectFour: React.FC = () => {
             })}
           </div>
         </div>
-        <button onClick={resetGame} className={styles.resetButton}>
-          Reset Game
-        </button>
-        <div className={styles.checkboxDiv}>
-          <label>
-            AI control Red
+        <div className="flex flex-col items-center justify-center">
+          <div className="flex items-center justify-center">
+            <div className={styles.checkboxDiv}>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  id="X-AI-switch"
+                  type="checkbox"
+                  role="switch"
+                  checked={isRAI}
+                  onChange={() => setIsRAI((prev) => !prev)}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-300">
+                  Red AI
+                </span>
+              </label>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  id="O-AI-switch"
+                  type="checkbox"
+                  role="switch"
+                  checked={isYAI}
+                  onChange={() => setIsYAI((prev) => !prev)}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white  after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-300">
+                  Yellow AI
+                </span>
+              </label>
+            </div>
+            <button
+              type="button"
+              onClick={resetGame}
+              className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
+            >
+              Reset
+            </button>
+          </div>
+          <div className="flex items-center mb-1">
+            <span className="block ml-0 mr-2 ms-3 text-sm font-medium text-gray-300">
+              Search depth
+            </span>
+            <div className="relative flex items-center max-w-[8rem]">
+              <button
+                type="button"
+                id="decrement-button"
+                disabled={depth <= 0}
+                onClick={() => setDepth((prev) => Math.max(prev - 1, 0))}
+                className="bg-gray-600 hover:bg-gray-500 rounded-s-lg px-3 pb-3 pt-2.5 h-8 "
+              >
+                <svg
+                  className="w-3 h-3 text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 2"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M1 1h16"
+                  />
+                </svg>
+              </button>
+              <div className="bg-gray-600 border-x-0 border-gray-300 h-8 w-4 text-center text-sm  block text-white">
+                <div className="w-fit h-fit m-auto pt-1.5">{depth}</div>
+              </div>
+              <button
+                type="button"
+                id="increment-button"
+                disabled={depth >= 6}
+                onClick={() => setDepth((prev) => Math.min(prev + 1, 6))}
+                className=" bg-gray-600 hover:bg-gray-500 rounded-e-lg px-3 pb-3 pt-2.5 h-8"
+              >
+                <svg
+                  className="w-3 h-3 text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 18"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 1v16M1 9h16"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <label
+            htmlFor="ai-noise"
+            className="flex items-center justify-center"
+          >
+            <span className="text-sm font-medium text-gray-300">AI noise</span>
             <input
-              type="checkbox"
-              checked={isRAI}
-              onChange={() => setIsRAI((prev) => !prev)}
-            />
-          </label>
-          <label>
-            AI control Yellow
-            <input
-              type="checkbox"
-              checked={isYAI}
-              onChange={() => setIsYAI((prev) => !prev)}
-            />
-          </label>
-        </div>
-        <label htmlFor="ai-depth" className={styles.aiDifficulty}>
-          AI search depth (higher is harder)
-          <input
-            name="ai-depth"
-            type="number"
-            min="0"
-            max="6"
-            step="1"
-            value={depth}
-            onChange={(e) => setDepth(Number(e.target.value))}
-          />
-        </label>
-        <label htmlFor="ai-noise" className={styles.aiDifficulty}>
-          AI noise (higher is more random)
-          <input
-            name="ai-noise"
-            type="range"
-            min="0.001"
-            max="0.1"
-            step="0.001"
-            value={noise}
-            onChange={(e) => setNoise(Number(e.target.value))}
-          />
-        </label>
-        <div className={styles.checkboxDiv}>
-          <label>
-            Show action values
-            <input
-              type="checkbox"
-              checked={showActionValues}
-              onChange={() => setShowActionValues((prev) => !prev)}
+              id="ai-noise"
+              type="range"
+              min="0.001"
+              max="0.1"
+              step="0.001"
+              value={noise}
+              onChange={(e) => setNoise(Number(e.target.value))}
+              className="ml-1"
             />
           </label>
         </div>
