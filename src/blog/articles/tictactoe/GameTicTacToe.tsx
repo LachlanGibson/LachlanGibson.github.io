@@ -277,7 +277,7 @@ const GameTicTacToe = () => {
 
   return (
     <>
-      <div className="bg-slate-700 p-2 mt-2 mb-4 mx-auto max-w-md rounded-xl bord">
+      <div className="bg-slate-700 p-2 mt-2 mb-4 mx-auto max-w-md rounded-xl">
         <div className={styles.winner}>
           {winner
             ? winner === "Tie"
@@ -310,8 +310,8 @@ const GameTicTacToe = () => {
                 onChange={() => setIsXHuman((prev) => !prev)}
                 className="sr-only peer"
               />
-              <div className="w-9 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
+              <span className="ms-3 text-sm font-mediumtext-gray-300">
                 X AI
               </span>
             </label>
@@ -324,8 +324,8 @@ const GameTicTacToe = () => {
                 onChange={() => setIsOHuman((prev) => !prev)}
                 className="sr-only peer"
               />
-              <div className="w-9 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
+              <span className="ms-3 text-sm font-medium text-gray-300">
                 O AI
               </span>
             </label>
@@ -333,12 +333,12 @@ const GameTicTacToe = () => {
           <button
             type="button"
             onClick={resetGame}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
           >
             Reset
           </button>
         </div>
-        <div className="mx-auto text-center text-sm font-medium text-gray-900 dark:text-gray-300">
+        <div className="mx-auto text-center text-sm font-medium text-gray-300">
           Precise &harr; Chaotic
         </div>
         <label htmlFor="X-ai-difficulty" className={styles.aiDifficulty}>
@@ -352,9 +352,7 @@ const GameTicTacToe = () => {
               value={xTemperature}
               onChange={(e) => setXTemperature(Number(e.target.value))}
             />
-            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-              X
-            </span>
+            <span className="ms-3 text-sm font-medium text-gray-300">X</span>
           </div>
         </label>
         <label htmlFor="O-ai-difficulty" className={styles.aiDifficulty}>
@@ -368,9 +366,7 @@ const GameTicTacToe = () => {
               value={oTemperature}
               onChange={(e) => setOTemperature(Number(e.target.value))}
             />
-            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-              O
-            </span>
+            <span className="ms-3 text-sm font-medium text-gray-300">O</span>
           </div>
         </label>
       </div>

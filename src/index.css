@@ -7,13 +7,6 @@ Boiler plate from
 https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
 */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  border: none;
-}
-
 html {
   -webkit-text-size-adjust: none; /* for iOS Safari */
   text-size-adjust: none; /* for other mobile browsers */
