@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import { Navigate, useParams } from "react-router-dom";
-import articleMetaData, { ArticleType } from "./articleMetaData";
+import articleMetaData from "./articleMetaData";
 import "./Article.css";
 import ShareLinks from "./ShareLinks";
 import BlogMetaData from "./BlogMetaData";
-
-const articles = Object.keys(articleMetaData);
 
 const Article: React.FC = () => {
   const { slug } = useParams();
