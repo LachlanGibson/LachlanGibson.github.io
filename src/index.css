@@ -95,8 +95,3 @@ p {
 .active-link {
   text-decoration: underline;
 }
-
-img {
-  display: block;
-  max-width: 100%;
-}
