@@ -25,11 +25,11 @@ const BlogMetaData: React.FC<{ slug: string; metaData: ArticleType }> = ({
       />
       <meta
         property="og:url"
-        content={`https://www.lachlangibson.dev/blog/${slug}`}
+        content={`https://www.lachlangibson.dev/blog/${slug}/`}
       />
       <link
         rel="canonical"
-        href={`https://www.lachlangibson.dev/blog/${slug}`}
+        href={`https://www.lachlangibson.dev/blog/${slug}/`}
       />
 
       <meta
