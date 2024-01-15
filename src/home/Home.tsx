@@ -1,4 +1,5 @@
 import React from "react";
+import IconLinks from "../navigation/IconLinks";
 
 const Home: React.FC<{}> = () => {
   return (
@@ -14,10 +15,12 @@ const Home: React.FC<{}> = () => {
         Lachlan Gibson
       </div>
       <p className="text-sky-700 max-w-48 text-center text-sm leading-[0.9rem]">
-        Data scientist & developer
+        Data scientist & Developer
         <br />
-        AI and simulation
+        AI & Simulation
       </p>
+      <IconLinks className="m-4 h-4 flex gap-5 justify-center w-fit" />
+      <div className="h-96"></div>
     </div>
   );
 };
