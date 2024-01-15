@@ -6,7 +6,7 @@ import PythonCodeDisplay from "./PythonCodeDisplay";
 
 const ArticleGoogleFoobarChallenge: React.FC = () => {
   return (
-    <>
+    <div>
       <p>
         Recently, I completed Google's&nbsp;
         <a
@@ -1747,7 +1747,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
           </section>
         </section>
       </div>
-    </>
+    </div>
   );
 };
 
