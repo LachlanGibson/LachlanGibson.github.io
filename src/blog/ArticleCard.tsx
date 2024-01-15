@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 const ArticleCard = ({
   slug,
   title,
-  timeElement,
+  publishedDateISO,
+  publishedDateLabel,
   imageLink,
 }: {
   slug: string;
   title: string;
-  timeElement: JSX.Element;
+  publishedDateISO: string;
+  publishedDateLabel: string;
   imageLink: string;
 }) => {
   return (
@@ -31,7 +33,9 @@ const ArticleCard = ({
             </h5>
           </Link>
           <p className="font-normal text-gray-700 dark:text-gray-400 text-xs">
-            <span>{timeElement}</span>
+            <span>
+              <time dateTime={publishedDateISO}>{publishedDateLabel}</time>
+            </span>
           </p>
         </div>
       </div>

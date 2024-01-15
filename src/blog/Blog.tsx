@@ -17,7 +17,8 @@ const Blog: React.FC<{}> = () => {
             key={slug}
             slug={slug}
             title={articleMetaData[slug].title}
-            timeElement={articleMetaData[slug].timeElement}
+            publishedDateISO={articleMetaData[slug].publishedDateISO}
+            publishedDateLabel={articleMetaData[slug].publishedDateLabel}
             imageLink={articleMetaData[slug].imageLink}
           />
         ))}
