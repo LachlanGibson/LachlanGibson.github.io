@@ -39,21 +39,6 @@ ul:not(article ul) {
   list-style: none;
 }
 
-menu,
-ol,
-ul {
-  padding-left: 0.5em;
-}
-
-article ol,
-article ul {
-  list-style-position: outside;
-  margin-left: 1em;
-}
-li:not(:last-child) {
-  margin-bottom: 0.5em;
-}
-
 a {
   text-underline-position: under;
   text-decoration-thickness: 0.1rem;
