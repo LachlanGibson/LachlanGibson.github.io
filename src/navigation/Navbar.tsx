@@ -11,11 +11,10 @@ const Navbar: React.FC<{}> = () => {
       <div>
         <img
           id="navbar-icon"
-          src="/navbar/icons/logo.svg"
+          src="/navbar/icons/LG_logo.svg"
           alt="Logo for Lachlan Gibson's website"
         />
-        <span id="lachlan-nav-text">Lachlan Gibson</span>
-        <span id="lachlan-nav-text-short">LG</span>
+        <span id="lachlan-nav-text">lachlangibson.dev</span>
       </div>
       <NavLink className={activeLink} to="/">
         Home

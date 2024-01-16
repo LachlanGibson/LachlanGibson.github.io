@@ -18,7 +18,7 @@ nav div {
 }
 
 nav div img {
-  height: 100%;
+  height: 2rem;
   margin-right: 1rem;
 }
 
@@ -42,15 +42,8 @@ nav a:hover {
   text-decoration: underline;
 }
 
-#lachlan-nav-text-short {
-  display: none;
-}
-
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 400px) {
   #lachlan-nav-text {
     display: none;
-  }
-  #lachlan-nav-text-short {
-    display: inline;
   }
 }
