@@ -37,7 +37,12 @@ const PopUpAbstract: React.FC<{
       onMouseEnter={() => setShowPopup(true)}
       onMouseLeave={() => setShowPopup(false)}
     >
-      <span className="hover:cursor-pointer text-sky-400">{children}</span>
+      <span
+        style={{ color: "rgb(76, 192, 212)" }}
+        className="hover:cursor-pointer"
+      >
+        {children}
+      </span>
       <div
         style={{ width: "50vw" }}
         className={`absolute bg-slate-700 shadow-lg p-2 rounded-lg text-xs  ${
@@ -82,37 +87,56 @@ const About: React.FC<{}> = () => {
       <h1 className="text-3xl font-bold text-center tracking-wider py-3">
         Academic History
       </h1>
-      <div className="grid md:grid-cols-[auto,1fr] grid-cols-[1fr,3fr]  gap-2 md:gap-4">
+      <div className="grid md:grid-cols-[auto,1fr] grid-cols-[2fr,7fr]  gap-2 md:gap-4">
         <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
           Employment
         </h2>
         <CVTimeSection
           leftBar={[
             "The University of Queensland",
-            "ARC Centre of Excellence for Mathematical & Statistical Frontiers",
-            "2021 \u2014 2022",
-          ]}
-          title="Postdoctoral Research Fellow"
-        ></CVTimeSection>
-        <CVTimeSection
-          leftBar={[
-            "The University of Queensland",
-            "Centre for Applications in Natural Resource Mathematics",
+            "CARM, ACEMS",
             "2020 \u2014 2021",
           ]}
           title="Postdoctoral Research Fellow"
-        ></CVTimeSection>
+        >
+          From August 2020 to June 2021, I served as a Postdoctoral Research
+          Fellow with the Centre for Applications in Natural Resource
+          Mathematics, and then with the ARC Centre of Excellence for
+          Mathematical & Statistical Frontiers. Some of my research included{" "}
+          <a
+            href="https://era.daf.qld.gov.au/id/eprint/8190/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            investigating environmental impacts on fishery risk
+          </a>
+          , exploring{" "}
+          <a
+            href="https://doi.org/10.1007/978-3-030-92511-6_10"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            reinforcement learning methods for managing restless multi-armed
+            bandits
+          </a>{" "}
+          and developing new methods for{" "}
+          <a
+            href="https://doi.org/10.48550/arXiv.2305.07863"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            rare-event simulation via generative neural networks
+          </a>
+          . I also supervised a Master of Data Science student's capstone
+          industry project during this time.
+        </CVTimeSection>
         <CVTimeSection
-          leftBar={[
-            "The University of Queensland",
-            "School of Mathematics & Physics",
-            "2016 \u2014 2020",
-          ]}
+          leftBar={["The University of Queensland", "SMP", "2016 \u2014 2020"]}
           title="Mathematics and Physics Tutor"
         >
-          I tutored mathematics, physics and data science courses during my
-          postgraduate studies. This included teaching tutorial, practical and
-          contact classes, preparing lessons, working with other tutors and
+          I tutored several mathematics, physics and data science courses during
+          my postgraduate studies. This included teaching tutorial, practical
+          and contact classes, preparing lessons, working with other tutors and
           marking assessments. Some subjects included: calculus, linear algebra,
           ordinary differential equations, electromagnetism, and statistical
           methods for data science.
@@ -123,7 +147,7 @@ const About: React.FC<{}> = () => {
         <CVTimeSection
           leftBar={[
             "The University of Queensland",
-            "School of Information Technology & Electrical Engineering",
+            "School of ITEE",
             "2019 \u2014 2020",
           ]}
           title="Master of Data Science"
@@ -142,11 +166,7 @@ const About: React.FC<{}> = () => {
           predict missing votes using these classifications.
         </CVTimeSection>
         <CVTimeSection
-          leftBar={[
-            "The University of Queensland",
-            "Optical Micro-manipulation Group",
-            "2016 \u2014 2019",
-          ]}
+          leftBar={["The University of Queensland", "OMG", "2016 \u2014 2019"]}
           title="Doctor of Philosophy (Physics)"
         >
           As a member of the Optical-tweezers Micromanipulation Group, I
@@ -178,16 +198,37 @@ const About: React.FC<{}> = () => {
             machine learning techniques to streamline the computation of complex
             fluid dynamics
           </a>
-          .
+          . During my candidature, in addition to coauthoring several{" "}
+          <a
+            href="https://scholar.google.com/citations?user=NeEMSU0AAAAJ&hl=en"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            publications
+          </a>
+          , I also presented my research at multiple international conferences,
+          including APPC-AIO Congress 2016 and AIP 2018.
         </CVTimeSection>
         <CVTimeSection
-          leftBar={[
-            "The University of Queensland",
-            "School of Mathematics & Physics",
-            "2011 \u2014 2015",
-          ]}
+          leftBar={["The University of Queensland", "SMP", "2011 \u2014 2015"]}
           title="Bachelor of Science (Honours)/ Bachelor of Arts"
-        ></CVTimeSection>
+        >
+          I pursued a dual Bachelor of Science and Bachelor of Arts degree,
+          majoring in Mathematics and Physics. During the initial phase
+          (2011-2014), I achieved a GPA of 6.66/7.00. In 2015, I completed an
+          honours year in Physics, earning first class honours with a GPA of
+          6.75/7.00. As a participant in the Advanced Study Program in Science
+          (ASPinS) and the UQ Summer Research Scholarship Programs for three
+          consecutive years, I actively engaged in research throughout my
+          undergraduate studies. This research was presented at various
+          conferences, including the UQ ASPinS Undergraduate Research
+          Conferences (2011-2013) and the UQ Undergraduate Research Conferences
+          (2012-2013), where I won the best poster award in 2012. In 2015, I
+          interned at The Simulation Group, where I contributed to the AnyLogic
+          simulation of Brisbane's proposed Bus and Train tunnel. Throughout my
+          studies, my academic achievements were recognised with multiple Dean's
+          Commendations for High Achievement/Academic Excellence.
+        </CVTimeSection>
       </div>
     </>
   );
