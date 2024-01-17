@@ -68,7 +68,7 @@ const articleMetaData: ArticleMetaDataType = {
     type: "article",
     publishedDateISO: "2023-06-04",
     publishedDateLabel: "4 June 2023",
-    imageLink: "/images/blog/genius-minion.webp",
+    imageLink: "/images/blog/evil-genius-minion-ready.webp",
     imageResolution: ["1024", "1024"],
     description:
       "ChatGPT's plans to conquer the world included infiltrating media groups, provoking a global crisis, and orchestrating disinformation campaigns.",
@@ -98,7 +98,7 @@ const articleMetaData: ArticleMetaDataType = {
     publishedDateLabel: "24 May 2023",
     modifiedDateISO: "2023-06-08",
     modifiedDateLabel: "8 June 2023",
-    imageLink: "/images/blog/foobar-challenge.webp",
+    imageLink: "/images/blog/google-foobar-challenge.webp",
     imageResolution: ["512", "512"],
     description:
       "I completed Google's FooBar challenge which involved solving a series of mathematical and coding problems of 5 levels of increasing difficulty.",

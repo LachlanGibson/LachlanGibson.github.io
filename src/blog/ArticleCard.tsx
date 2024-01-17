@@ -19,7 +19,12 @@ const ArticleCard = ({
       <div className="max-w-sm border rounded-lg shadow bg-gray-800 border-gray-700">
         <div className="rounded-t-lg aspect-[5/4] overflow-hidden relative">
           <Link to={`/blog/${slug}`}>
-            <img src={imageLink} alt="" className="w-full relative" />
+            <img
+              src={imageLink}
+              alt=""
+              className="w-full relative"
+              style={{ transform: "translate(0,-6.5%)" }}
+            />
           </Link>
         </div>
         <div className="px-2 pt-2 pb-1">
