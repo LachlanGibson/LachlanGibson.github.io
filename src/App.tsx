@@ -20,10 +20,13 @@ const App: React.FC = () => {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<Article />} />
-          <Route path="/blog/article-not-found" element={<ArticleNotFound />} />
+          <Route path="/about/" element={<About />} />
+          <Route path="/blog/" element={<Blog />} />
+          <Route path="/blog/:slug/" element={<Article />} />
+          <Route
+            path="/blog/article-not-found/"
+            element={<ArticleNotFound />}
+          />
         </Routes>
       </main>
       <Footer />
