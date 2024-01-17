@@ -1,10 +1,30 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 
-interface PopupProps {
-  text: string;
-  isVisible: boolean;
-}
+const abstracts = {
+  mastersCapstone: `
+Ranging from presidential elections, to social media likes, voting
+generally involves putting forward an opinion about an item, such
+as a person, idea or product. Therefore, voters are generally
+motivated to remain anonymous or avoid voting entirely, especially
+when voting requires effort or is on a sensitive issue. As such,
+datasets of votes are often sparse and include minimal explicit
+information about the voters or items. However, much of this
+information can still exist implicitly within the vote values
+themselves, because votes are usually correlated to features of
+both the voters and items. I have identified and developed a
+denoising autoencoder neural network model that can be trained
+on a sparse dataset of votes to automatically classify voters and
+items into latent classes and then predict missing votes using these
+classifications. The autoencoder classifies voters or items completely
+unsupervised by using a softmax activation function at the code layer,
+as well as regularising terms in the training loss function that minimise
+the code entropy. Using votes made in the U.S. House of Representatives
+from 1990 to May 2020 as an example, the model correctly predicted
+missing votes with 92.6% accuracy. Furthermore, some of the learnt latent
+classes corresponded to interpretable categories, such as party
+affiliation, which could be identified with a 99.5% accuracy.`,
+};
 
 const PopUpAbstract: React.FC<{
   abstract: string;
@@ -32,20 +52,22 @@ const PopUpAbstract: React.FC<{
 };
 
 const CVTimeSection: React.FC<{
-  institution: string;
+  leftBar: string[];
   title: string;
-  dates: string;
   children?: React.ReactNode;
-}> = ({ institution, dates, title, children }) => {
+}> = ({ leftBar, title, children }) => {
   return (
     <>
-      <div className="flex flex-col items-end text-slate-300 italic">
-        <div className="pr-1">{institution}</div>
-        <div className="pr-1">{dates}</div>
+      <div className=" text-right flex flex-col items-end text-slate-300 italic text-xs pt-1 max-w-56">
+        {leftBar.map((item, index) => (
+          <div key={index} className="pr-1">
+            {item}
+          </div>
+        ))}
       </div>
       <div className="flex flex-col items-start">
         <h3 className="font-bold text-lg">{title}</h3>
-        <div className="text-sm text-slate-400">{children}</div>
+        <div className="text-sm text-slate-300">{children}</div>
       </div>
     </>
   );
@@ -57,50 +79,33 @@ const About: React.FC<{}> = () => {
       <Helmet>
         <title>Lachlan Gibson - About</title>
       </Helmet>
-      <div className="grid grid-cols-[auto,1fr] gap-4">
+      <div className="grid md:grid-cols-[auto,1fr] grid-cols-[1fr,3fr]  gap-2 md:gap-4">
         <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
           Employment
         </h2>
         <CVTimeSection
-          institution={`The University of Queensland`}
-          dates="2020 &mdash; Present"
+          leftBar={["The University of Queensland", "2021 \u2014 2022"]}
           title="Postdoctoral Research Fellow"
+        ></CVTimeSection>
+        <CVTimeSection
+          leftBar={["The University of Queensland", "2020 \u2014 2021"]}
+          title="Postdoctoral Research Fellow"
+        ></CVTimeSection>
+        <CVTimeSection
+          leftBar={["The University of Queensland", "2016 \u2014 2020"]}
+          title="Mathematics and Physics Tutor"
         ></CVTimeSection>
         <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
           Education
         </h2>
         <CVTimeSection
-          institution="The University of Queensland"
-          dates="2019 &mdash; 2020"
+          leftBar={["The University of Queensland", "2019 \u2014 2020"]}
           title="Master of Data Science"
         >
           With a GPA of 6.82/7.00, I studied a range of theoretical and
           practical content including deep learning, data mining, database
           systems and operations research. In my capstone project titled,{" "}
-          <PopUpAbstract
-            abstract={`
-            Ranging from presidential elections, to social media likes, voting
-            generally involves putting forward an opinion about an item, such
-            as a person, idea or product. Therefore, voters are generally
-            motivated to remain anonymous or avoid voting entirely, especially
-            when voting requires effort or is on a sensitive issue. As such,
-            datasets of votes are often sparse and include minimal explicit
-            information about the voters or items. However, much of this
-            information can still exist implicitly within the vote values
-            themselves, because votes are usually correlated to features of
-            both the voters and items. I have identified and developed a
-            denoising autoencoder neural network model that can be trained
-            on a sparse dataset of votes to automatically classify voters and
-            items into latent classes and then predict missing votes using these
-            classifications. The autoencoder classifies voters or items completely
-            unsupervised by using a softmax activation function at the code layer,
-            as well as regularising terms in the training loss function that minimise
-            the code entropy. Using votes made in the U.S. House of Representatives
-            from 1990 to May 2020 as an example, the model correctly predicted
-            missing votes with 92.6% accuracy. Furthermore, some of the learnt latent
-            classes corresponded to interpretable categories, such as party
-            affiliation, which could be identified with a 99.5% accuracy.`}
-          >
+          <PopUpAbstract abstract={abstracts["mastersCapstone"]}>
             <span className="italic">
               Categorical Vector Clustering: Revealing hidden features of votes
               and voters
@@ -111,13 +116,42 @@ const About: React.FC<{}> = () => {
           predict missing votes using these classifications.
         </CVTimeSection>
         <CVTimeSection
-          institution="The University of Queensland"
-          dates="2016 &mdash; 2019"
+          leftBar={["The University of Queensland", "2016 \u2014 2019"]}
           title="Doctor of Philosophy (Physics)"
-        ></CVTimeSection>
+        >
+          As a member of the Optical-tweezers Micromanipulation Group, I
+          completed my thesis under the supervision of Halina
+          Rubinsztein-Dunlop, Timo Nieminen, and Alexander Stilgoe. The thesis,
+          titled "
+          <a
+            href="https://doi.org/10.14264/uql.2019.644"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Hydrodynamic forces in optical tweezers
+          </a>
+          ", focused on the mathematical and computational modeling of fluid
+          dynamics in optical tweezers systems. This included developing{" "}
+          <a
+            href="https://doi.org/10.1103/PhysRevE.95.042608"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            new theories that facilitated record-breaking experiments
+          </a>{" "}
+          and applying{" "}
+          <a
+            href="https://doi.org/10.1103/PhysRevE.99.043304"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            machine learning techniques to streamline the computation of complex
+            fluid dynamics
+          </a>
+          .
+        </CVTimeSection>
         <CVTimeSection
-          institution="The University of Queensland"
-          dates="2011 &mdash; 2015"
+          leftBar={["The University of Queensland", "2011 \u2014 2015"]}
           title="Bachelor of Science (Honours)/ Bachelor of Arts"
         ></CVTimeSection>
       </div>
