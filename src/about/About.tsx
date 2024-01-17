@@ -60,7 +60,7 @@ const CVTimeSection: React.FC<{
     <>
       <div className=" text-right flex flex-col items-end text-slate-300 italic text-xs pt-1 max-w-56">
         {leftBar.map((item, index) => (
-          <div key={index} className="pr-1">
+          <div key={index} className="pr-1 mb-1">
             {item}
           </div>
         ))}
@@ -79,27 +79,53 @@ const About: React.FC<{}> = () => {
       <Helmet>
         <title>Lachlan Gibson - About</title>
       </Helmet>
+      <h1 className="text-3xl font-bold text-center tracking-wider py-3">
+        Academic History
+      </h1>
       <div className="grid md:grid-cols-[auto,1fr] grid-cols-[1fr,3fr]  gap-2 md:gap-4">
         <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
           Employment
         </h2>
         <CVTimeSection
-          leftBar={["The University of Queensland", "2021 \u2014 2022"]}
+          leftBar={[
+            "The University of Queensland",
+            "ARC Centre of Excellence for Mathematical & Statistical Frontiers",
+            "2021 \u2014 2022",
+          ]}
           title="Postdoctoral Research Fellow"
         ></CVTimeSection>
         <CVTimeSection
-          leftBar={["The University of Queensland", "2020 \u2014 2021"]}
+          leftBar={[
+            "The University of Queensland",
+            "Centre for Applications in Natural Resource Mathematics",
+            "2020 \u2014 2021",
+          ]}
           title="Postdoctoral Research Fellow"
         ></CVTimeSection>
         <CVTimeSection
-          leftBar={["The University of Queensland", "2016 \u2014 2020"]}
+          leftBar={[
+            "The University of Queensland",
+            "School of Mathematics & Physics",
+            "2016 \u2014 2020",
+          ]}
           title="Mathematics and Physics Tutor"
-        ></CVTimeSection>
+        >
+          I tutored mathematics, physics and data science courses during my
+          postgraduate studies. This included teaching tutorial, practical and
+          contact classes, preparing lessons, working with other tutors and
+          marking assessments. Some subjects included: calculus, linear algebra,
+          ordinary differential equations, electromagnetism, and statistical
+          methods for data science.
+        </CVTimeSection>
         <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
           Education
         </h2>
         <CVTimeSection
-          leftBar={["The University of Queensland", "2019 \u2014 2020"]}
+          leftBar={[
+            "The University of Queensland",
+            "School of Information Technology & Electrical Engineering",
+            "2019 \u2014 2020",
+          ]}
           title="Master of Data Science"
         >
           With a GPA of 6.82/7.00, I studied a range of theoretical and
@@ -116,7 +142,11 @@ const About: React.FC<{}> = () => {
           predict missing votes using these classifications.
         </CVTimeSection>
         <CVTimeSection
-          leftBar={["The University of Queensland", "2016 \u2014 2019"]}
+          leftBar={[
+            "The University of Queensland",
+            "Optical Micro-manipulation Group",
+            "2016 \u2014 2019",
+          ]}
           title="Doctor of Philosophy (Physics)"
         >
           As a member of the Optical-tweezers Micromanipulation Group, I
@@ -151,7 +181,11 @@ const About: React.FC<{}> = () => {
           .
         </CVTimeSection>
         <CVTimeSection
-          leftBar={["The University of Queensland", "2011 \u2014 2015"]}
+          leftBar={[
+            "The University of Queensland",
+            "School of Mathematics & Physics",
+            "2011 \u2014 2015",
+          ]}
           title="Bachelor of Science (Honours)/ Bachelor of Arts"
         ></CVTimeSection>
       </div>
