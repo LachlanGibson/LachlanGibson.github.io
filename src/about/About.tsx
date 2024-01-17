@@ -123,7 +123,7 @@ const About: React.FC<{}> = () => {
           leftBar={[
             "The University of Queensland",
             "CARM, ACEMS",
-            "2020 \u2014 2021",
+            "2020 \u2014 2022",
           ]}
           title="Postdoctoral Research Fellow"
         >
