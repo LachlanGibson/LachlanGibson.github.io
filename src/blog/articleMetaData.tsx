@@ -99,7 +99,7 @@ const articleMetaData: ArticleMetaDataType = {
     modifiedDateISO: "2023-06-08",
     modifiedDateLabel: "8 June 2023",
     imageLink: "/images/blog/google-foobar-challenge.webp",
-    imageResolution: ["512", "512"],
+    imageResolution: ["1024", "1024"],
     description:
       "I completed Google's FooBar challenge which involved solving a series of mathematical and coding problems of 5 levels of increasing difficulty.",
     language: "en-au",
