@@ -78,11 +78,39 @@ const CVTimeSection: React.FC<{
   );
 };
 
+const name = "Lachlan Gibson";
+const title = "Lachlan Gibson - About";
+const description =
+  "Lachlan Gibson is a data scientist and developer with experience in AI, algorithmic design, scientific computing, and data analytics.";
+const imageUrl =
+  "https://www.lachlangibson.dev/images/home/lachlan_gibson.webp";
+const pageUrl = "https://www.lachlangibson.dev/about/";
+const keyWords = `Lachlan Gibson, data scientist, developer, AI, simulation, 
+machine learning, deep learning, reinforcement learning, dimensionality reduction, 
+algorithmic design, neural network architecture, Q-Learning, dynamic programming, 
+numerical methods, scientific computing, MATLAB, finite element method, 
+finite difference method, discrete event simulation, data analytics, 
+Python, R, SQL, PyTorch, pandas, Matplotlib, physics, mathematics, statistics`;
+
 const About: React.FC<{}> = () => {
   return (
     <>
       <Helmet>
-        <title>Lachlan Gibson - About</title>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:description" content={description} />
+        <meta name="twitter:description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta name="twitter:title" content={title} />
+        <meta name="author" content={name} />
+        <meta property="og:image" content={imageUrl} />
+        <meta name="twitter:image" content={imageUrl} />
+        <meta property="og:url" content={pageUrl} />
+        <link rel="canonical" href={pageUrl} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="robots" content="index, follow" />
+        <meta name="keywords" content={keyWords} />
       </Helmet>
       <h1 className="text-3xl font-bold text-center tracking-wider py-3">
         Academic History
