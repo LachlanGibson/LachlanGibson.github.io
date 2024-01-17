@@ -1,5 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
+
+interface PopupProps {
+  text: string;
+  isVisible: boolean;
+}
+
+const PopUpAbstract: React.FC<{
+  abstract: string;
+  children: React.ReactNode;
+}> = ({ abstract, children }) => {
+  const [showPopup, setShowPopup] = useState(false);
+
+  return (
+    <span
+      onMouseEnter={() => setShowPopup(true)}
+      onMouseLeave={() => setShowPopup(false)}
+    >
+      <span className="hover:cursor-pointer text-sky-400">{children}</span>
+      <div
+        style={{ width: "50vw" }}
+        className={`absolute bg-slate-700 shadow-lg p-2 rounded-lg text-xs  ${
+          showPopup ? "block" : "hidden"
+        }`}
+      >
+        <span className="font-bold">Abstract: </span>
+        {abstract}
+      </div>
+    </span>
+  );
+};
+
+const CVTimeSection: React.FC<{
+  institution: string;
+  title: string;
+  dates: string;
+  children?: React.ReactNode;
+}> = ({ institution, dates, title, children }) => {
+  return (
+    <>
+      <div className="flex flex-col items-end text-slate-300 italic">
+        <div className="pr-1">{institution}</div>
+        <div className="pr-1">{dates}</div>
+      </div>
+      <div className="flex flex-col items-start">
+        <h3 className="font-bold text-lg">{title}</h3>
+        <div className="text-sm text-slate-400">{children}</div>
+      </div>
+    </>
+  );
+};
 
 const About: React.FC<{}> = () => {
   return (
@@ -7,64 +57,70 @@ const About: React.FC<{}> = () => {
       <Helmet>
         <title>Lachlan Gibson - About</title>
       </Helmet>
-      <section>
-        <h1 className="text-xl font-bold mb-3">
-          ChatGPT's Introduction to Lachlan
-        </h1>
-        <p>
-          Dr. Lachlan Gibson, an Australian citizen, is a scholar and researcher
-          in the field of Physics and Data Science. He began his educational
-          journey at the University of Queensland, where he pursued a dual
-          program of a Bachelor of Science and a Bachelor of Arts from 2011 to
-          2014 with extended majors in Physics and Mathematics respectively.
-          During his undergraduate years, Dr. Gibson was heavily involved in
-          research programs, including the Advanced Study Program in Science
-          (ASPinS), and was recognized by the UQ Summer Research Scholarship
-          Program for three consecutive years.
-          <br />
-          <br />
-          His desire for continuous learning led him to attain his Bachelor of
-          Science (Honours) in 2015, achieving First Class Honours. His
-          dedication was evident through his participation in a Simulation Group
-          Internship, where he worked on simulations of the proposed Brisbane
-          BaT tunnel.
-          <br />
-          <br />
-          Dr. Gibson further expanded his knowledge base by pursuing a Doctor of
-          Philosophy (Physics) from 2016 to 2019. His thesis focused on the
-          mathematical and computational modelling of fluid dynamics relevant to
-          optical-tweezers systems. He then added to his expertise by completing
-          a Masters of Data Science in 2020 with a capstone study project on
-          Categorical Vector Clustering.
-          <br />
-          <br />
-          Following his academic pursuits, Dr. Gibson embarked on a career as a
-          Postdoctoral Research Fellow at the University of Queensland from
-          August 2020 to December 2022. His work involved researching rare-event
-          simulation via generative neural networks, environmental effects on
-          fishery risk, and reinforcement learning methods for controlling
-          restless multi-armed bandits. He also served as an Academic Tutor from
-          2016 to 2020 for various Mathematics and Physics courses.
-          <br />
-          <br />
-          Besides his professional accomplishments, Dr. Gibson has shown a
-          commendable spirit of volunteerism. He has taken on roles such as
-          Assistant Secretary and Sound Technician at Salisbury Baptist Church
-          between 2013 and 2022, providing administrative and technical support
-          for the organization. He has also volunteered as a Youth Leader,
-          mentoring high school students from the church and local community.
-          Additionally, he contributed to Scripture Union as a camp leader, and
-          as an English Conversation Club Volunteer Helper at UQ's Institute of
-          Continuing & TESOL Education.
-          <br />
-          <br />
-          With his impressive educational qualifications, extensive research
-          experience, and a strong commitment to service, Dr. Lachlan Gibson
-          stands as an accomplished researcher and data scientist, dedicated to
-          advancing knowledge and improving the community.
-          <br />
-        </p>
-      </section>
+      <div className="grid grid-cols-[auto,1fr] gap-4">
+        <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
+          Employment
+        </h2>
+        <CVTimeSection
+          institution={`The University of Queensland`}
+          dates="2020 &mdash; Present"
+          title="Postdoctoral Research Fellow"
+        ></CVTimeSection>
+        <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
+          Education
+        </h2>
+        <CVTimeSection
+          institution="The University of Queensland"
+          dates="2019 &mdash; 2020"
+          title="Master of Data Science"
+        >
+          With a GPA of 6.82/7.00, I studied a range of theoretical and
+          practical content including deep learning, data mining, database
+          systems and operations research. In my capstone project titled,{" "}
+          <PopUpAbstract
+            abstract={`
+            Ranging from presidential elections, to social media likes, voting
+            generally involves putting forward an opinion about an item, such
+            as a person, idea or product. Therefore, voters are generally
+            motivated to remain anonymous or avoid voting entirely, especially
+            when voting requires effort or is on a sensitive issue. As such,
+            datasets of votes are often sparse and include minimal explicit
+            information about the voters or items. However, much of this
+            information can still exist implicitly within the vote values
+            themselves, because votes are usually correlated to features of
+            both the voters and items. I have identified and developed a
+            denoising autoencoder neural network model that can be trained
+            on a sparse dataset of votes to automatically classify voters and
+            items into latent classes and then predict missing votes using these
+            classifications. The autoencoder classifies voters or items completely
+            unsupervised by using a softmax activation function at the code layer,
+            as well as regularising terms in the training loss function that minimise
+            the code entropy. Using votes made in the U.S. House of Representatives
+            from 1990 to May 2020 as an example, the model correctly predicted
+            missing votes with 92.6% accuracy. Furthermore, some of the learnt latent
+            classes corresponded to interpretable categories, such as party
+            affiliation, which could be identified with a 99.5% accuracy.`}
+          >
+            <span className="italic">
+              Categorical Vector Clustering: Revealing hidden features of votes
+              and voters
+            </span>
+          </PopUpAbstract>
+          , I developed a recommender-system-like model based on a denoising
+          autoencoder to classify voters and items into latent classes and
+          predict missing votes using these classifications.
+        </CVTimeSection>
+        <CVTimeSection
+          institution="The University of Queensland"
+          dates="2016 &mdash; 2019"
+          title="Doctor of Philosophy (Physics)"
+        ></CVTimeSection>
+        <CVTimeSection
+          institution="The University of Queensland"
+          dates="2011 &mdash; 2015"
+          title="Bachelor of Science (Honours)/ Bachelor of Arts"
+        ></CVTimeSection>
+      </div>
     </>
   );
 };
