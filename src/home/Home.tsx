@@ -55,14 +55,17 @@ const Home: React.FC<{}> = () => {
         <div className="max-w-48 max-h-48 w-full aspect-square bg-slate-200 overflow-hidden rounded-full relative border-sky-600 border-solid border-2">
           <img
             className="h-full"
-            src="/images/home/lachlan_gibson.webp"
+            src="/images/home/lachlan_gibson_600.webp"
             alt="Lachlan Gibson"
           />
         </div>
-        <div className="my-1 font-bold tracking-widest text-2xl">
+        <div
+          className="my-1 font-bold tracking-wider"
+          style={{ fontSize: "1.8rem", lineHeight: "2.25rem" }}
+        >
           Lachlan Gibson
         </div>
-        <p className="text-sky-700 max-w-48 text-center text-sm leading-[0.9rem]">
+        <p className="text-sky-700 max-w-48 text-center text-md leading-[0.9rem]">
           Data scientist & Developer
           <br />
           AI & Simulation
