@@ -1,13 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import articleMetaData from "./articleMetaData";
+import articleMetaData, { ArticleType } from "./articleMetaData";
 import "./Article.css";
-import ShareLinks from "./ShareLinks";
+import ShareLinks, { SocialMediaLinks } from "./ShareLinks";
 import BlogMetaData from "./BlogMetaData";
+
+const AuthorCard: React.FC<{
+  metaData: ArticleType;
+  shareLinks: SocialMediaLinks;
+}> = ({ metaData, shareLinks }) => {
+  return (
+    <div className="flex flex-col items-center">
+      <h1 className="text-4xl tracking-wide my-4 text-center">
+        {metaData.title}
+      </h1>
+      <div className="flex gap-4 items-center mb-4">
+        <div className="w-12 h-12 aspect-square bg-slate-200 overflow-hidden rounded-full relative">
+          <img
+            className="h-full"
+            src={metaData.authorImageLink}
+            alt={metaData.author}
+          />
+        </div>
+        <div className="h-fit">
+          <div className="tracking-wide text-xl">{metaData.author}</div>
+          <div className="text-sky-600 text-xs">
+            <time dateTime={metaData.publishedDateISO}>
+              {metaData.publishedDateLabel}
+            </time>
+            {metaData.modifiedDateISO && (
+              <>
+                , updated{" "}
+                {
+                  <time dateTime={metaData.modifiedDateISO}>
+                    {metaData.modifiedDateLabel}
+                  </time>
+                }
+              </>
+            )}
+          </div>
+        </div>
+        <ShareLinks shareLinks={shareLinks} />
+      </div>
+    </div>
+  );
+};
 
 const Article: React.FC = () => {
   const { slug } = useParams();
-  const [shareLinks, setShareLinks] = useState({
+  const [shareLinks, setShareLinks] = useState<SocialMediaLinks>({
     fb: "",
     twitter: "",
     linkedIn: "",
@@ -58,31 +99,7 @@ const Article: React.FC = () => {
   return (
     <>
       <BlogMetaData slug={slug} metaData={articleMetaData[slug]} />
-      <div className="blog-title-div">
-        <h1>{articleMetaData[slug].title}</h1>
-        <span className="author-date-span">
-          By {articleMetaData[slug].author},{" "}
-          {
-            <time dateTime={articleMetaData[slug].publishedDateISO}>
-              {articleMetaData[slug].publishedDateLabel}
-            </time>
-          }
-          {articleMetaData[slug].modifiedDateISO ? (
-            <>
-              , updated{" "}
-              {
-                <time dateTime={articleMetaData[slug].modifiedDateISO}>
-                  {articleMetaData[slug].modifiedDateLabel}
-                </time>
-              }
-            </>
-          ) : (
-            ""
-          )}
-          .
-        </span>
-        <ShareLinks shareLinks={shareLinks} />
-      </div>
+      <AuthorCard metaData={articleMetaData[slug]} shareLinks={shareLinks} />
       {articleMetaData[slug].articleElement}
     </>
   );

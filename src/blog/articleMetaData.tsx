@@ -6,6 +6,7 @@ import GameTicTacToe from "./articles/tictactoe/GameTicTacToe";
 export type ArticleType = {
   title: string;
   author: string;
+  authorImageLink: string;
   type: string;
   description: string;
   publishedDateISO: string;
@@ -28,6 +29,7 @@ const articleMetaData: ArticleMetaDataType = {
   "connect-four": {
     title: "Connect Four",
     author: "Lachlan Gibson",
+    authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
     publishedDateISO: "2024-01-09",
     publishedDateLabel: "Work in progress",
@@ -40,6 +42,7 @@ const articleMetaData: ArticleMetaDataType = {
   "tic-tac-toe": {
     title: "Tic Tac Toe",
     author: "Lachlan Gibson",
+    authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
     publishedDateISO: "2024-01-12",
     publishedDateLabel: "12 January 2024",
@@ -65,6 +68,7 @@ const articleMetaData: ArticleMetaDataType = {
   "evil-genius-minion-ready": {
     title: "Evil Genius, Minion Ready",
     author: "Lachlan Gibson",
+    authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
     publishedDateISO: "2023-06-04",
     publishedDateLabel: "4 June 2023",
@@ -93,6 +97,7 @@ const articleMetaData: ArticleMetaDataType = {
   "google-foobar-challenge": {
     title: "Google's FooBar Challenge",
     author: "Lachlan Gibson",
+    authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
     publishedDateISO: "2023-05-24",
     publishedDateLabel: "24 May 2023",
