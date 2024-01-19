@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import articleMetaData, { ArticleType } from "./articleMetaData";
-import "./Article.css";
 import ShareLinks, { SocialMediaLinks } from "./ShareLinks";
 import BlogMetaData from "./BlogMetaData";
 
@@ -59,16 +58,6 @@ const Article: React.FC = () => {
   useEffect(() => {
     if (slug && articleMetaData[slug]) {
       document.title = articleMetaData[slug].title;
-      const linkIconsCSS = document.createElement("link");
-      linkIconsCSS.rel = "stylesheet";
-      linkIconsCSS.href =
-        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
-      linkIconsCSS.integrity =
-        "sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==";
-      linkIconsCSS.crossOrigin = "anonymous";
-      linkIconsCSS.referrerPolicy = "no-referrer";
-      document.head.appendChild(linkIconsCSS);
-
       setShareLinks(() => {
         const link = encodeURI(window.location.href);
         const title = encodeURIComponent(articleMetaData[slug].title);
@@ -82,10 +71,6 @@ const Article: React.FC = () => {
           telegram: `https://telegram.me/share/url?url=${link}&text=${msg}`,
         };
       });
-
-      return () => {
-        document.head.removeChild(linkIconsCSS);
-      };
     }
   }, [slug]);
 
