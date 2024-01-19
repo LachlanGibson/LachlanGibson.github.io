@@ -433,7 +433,13 @@ const GameConnectFour: React.FC = () => {
         <div className={styles.gameBoard}>
           <div className={styles.inputRow}>
             {slotAbove.map((cell, cellIndex) => (
-              <div key={-1 - cellIndex} className={styles.slotCell}>
+              <div
+                key={-1 - cellIndex}
+                className={styles.slotCell}
+                onClick={() => makeMove(cellIndex)}
+                onMouseEnter={() => handleMouseEnter(cellIndex)}
+                onMouseLeave={handleMouseLeave}
+              >
                 <div className={previewCellClassName(cell, cellIndex)}></div>
               </div>
             ))}
