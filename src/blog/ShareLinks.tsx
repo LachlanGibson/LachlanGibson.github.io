@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export type SocialMediaLinks = {
   fb: string;
@@ -17,11 +17,28 @@ const ShareLinks: React.FC<{ shareLinks: SocialMediaLinks }> = ({
   shareLinks,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !(dropdownRef.current as HTMLElement).contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         className="flex items-center whitespace-nowrap rounded bg-slate-700 p-3 text-xs font-medium uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-slate-600 focus:bg-primary-600 active:bg-slate-500 motion-reduce:transition-none"
         type="button"
@@ -40,11 +57,16 @@ const ShareLinks: React.FC<{ shareLinks: SocialMediaLinks }> = ({
       </button>
       {isDropdownOpen && (
         <ul
-          className="absolute z-[1000] float-left m-0 min-w-max list-none overflow-hidden rounded-lg bg-clip-padding text-left text-base shadow-lg bg-slate-700"
+          className="absolute sm:left-0 right-0 z-[1000] float-left m-0 min-w-max list-none overflow-hidden rounded-lg bg-clip-padding text-left text-base shadow-lg bg-slate-700"
           aria-labelledby="dropdownMenuButton1"
         >
           <li>
-            <a className={linkClassName} href={shareLinks["fb"]}>
+            <a
+              className={linkClassName}
+              href={shareLinks["fb"]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
@@ -57,7 +79,12 @@ const ShareLinks: React.FC<{ shareLinks: SocialMediaLinks }> = ({
             </a>
           </li>
           <li>
-            <a className={linkClassName} href={shareLinks["twitter"]}>
+            <a
+              className={linkClassName}
+              href={shareLinks["twitter"]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
@@ -70,7 +97,12 @@ const ShareLinks: React.FC<{ shareLinks: SocialMediaLinks }> = ({
             </a>
           </li>
           <li>
-            <a className={linkClassName} href={shareLinks["linkedIn"]}>
+            <a
+              className={linkClassName}
+              href={shareLinks["linkedIn"]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 448 512"
@@ -83,7 +115,12 @@ const ShareLinks: React.FC<{ shareLinks: SocialMediaLinks }> = ({
             </a>
           </li>
           <li>
-            <a className={linkClassName} href={shareLinks["reddit"]}>
+            <a
+              className={linkClassName}
+              href={shareLinks["reddit"]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
@@ -96,7 +133,12 @@ const ShareLinks: React.FC<{ shareLinks: SocialMediaLinks }> = ({
             </a>
           </li>
           <li>
-            <a className={linkClassName} href={shareLinks["whatsapp"]}>
+            <a
+              className={linkClassName}
+              href={shareLinks["whatsapp"]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 448 512"
@@ -109,7 +151,12 @@ const ShareLinks: React.FC<{ shareLinks: SocialMediaLinks }> = ({
             </a>
           </li>
           <li>
-            <a className={linkClassName} href={shareLinks["telegram"]}>
+            <a
+              className={linkClassName}
+              href={shareLinks["telegram"]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 496 512"
