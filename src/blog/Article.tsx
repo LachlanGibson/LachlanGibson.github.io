@@ -57,9 +57,8 @@ const Article: React.FC = () => {
   });
   useEffect(() => {
     if (slug && articleMetaData[slug]) {
-      document.title = articleMetaData[slug].title;
       setShareLinks(() => {
-        const link = encodeURI(window.location.href);
+        const link = encodeURI(`https://www.lachlangibson.dev/blog/${slug}/`);
         const title = encodeURIComponent(articleMetaData[slug].title);
         const msg = encodeURIComponent("Checkout this article");
         return {
