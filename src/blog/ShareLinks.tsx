@@ -32,10 +32,10 @@ const ShareLinks: React.FC<{ shareLinks: SocialMediaLinks }> = ({
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    // document.addEventListener("mousedown", handleClickOutside);
+    // return () => {
+    //   document.removeEventListener("mousedown", handleClickOutside);
+    // };
   }, []);
   return (
     <div className="relative" ref={dropdownRef}>
