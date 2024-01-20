@@ -1,5 +1,6 @@
 import ArticleEvilGeniusMinionReady from "./articles/ArticleEvilGeniusMinionReady/ArticleEvilGeniusMinionReady";
 import ArticleGoogleFoobarChallenge from "./articles/ArticleGoogleFoobarChallenge/ArticleGoogleFoobarChallenge";
+import Codenames from "./articles/Codenames/Codenames";
 import GameConnectFour from "./articles/connectfour/GameConnectFour";
 import GameTicTacToe from "./articles/tictactoe/GameTicTacToe";
 
@@ -26,6 +27,19 @@ type ArticleMetaDataType = {
 };
 
 const articleMetaData: ArticleMetaDataType = {
+  codenames: {
+    title: "Codenames",
+    author: "Lachlan Gibson",
+    authorImageLink: "/images/home/lachlan_gibson_200.webp",
+    type: "article",
+    publishedDateISO: "2024-01-20",
+    publishedDateLabel: "Work in progress",
+    imageLink: "/images/blog/codenames.webp",
+    imageResolution: ["1024", "1024"],
+    description: "A functional game of Codenames with an AI spymaster.",
+    language: "en-au",
+    articleElement: <Codenames />,
+  },
   "connect-four": {
     title: "Connect Four",
     author: "Lachlan Gibson",
