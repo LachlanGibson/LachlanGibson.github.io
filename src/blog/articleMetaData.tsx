@@ -35,7 +35,7 @@ const articleMetaData: ArticleMetaDataType = {
     publishedDateISO: "2024-01-20",
     publishedDateLabel: "Work in progress",
     imageLink: "/images/blog/codenames.webp",
-    imageResolution: ["1024", "1024"],
+    imageResolution: ["1280", "720"],
     description: "A functional game of Codenames with an AI spymaster.",
     language: "en-au",
     articleElement: <Codenames />,
