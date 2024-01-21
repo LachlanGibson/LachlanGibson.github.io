@@ -1,8 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./GameTicTacToe.module.css";
 import { BlockMath, InlineMath } from "react-katex";
 import TreeDiagram from "./TreeDiagram";
 import PythonCodeDisplay from "../ArticleGoogleFoobarChallenge/PythonCodeDisplay";
+import {
+  compareNumberArrays,
+  copy2DArray,
+  dotProduct,
+  softMaxT,
+} from "../../../utility/utilities";
 type Player = "X" | "O";
 type GameResult = Player | "Tie";
 type Action = [number, number];
@@ -11,6 +17,30 @@ const miniumThinkTime = 500;
 const decidedTime = 300;
 let minimaxMemo: { [key: string]: number } = {};
 let expectedValueMemo: { [key: string]: number } = {};
+
+const availableActions = (board: string[][]): Action[] =>
+  board.reduce<Action[]>((acc, row, i) => {
+    row.forEach((cell, j) => cell || acc.push([i, j]));
+    return acc;
+  }, []);
+
+const thinkMove = (board: string[][], player: Player, action: Action) => {
+  const newBoard = copy2DArray(board);
+  newBoard[action[0]][action[1]] = player;
+  return newBoard;
+};
+
+const getActionValues = (
+  board: string[][],
+  player: Player,
+  expectedValue: any
+): [Action[], number[]] => {
+  const actions = availableActions(board);
+  const values = availableActions(board).map((move) => {
+    return expectedValue(board, player, move);
+  });
+  return [actions, values];
+};
 
 const GameTicTacToe = () => {
   const [board, setBoard] = useState<string[][]>([
@@ -34,11 +64,76 @@ const GameTicTacToe = () => {
     return false;
   }, [turn, isXHuman, isOHuman, gameOver]);
 
+  const makeMove = useCallback(
+    (row: number, col: number, player: Player) => {
+      const newBoard = [...board];
+      newBoard[row][col] = player;
+      setBoard(newBoard);
+      const isWinningMove = checkWinningMove(newBoard, row, col);
+      if (isWinningMove) {
+        setWinner(() => turn);
+        setGameOver(() => true);
+      } else if (isBoardFull(newBoard)) {
+        setWinner(() => "Tie");
+        setGameOver(() => true);
+      } else {
+        setTurn((prev) => (prev === "X" ? "O" : "X"));
+      }
+    },
+    [board, turn]
+  );
+
+  const expectedValue = useCallback(
+    (prevBoard: string[][], prevPlayer: Player, move: Action) => {
+      const board = thinkMove(prevBoard, prevPlayer, move);
+      const boardString = stringifyBoard(board);
+      if (expectedValueMemo[boardString]) {
+        return expectedValueMemo[boardString];
+      }
+      if (checkWinningMove(board, move[0], move[1])) {
+        minimaxMemo[boardString] = prevPlayer === "X" ? 1 : -1;
+        return minimaxMemo[boardString];
+      }
+
+      if (isBoardFull(board)) {
+        minimaxMemo[boardString] = 0;
+        return minimaxMemo[boardString];
+      }
+
+      const player = prevPlayer === "X" ? "O" : "X";
+      const [, values] = getActionValues(board, player, expectedValue);
+
+      const probs = softMaxT(
+        values,
+        player === "X" ? xTemperature : -oTemperature
+      );
+      expectedValueMemo[boardString] = dotProduct(values, probs);
+      return expectedValueMemo[boardString];
+    },
+    [oTemperature, xTemperature]
+  );
+
   useEffect(() => {
     if (!isAiTurn) {
       setAiConsiderCell(() => []);
       return;
     }
+
+    const aiChooseMove = (board: string[][]) => {
+      expectedValueMemo = {};
+      const [moves, values] = getActionValues(board, turn, expectedValue);
+      const probs = softMaxT(
+        values,
+        turn === "X" ? xTemperature : -oTemperature
+      );
+      const cumProb = probs.reduce(
+        (acc, prob) => [...acc, acc[acc.length - 1] + prob],
+        [0]
+      );
+      const rand = Math.random();
+      const index = cumProb.findIndex((prob) => prob > rand) - 1;
+      return moves[index];
+    };
 
     const options = availableActions(board);
     const thinkInterval = setInterval(() => {
@@ -74,48 +169,18 @@ const GameTicTacToe = () => {
       clearTimeout(timeout);
       clearTimeout(decidedTimeout);
     };
-  }, [turn, isXHuman, isOHuman, gameOver]);
-
-  const availableActions = (board: string[][]): Action[] =>
-    board.reduce<Action[]>((acc, row, i) => {
-      row.forEach((cell, j) => cell || acc.push([i, j]));
-      return acc;
-    }, []);
-
-  const aiChooseMove = (board: string[][]) => {
-    expectedValueMemo = {};
-    const [moves, values] = getActionValues(board, turn);
-    const probs = softMax(values, turn === "X" ? xTemperature : -oTemperature);
-    const cumProb = probs.reduce(
-      (acc, prob) => [...acc, acc[acc.length - 1] + prob],
-      [0]
-    );
-    const rand = Math.random();
-    const index = cumProb.findIndex((prob) => prob > rand) - 1;
-    return moves[index];
-  };
-
-  const makeMove = (row: number, col: number, player: Player) => {
-    const newBoard = [...board];
-    newBoard[row][col] = player;
-    setBoard(newBoard);
-    const isWinningMove = checkWinningMove(newBoard, row, col);
-    if (isWinningMove) {
-      setWinner(() => turn);
-      setGameOver(() => true);
-    } else if (isBoardFull(newBoard)) {
-      setWinner(() => "Tie");
-      setGameOver(() => true);
-    } else {
-      setTurn((prev) => (prev === "X" ? "O" : "X"));
-    }
-  };
-
-  const thinkMove = (board: string[][], player: Player, action: Action) => {
-    const newBoard = copyBoard(board);
-    newBoard[action[0]][action[1]] = player;
-    return newBoard;
-  };
+  }, [
+    turn,
+    isXHuman,
+    isOHuman,
+    gameOver,
+    oTemperature,
+    xTemperature,
+    makeMove,
+    board,
+    expectedValue,
+    isAiTurn,
+  ]);
 
   const stringifyBoard = (board: string[][]): string => {
     return board
@@ -124,8 +189,6 @@ const GameTicTacToe = () => {
       })
       .join("\n");
   };
-
-  const copyBoard = (board: string[][]) => board.map((row) => row.slice());
 
   const handleCellClick = (row: number, col: number) => {
     if (turn === "X" && !isXHuman) return;
@@ -181,58 +244,6 @@ const GameTicTacToe = () => {
     return false;
   };
 
-  const softMax = (values: number[], temperature: number) => {
-    const valuesExp = values.map((value) => Math.exp(value / temperature));
-    const valuesExpSum = valuesExp.reduce((acc, value) => acc + value, 0);
-    return valuesExp.map((value) => value / valuesExpSum);
-  };
-
-  const dotProduct = (arr1: number[], arr2: number[]) => {
-    return arr1.reduce((acc, value, index) => acc + value * arr2[index], 0);
-  };
-
-  const getActionValues = (
-    board: string[][],
-    player: Player
-  ): [Action[], number[]] => {
-    const actions = availableActions(board);
-    const values = availableActions(board).map((move) => {
-      return expectedValue(board, player, move);
-    });
-    return [actions, values];
-  };
-
-  const expectedValue = (
-    prevBoard: string[][],
-    prevPlayer: Player,
-    move: Action
-  ) => {
-    const board = thinkMove(prevBoard, prevPlayer, move);
-    const boardString = stringifyBoard(board);
-    if (expectedValueMemo[boardString]) {
-      return expectedValueMemo[boardString];
-    }
-    if (checkWinningMove(board, move[0], move[1])) {
-      minimaxMemo[boardString] = prevPlayer === "X" ? 1 : -1;
-      return minimaxMemo[boardString];
-    }
-
-    if (isBoardFull(board)) {
-      minimaxMemo[boardString] = 0;
-      return minimaxMemo[boardString];
-    }
-
-    const player = prevPlayer === "X" ? "O" : "X";
-    const [, values] = getActionValues(board, player);
-
-    const probs = softMax(
-      values,
-      player === "X" ? xTemperature : -oTemperature
-    );
-    expectedValueMemo[boardString] = dotProduct(values, probs);
-    return expectedValueMemo[boardString];
-  };
-
   const resetGame = () => {
     setBoard(() => [
       ["", "", ""],
@@ -249,11 +260,6 @@ const GameTicTacToe = () => {
     return board.every((row) => row.every((cell) => cell));
   };
 
-  const compareArrays = (arr1: number[], arr2: number[]) => {
-    if (arr1.length !== arr2.length) return false;
-    return arr1.every((item, index) => item === arr2[index]);
-  };
-
   function createCellClassName(
     cell: string,
     rowIndex: number,
@@ -266,7 +272,7 @@ const GameTicTacToe = () => {
         className += " " + styles.winningCell;
       }
     }
-    if (compareArrays(aiConsiderCell, [rowIndex, colIndex])) {
+    if (compareNumberArrays(aiConsiderCell, [rowIndex, colIndex])) {
       className += " " + styles.aiConsiderCell;
     }
     if (isAiTurn) {
