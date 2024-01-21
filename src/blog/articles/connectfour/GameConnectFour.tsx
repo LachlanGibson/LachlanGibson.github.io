@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./GameConnectFour.module.css";
+import { copy2DArray } from "../../../utility/utilities";
 
 type GameStatus = "in progress" | "R wins" | "Y wins" | "tie";
 type Player = "R" | "Y";
@@ -56,6 +57,171 @@ const stringifyBoard = (board: string[][]): string => {
     .join("\n");
 };
 
+const minimax = (
+  prevBoard: string[][],
+  action: number,
+  depth: number,
+  alpha: number,
+  beta: number,
+  prevPlayer: Player,
+  player: Player,
+  noise?: number
+) => {
+  const board = thinkStep(prevBoard, action, prevPlayer);
+  const result = checkWin(board, action);
+
+  if (result === "R wins") {
+    return 1;
+  } else if (result === "Y wins") {
+    return -1;
+  } else if (result === "tie") {
+    return 0;
+  } else if (depth === 0) {
+    return evaluateBoard(board);
+  }
+
+  let bestScore = player === "R" ? -Infinity : Infinity;
+  const moves = availableMoves(board);
+  for (const action of moves) {
+    const nudge = noise ? (Math.random() - 0.5) * 2 * noise : 0;
+    const score =
+      nudge +
+      minimax(board, action, depth - 1, alpha, beta, player, prevPlayer, noise);
+    if (player === "R") {
+      bestScore = Math.max(bestScore, score);
+      alpha = Math.max(alpha, score);
+    } else {
+      bestScore = Math.min(bestScore, score);
+      beta = Math.min(beta, score);
+    }
+    if (alpha >= beta) {
+      break;
+    }
+  }
+  return bestScore;
+};
+
+const evaluateBoard = (board: string[][]) => {
+  const boardString = stringifyBoard(board);
+  if (evaluateMemo[boardString]) {
+    return evaluateMemo[boardString];
+  }
+  // count the difference in number of ways to connect four for each player
+  const count = winPossibilities.reduce((acc, winPossibility): number => {
+    if (winPossibility.every(([col, row]) => board[col][row] !== "Y")) {
+      acc++;
+    }
+    if (winPossibility.every(([col, row]) => board[col][row] !== "R")) {
+      acc--;
+    }
+    return acc;
+  }, 0);
+  evaluateMemo[boardString] = count / winPossibilities.length;
+  return evaluateMemo[boardString];
+};
+
+const thinkStep = (board: string[][], columnIndex: number, player: Player) => {
+  const newBoard = copy2DArray(board);
+  for (let i = newBoard[columnIndex].length - 1; i >= 0; i--) {
+    if (newBoard[columnIndex][i] === "") {
+      newBoard[columnIndex][i] = player;
+      break;
+    }
+  }
+  return newBoard;
+};
+
+const checkWin = (board: string[][], columnIndex: number): GameStatus => {
+  // find row
+  let row = -1;
+  for (let i = 0; i < board[columnIndex].length; i++) {
+    if (board[columnIndex][i] !== "") {
+      row = i;
+      break;
+    }
+  }
+  if (row < 0) {
+    return "in progress";
+  }
+
+  const player = board[columnIndex][row];
+
+  // check column
+  if (row <= 2) {
+    let win = true;
+    for (let i = 0; i < 4; i++) {
+      if (row + i >= board[columnIndex].length) {
+        win = false;
+        break;
+      }
+      if (board[columnIndex][row + i] !== player) {
+        win = false;
+        break;
+      }
+    }
+    if (win) {
+      return player === "R" ? "R wins" : "Y wins";
+    }
+  }
+
+  // check row
+  let [, win] = board.reduce(
+    (acc, col): [number, boolean] => {
+      let [count, win] = acc;
+      if (col[row] === player) {
+        count++;
+      } else {
+        count = 0;
+      }
+      if (count >= 4) {
+        win = true;
+      }
+      return [count, win];
+    },
+    [0, false] as [number, boolean]
+  );
+  if (win) {
+    return player === "R" ? "R wins" : "Y wins";
+  }
+
+  // check diagonals
+  let [count1, count2] = [0, 0];
+  for (let i = -3; i <= 3; i++) {
+    if (columnIndex + i < 0 || columnIndex + i >= board.length) {
+      continue;
+    }
+    if (board[columnIndex + i][row + i] === player) {
+      count1++;
+    } else {
+      count1 = 0;
+    }
+    if (board[columnIndex + i][row - i] === player) {
+      count2++;
+    } else {
+      count2 = 0;
+    }
+    if (count1 >= 4 || count2 >= 4) {
+      return player === "R" ? "R wins" : "Y wins";
+    }
+  }
+
+  // check if board is full
+  if (board.every((col) => col[0])) {
+    return "tie";
+  }
+
+  return "in progress";
+};
+
+const availableMoves = (board: string[][]): number[] => {
+  return board.reduce((acc, col, colIndex) => {
+    if (!col[0]) {
+      acc.push(colIndex);
+    }
+    return acc;
+  }, [] as number[]);
+};
+
 const GameConnectFour: React.FC = () => {
   // note that the board array elements are in the order of columns, not rows
   const [board, setBoard] = useState<string[][]>([
@@ -74,8 +240,6 @@ const GameConnectFour: React.FC = () => {
   const [depth, setDepth] = useState<number>(4);
   const [isRAI, setIsRAI] = useState<boolean>(false);
   const [isYAI, setIsYAI] = useState<boolean>(true);
-  const [actionValues, setActionValues] = useState<number[]>([]);
-  const [showActionValues, setShowActionValues] = useState<boolean>(false);
   const [aiConsiderCell, setAiConsiderCell] = useState<number>();
 
   const isAiTurn = useMemo(() => {
@@ -85,11 +249,56 @@ const GameConnectFour: React.FC = () => {
     return false;
   }, [player, isRAI, isYAI, gameStatus]);
 
+  const makeMove = useCallback(
+    (columnIndex: number) => {
+      if (board[columnIndex][0] !== "" || gameStatus !== "in progress") {
+        return;
+      }
+      const newBoard = thinkStep(board, columnIndex, player);
+      setBoard(newBoard);
+      setPlayer((prev) => (prev === "R" ? "Y" : "R"));
+      const result = checkWin(newBoard, columnIndex);
+      if (result !== "in progress") {
+        setgameStatus(result);
+      }
+    },
+    [board, gameStatus, player]
+  );
+
   useEffect(() => {
     if (!isAiTurn) {
       setAiConsiderCell(undefined);
       return;
     }
+
+    const aiChooseMove = () => {
+      const moves = availableMoves(board);
+      let bestScore = player === "R" ? -Infinity : Infinity;
+      let bestMove = moves[0];
+      for (const action of moves) {
+        const nudge = noise ? (Math.random() - 0.5) * 2 * noise : 0;
+        const score =
+          nudge +
+          minimax(
+            board,
+            action,
+            depth,
+            -Infinity,
+            Infinity,
+            player,
+            player === "R" ? "Y" : "R",
+            noise
+          );
+        if (
+          (score > bestScore && player === "R") ||
+          (score < bestScore && player === "Y")
+        ) {
+          bestScore = score;
+          bestMove = action;
+        }
+      }
+      return bestMove;
+    };
 
     const options = availableMoves(board);
     let optionIndex = 0;
@@ -128,17 +337,17 @@ const GameConnectFour: React.FC = () => {
       clearTimeout(timeout);
       clearTimeout(decidedTimeout);
     };
-  }, [player, gameStatus, isRAI, isYAI]);
-
-  useEffect(() => {
-    if (!showActionValues) {
-      return;
-    }
-    const actionValues = availableMoves(board).map((action) => {
-      return minimax(board, action, depth, -Infinity, Infinity, player, player);
-    });
-    setActionValues(actionValues);
-  }, [board]);
+  }, [
+    player,
+    gameStatus,
+    isRAI,
+    isYAI,
+    makeMove,
+    isAiTurn,
+    board,
+    noise,
+    depth,
+  ]);
 
   const handleMouseEnter = (columnIndex: number) => {
     if (gameStatus !== "in progress") {
@@ -153,125 +362,6 @@ const GameConnectFour: React.FC = () => {
     setSlotAbove([...emptyRow]);
   };
 
-  const availableMoves = (board: string[][]): number[] => {
-    return board.reduce((acc, col, colIndex) => {
-      if (!col[0]) {
-        acc.push(colIndex);
-      }
-      return acc;
-    }, [] as number[]);
-  };
-
-  const thinkStep = (
-    board: string[][],
-    columnIndex: number,
-    player: Player
-  ) => {
-    const newBoard = board.map((col) => [...col]);
-    for (let i = newBoard[columnIndex].length - 1; i >= 0; i--) {
-      if (newBoard[columnIndex][i] === "") {
-        newBoard[columnIndex][i] = player;
-        break;
-      }
-    }
-    return newBoard;
-  };
-
-  const makeMove = (columnIndex: number) => {
-    if (board[columnIndex][0] !== "" || gameStatus !== "in progress") {
-      return;
-    }
-    const newBoard = thinkStep(board, columnIndex, player);
-    setBoard(newBoard);
-    setPlayer((prev) => (prev === "R" ? "Y" : "R"));
-    const result = checkWin(newBoard, columnIndex);
-    if (result !== "in progress") {
-      setgameStatus(result);
-    }
-  };
-
-  const checkWin = (board: string[][], columnIndex: number): GameStatus => {
-    // find row
-    let row = -1;
-    for (let i = 0; i < board[columnIndex].length; i++) {
-      if (board[columnIndex][i] !== "") {
-        row = i;
-        break;
-      }
-    }
-    if (row < 0) {
-      return "in progress";
-    }
-
-    const player = board[columnIndex][row];
-
-    // check column
-    if (row <= 2) {
-      let win = true;
-      for (let i = 0; i < 4; i++) {
-        if (row + i >= board[columnIndex].length) {
-          win = false;
-          break;
-        }
-        if (board[columnIndex][row + i] !== player) {
-          win = false;
-          break;
-        }
-      }
-      if (win) {
-        return player === "R" ? "R wins" : "Y wins";
-      }
-    }
-
-    // check row
-    let [, win] = board.reduce(
-      (acc, col): [number, boolean] => {
-        let [count, win] = acc;
-        if (col[row] === player) {
-          count++;
-        } else {
-          count = 0;
-        }
-        if (count >= 4) {
-          win = true;
-        }
-        return [count, win];
-      },
-      [0, false] as [number, boolean]
-    );
-    if (win) {
-      return player === "R" ? "R wins" : "Y wins";
-    }
-
-    // check diagonals
-    let [count1, count2] = [0, 0];
-    for (let i = -3; i <= 3; i++) {
-      if (columnIndex + i < 0 || columnIndex + i >= board.length) {
-        continue;
-      }
-      if (board[columnIndex + i][row + i] === player) {
-        count1++;
-      } else {
-        count1 = 0;
-      }
-      if (board[columnIndex + i][row - i] === player) {
-        count2++;
-      } else {
-        count2 = 0;
-      }
-      if (count1 >= 4 || count2 >= 4) {
-        return player === "R" ? "R wins" : "Y wins";
-      }
-    }
-
-    // check if board is full
-    if (board.every((col) => col[0])) {
-      return "tie";
-    }
-
-    return "in progress";
-  };
-
   const resetGame = () => {
     setBoard([
       ["", "", "", "", "", ""],
@@ -284,127 +374,6 @@ const GameConnectFour: React.FC = () => {
     ]);
     setPlayer("R");
     setgameStatus("in progress");
-  };
-
-  const minimax = (
-    prevBoard: string[][],
-    action: number,
-    depth: number,
-    alpha: number,
-    beta: number,
-    prevPlayer: Player,
-    player: Player,
-    noise?: number
-  ) => {
-    const board = thinkStep(prevBoard, action, prevPlayer);
-    const result = checkWin(board, action);
-
-    if (result === "R wins") {
-      return 1;
-    } else if (result === "Y wins") {
-      return -1;
-    } else if (result === "tie") {
-      return 0;
-    } else if (depth === 0) {
-      return evaluateBoard(board);
-    }
-
-    let bestScore = player === "R" ? -Infinity : Infinity;
-    const moves = availableMoves(board);
-    for (const action of moves) {
-      const nudge = noise ? (Math.random() - 0.5) * 2 * noise : 0;
-      const score =
-        nudge +
-        minimax(
-          board,
-          action,
-          depth - 1,
-          alpha,
-          beta,
-          player,
-          prevPlayer,
-          noise
-        );
-      if (player === "R") {
-        bestScore = Math.max(bestScore, score);
-        alpha = Math.max(alpha, score);
-      } else {
-        bestScore = Math.min(bestScore, score);
-        beta = Math.min(beta, score);
-      }
-      if (alpha >= beta) {
-        break;
-      }
-    }
-    return bestScore;
-  };
-
-  const evaluateBoard = (board: string[][]) => {
-    const boardString = stringifyBoard(board);
-    if (evaluateMemo[boardString]) {
-      return evaluateMemo[boardString];
-    }
-    // count the difference in number of ways to connect four for each player
-    const count = winPossibilities.reduce((acc, winPossibility): number => {
-      if (winPossibility.every(([col, row]) => board[col][row] !== "Y")) {
-        acc++;
-      }
-      if (winPossibility.every(([col, row]) => board[col][row] !== "R")) {
-        acc--;
-      }
-      return acc;
-    }, 0);
-    evaluateMemo[boardString] = count / winPossibilities.length;
-    return evaluateMemo[boardString];
-  };
-
-  const evaluateMoves = () => {
-    const moves = availableMoves(board);
-    return moves.map((action) => {
-      const nudge = noise ? (Math.random() - 0.5) * 2 * noise : 0;
-      const score =
-        nudge +
-        minimax(
-          board,
-          action,
-          depth,
-          -Infinity,
-          Infinity,
-          player,
-          player === "R" ? "Y" : "R",
-          noise
-        );
-      return [action, score];
-    });
-  };
-
-  const aiChooseMove = () => {
-    const moves = availableMoves(board);
-    let bestScore = player === "R" ? -Infinity : Infinity;
-    let bestMove = moves[0];
-    for (const action of moves) {
-      const nudge = noise ? (Math.random() - 0.5) * 2 * noise : 0;
-      const score =
-        nudge +
-        minimax(
-          board,
-          action,
-          depth,
-          -Infinity,
-          Infinity,
-          player,
-          player === "R" ? "Y" : "R",
-          noise
-        );
-      if (
-        (score > bestScore && player === "R") ||
-        (score < bestScore && player === "Y")
-      ) {
-        bestScore = score;
-        bestMove = action;
-      }
-    }
-    return bestMove;
   };
 
   const previewCellClassName = (cell: string, cellIndex: number) => {
@@ -436,7 +405,9 @@ const GameConnectFour: React.FC = () => {
               <div
                 key={-1 - cellIndex}
                 className={styles.slotCell}
-                onClick={() => makeMove(cellIndex)}
+                onClick={() => {
+                  if (!isAiTurn) makeMove(cellIndex);
+                }}
                 onMouseEnter={() => handleMouseEnter(cellIndex)}
                 onMouseLeave={handleMouseLeave}
               >
@@ -450,7 +421,9 @@ const GameConnectFour: React.FC = () => {
                 <div
                   key={columnIndex}
                   className={styles.column}
-                  onClick={() => makeMove(columnIndex)}
+                  onClick={() => {
+                    if (!isAiTurn) makeMove(columnIndex);
+                  }}
                   onMouseEnter={() => handleMouseEnter(columnIndex)}
                   onMouseLeave={handleMouseLeave}
                 >
