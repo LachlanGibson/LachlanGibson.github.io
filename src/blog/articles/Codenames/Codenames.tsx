@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { shuffleArray } from "../../../utility/utilities";
+import { range, shuffleArray } from "../../../utility/utilities";
+import wordList from "./wordList";
 
 type Team = "red" | "blue";
 type Card = Team | "assassin" | "bystander";
@@ -35,42 +36,31 @@ const boardSize = 25;
 
 function MyComponent() {
   const [rawScores, setRawScores] = useState();
-  const [wordList, setWordList] = useState<string[]>([]);
   const [spyMasterKey, setSpyMasterKey] = useState<Card[]>([]);
-  const [boardIndices, setBoardIndices] = useState<number[]>([]);
+  const [boardIndices, setBoardIndices] = useState<number[]>(
+    range(0, wordList.length)
+  );
   const [revealed, setRevealed] = useState<boolean[]>([]);
   const [turn, setTurn] = useState<Team>("red");
 
   const reset = useCallback(() => {
-    let arr = [];
-    for (let i = 0; i < wordList.length; i++) {
-      arr.push(i);
-    }
     setSpyMasterKey(shuffleArray(initialKey));
-    setBoardIndices(shuffleArray(arr));
+    setBoardIndices((prev) => shuffleArray(prev));
     setTurn("red");
     setRevealed(new Array(boardSize).fill(false));
-  }, [wordList.length]);
+  }, []);
 
   useEffect(() => {
     fetch("/blog/files/codenames/glove.6B.300d_compressed_scores.json")
       .then((response) => response.json())
       .then((jsonData) => setRawScores(jsonData))
       .catch((error) => console.error("Error fetching the JSON file:", error));
-
-    fetch("/blog/files/codenames/word_list.txt")
-      .then((response) => response.text())
-      .then((text) => {
-        const words = text.split("\r\n").filter(Boolean);
-        setWordList(words);
-      })
-      .catch((error) => console.error("Error fetching the text file:", error));
   }, []);
 
   useEffect(() => {
-    if (!rawScores || !wordList) return;
+    if (!rawScores) return;
     reset();
-  }, [wordList, rawScores, reset]);
+  }, [rawScores, reset]);
 
   const cardClassName = (index: number) => {
     const name = revealed[index]
@@ -83,10 +73,6 @@ function MyComponent() {
     if (spyMasterKey[index] === "assassin") return name + " bg-gray-900";
     return name + " bg-gray-400";
   };
-
-  if (!rawScores || !wordList) {
-    return <div>Loading...</div>;
-  }
 
   const transitionClass = "transition duration-300 ease-in-out";
 
