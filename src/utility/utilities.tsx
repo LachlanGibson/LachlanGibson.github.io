@@ -2,7 +2,7 @@ export function sumArray(arr: number[]): number {
   return arr.reduce((a, b) => a + b, 0);
 }
 
-export function copy2DArray<T extends any>(arr: T[][]): T[][] {
+export function copy2DArray<T>(arr: T[][]): T[][] {
   return arr.map((row) => row.slice());
 }
 
@@ -23,4 +23,14 @@ export function compareNumberArrays(arr1: number[], arr2: number[]): boolean {
 
 export function compareArrays(arr1: [], arr2: []): boolean {
   return JSON.stringify(arr1) === JSON.stringify(arr2);
+}
+
+export function shuffleArray<T>(inputArray: T[]): T[] {
+  //Fisher–Yates shuffle
+  const array = [...inputArray];
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }

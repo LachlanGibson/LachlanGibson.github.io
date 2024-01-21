@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { shuffleArray } from "../../../utility/utilities";
 
 type Team = "red" | "blue";
 type Card = Team | "assassin" | "bystander";
@@ -32,16 +33,6 @@ const initialKey: Card[] = [
 ];
 const boardSize = 25;
 
-function shuffleArray<T>(inputArray: T[]): T[] {
-  //Fisher–Yates shuffle
-  const array = [...inputArray];
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
 function MyComponent() {
   const [rawScores, setRawScores] = useState();
   const [wordList, setWordList] = useState<string[]>([]);
@@ -49,6 +40,17 @@ function MyComponent() {
   const [boardIndices, setBoardIndices] = useState<number[]>([]);
   const [revealed, setRevealed] = useState<boolean[]>([]);
   const [turn, setTurn] = useState<Team>("red");
+
+  const reset = useCallback(() => {
+    let arr = [];
+    for (let i = 0; i < wordList.length; i++) {
+      arr.push(i);
+    }
+    setSpyMasterKey(shuffleArray(initialKey));
+    setBoardIndices(shuffleArray(arr));
+    setTurn("red");
+    setRevealed(new Array(boardSize).fill(false));
+  }, [wordList.length]);
 
   useEffect(() => {
     fetch("/blog/files/codenames/glove.6B.300d_compressed_scores.json")
@@ -68,22 +70,7 @@ function MyComponent() {
   useEffect(() => {
     if (!rawScores || !wordList) return;
     reset();
-  }, [wordList, rawScores]);
-
-  const reset = () => {
-    let arr = [];
-    for (let i = 0; i < wordList.length; i++) {
-      arr.push(i);
-    }
-    setSpyMasterKey(shuffleArray(initialKey));
-    setBoardIndices(shuffleArray(arr));
-    setTurn("red");
-    setRevealed(new Array(boardSize).fill(false));
-  };
-
-  if (!rawScores || !wordList) {
-    return <div>Loading...</div>;
-  }
+  }, [wordList, rawScores, reset]);
 
   const cardClassName = (index: number) => {
     const name = revealed[index]
@@ -96,6 +83,10 @@ function MyComponent() {
     if (spyMasterKey[index] === "assassin") return name + " bg-gray-900";
     return name + " bg-gray-400";
   };
+
+  if (!rawScores || !wordList) {
+    return <div>Loading...</div>;
+  }
 
   const transitionClass = "transition duration-300 ease-in-out";
 
