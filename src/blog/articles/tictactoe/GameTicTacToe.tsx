@@ -7,6 +7,7 @@ import {
   compareNumberArrays,
   copy2DArray,
   dotProduct,
+  randomChoice,
   softMaxT,
 } from "../../../utility/utilities";
 type Player = "X" | "O";
@@ -126,12 +127,7 @@ const GameTicTacToe = () => {
         values,
         turn === "X" ? xTemperature : -oTemperature
       );
-      const cumProb = probs.reduce(
-        (acc, prob) => [...acc, acc[acc.length - 1] + prob],
-        [0]
-      );
-      const rand = Math.random();
-      const index = cumProb.findIndex((prob) => prob > rand) - 1;
+      const index = randomChoice(probs);
       return moves[index];
     };
 

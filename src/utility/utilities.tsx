@@ -38,3 +38,13 @@ export function shuffleArray<T>(inputArray: T[]): T[] {
 export function range(start: number, end: number): number[] {
   return Array.from({ length: end - start }, (_, i) => start + i);
 }
+
+export function randomChoice(probabilities: number[]): number {
+  const cumProb = probabilities.reduce(
+    (acc, prob) => [...acc, acc[acc.length - 1] + prob],
+    [0]
+  );
+  const rand = Math.random();
+  const index = cumProb.findIndex((prob) => prob > rand) - 1;
+  return index;
+}
