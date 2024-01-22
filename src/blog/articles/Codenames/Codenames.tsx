@@ -1,9 +1,37 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { range, shuffleArray } from "../../../utility/utilities";
+import { dotProduct, range, shuffleArray } from "../../../utility/utilities";
 import wordList from "./wordList";
 
 type Team = "red" | "blue";
 type Card = Team | "assassin" | "bystander";
+type ClueNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | "\u221E";
+type Clue = [string, ClueNumber];
+type RawScores = { [word: string]: number[] };
+
+const getTeamWeights = (team: Team, remainingKey: Card[]): number[] => {
+  return remainingKey.map((card) => {
+    if (card === team) return 1;
+    if (card === "bystander") return 0;
+    if (card === "assassin") return -10;
+    return -2; // other team
+  });
+};
+
+const getWordWeights = (
+  team: Team,
+  remainingKey: Card[],
+  remainingIndices: number[],
+  rawScores: RawScores,
+  topN: number
+): [string, number][] => {
+  const teamWeights = getTeamWeights(team, remainingKey);
+  return Object.entries(rawScores).reduce((acc, [word, scores]) => {
+    const remainingScores = remainingIndices.map((i) => scores[i]);
+    acc.push([word, dotProduct(remainingScores, teamWeights)]);
+    if (acc.length > topN) acc.sort((a, b) => b[1] - a[1]).pop();
+    return acc;
+  }, [] as [string, number][]);
+};
 
 const initialKey: Card[] = [
   "assassin",
@@ -33,19 +61,24 @@ const initialKey: Card[] = [
   "bystander",
 ];
 const boardSize = 25;
+const arrayRange = range(0, wordList.length);
+const topN = 5;
 
-function MyComponent() {
-  const [rawScores, setRawScores] = useState();
+const Codenames = () => {
+  const [rawScores, setRawScores] = useState<RawScores>({});
   const [spyMasterKey, setSpyMasterKey] = useState<Card[]>([]);
   const [boardIndices, setBoardIndices] = useState<number[]>(
-    range(0, wordList.length)
+    range(0, boardSize)
   );
   const [revealed, setRevealed] = useState<boolean[]>([]);
   const [turn, setTurn] = useState<Team>("red");
 
   const reset = useCallback(() => {
-    setSpyMasterKey(shuffleArray(initialKey));
-    setBoardIndices((prev) => shuffleArray(prev));
+    const newKey = shuffleArray(initialKey);
+    const newIndices = shuffleArray(arrayRange).slice(0, boardSize);
+
+    setSpyMasterKey(newKey);
+    setBoardIndices(newIndices);
     setTurn("red");
     setRevealed(new Array(boardSize).fill(false));
   }, []);
@@ -61,6 +94,25 @@ function MyComponent() {
     if (!rawScores) return;
     reset();
   }, [rawScores, reset]);
+
+  useEffect(() => {
+    if (!rawScores || !spyMasterKey.length) return;
+    const remainingIndices = boardIndices.filter(
+      (i, arrayIndex) => !revealed[arrayIndex]
+    );
+    const remainingKey = spyMasterKey.filter(
+      (card, arrayIndex) => !revealed[arrayIndex]
+    );
+    const topOptions = getWordWeights(
+      turn,
+      remainingKey,
+      remainingIndices,
+      rawScores,
+      topN
+    );
+
+    console.log(topOptions);
+  }, [boardIndices, rawScores, revealed, spyMasterKey, turn]);
 
   const cardClassName = (index: number) => {
     const name = revealed[index]
@@ -89,7 +141,7 @@ function MyComponent() {
   return (
     <div className="max-w-3xl mx-auto bg-slate-500 sm2:p-2 p-1 rounded-lg flex flex-col items-center">
       <div
-        className={`text-2xl mb-2 text-cente ${
+        className={`text-2xl mb-2 text-center ${
           turn === "red" ? "text-red-400" : "text-sky-400"
         }`}
       >
@@ -98,7 +150,7 @@ function MyComponent() {
       <div
         className={`grid sm:grid-cols-5 sm2:grid-cols-4 grid-cols-3 sm2:gap-2 gap-1 w-full`}
       >
-        {boardIndices.slice(0, boardSize).map((wordIndex, i) => (
+        {boardIndices.map((wordIndex, i) => (
           <button
             key={i}
             disabled={revealed[i]}
@@ -122,6 +174,6 @@ function MyComponent() {
       </div>
     </div>
   );
-}
+};
 
-export default MyComponent;
+export default Codenames;
