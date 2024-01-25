@@ -14,6 +14,7 @@ export type ArticleType = {
   modifiedDateISO?: string;
   publishedDateLabel: string;
   modifiedDateLabel?: string;
+  svgLink: string;
   imageLink: string;
   imageResolution: [string, string];
   otherMetaElements?: JSX.Element[];
@@ -22,11 +23,7 @@ export type ArticleType = {
   articleElement: JSX.Element;
 };
 
-type ArticleMetaDataType = {
-  [slug: string]: ArticleType;
-};
-
-const articleMetaData: ArticleMetaDataType = {
+const articleMetaData: { [slug: string]: ArticleType } = {
   codenames: {
     title: "Codenames",
     author: "Lachlan Gibson",
@@ -34,8 +31,9 @@ const articleMetaData: ArticleMetaDataType = {
     type: "article",
     publishedDateISO: "2024-01-20",
     publishedDateLabel: "Work in progress",
-    imageLink: "/images/blog/codenames.webp",
-    imageResolution: ["1280", "720"],
+    svgLink: "/images/blog/thumbnail/svg/codenames.svg",
+    imageLink: "/images/blog/thumbnail/webp/codenames.webp",
+    imageResolution: ["1200", "800"],
     description: "A functional game of Codenames with an AI spymaster.",
     language: "en-au",
     articleElement: <Codenames />,
@@ -47,8 +45,9 @@ const articleMetaData: ArticleMetaDataType = {
     type: "article",
     publishedDateISO: "2024-01-09",
     publishedDateLabel: "Work in progress",
-    imageLink: "/images/blog/connect-four.webp",
-    imageResolution: ["1024", "1024"],
+    svgLink: "/images/blog/thumbnail/svg/connect-four.svg",
+    imageLink: "/images/blog/thumbnail/webp/connect-four.webp",
+    imageResolution: ["1200", "800"],
     description: "A functional game of connect four with an AI opponent.",
     language: "en-au",
     articleElement: <GameConnectFour />,
@@ -60,8 +59,9 @@ const articleMetaData: ArticleMetaDataType = {
     type: "article",
     publishedDateISO: "2024-01-12",
     publishedDateLabel: "12 January 2024",
-    imageLink: "/images/blog/tic-tac-toe.webp",
-    imageResolution: ["1024", "1024"],
+    svgLink: "/images/blog/thumbnail/svg/tic-tac-toe.svg",
+    imageLink: "/images/blog/thumbnail/webp/tic-tac-toe.webp",
+    imageResolution: ["1200", "800"],
     description:
       "A functional game of tic-tac-toe with an interesting AI opponent and explanation.",
     language: "en-au",
@@ -86,8 +86,9 @@ const articleMetaData: ArticleMetaDataType = {
     type: "article",
     publishedDateISO: "2023-06-04",
     publishedDateLabel: "4 June 2023",
-    imageLink: "/images/blog/evil-genius-minion-ready.webp",
-    imageResolution: ["1024", "1024"],
+    svgLink: "/images/blog/thumbnail/svg/evil-genius-minion-ready.svg",
+    imageLink: "/images/blog/thumbnail/webp/evil-genius-minion-ready.webp",
+    imageResolution: ["1200", "800"],
     description:
       "ChatGPT's plans to conquer the world included infiltrating media groups, provoking a global crisis, and orchestrating disinformation campaigns.",
     language: "en-au",
@@ -117,8 +118,9 @@ const articleMetaData: ArticleMetaDataType = {
     publishedDateLabel: "24 May 2023",
     modifiedDateISO: "2023-06-08",
     modifiedDateLabel: "8 June 2023",
-    imageLink: "/images/blog/google-foobar-challenge.webp",
-    imageResolution: ["1024", "1024"],
+    svgLink: "/images/blog/thumbnail/svg/google-foobar-challenge.svg",
+    imageLink: "/images/blog/thumbnail/webp/google-foobar-challenge.webp",
+    imageResolution: ["1200", "800"],
     description:
       "I completed Google's FooBar challenge which involved solving a series of mathematical and coding problems of 5 levels of increasing difficulty.",
     language: "en-au",

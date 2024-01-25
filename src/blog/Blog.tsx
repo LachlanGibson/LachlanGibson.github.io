@@ -2,7 +2,6 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import articleMetaData from "./articleMetaData";
 import ArticleCard from "./ArticleCard";
-import "./Blog.css";
 
 const name = "Lachlan Gibson";
 const title = "Lachlan Gibson - Blog";
@@ -41,7 +40,10 @@ const Blog: React.FC<{}> = () => {
         <meta name="keywords" content={keyWords} />
       </Helmet>
       <h1 className="text-xl font-bold mb-3">Blog</h1>
-      <div className="blog-list-div">
+      <div
+        className="grid gap-4 justify-center"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(12rem, 1fr))" }}
+      >
         {Object.keys(articleMetaData).map((slug) => (
           <ArticleCard
             key={slug}
@@ -49,7 +51,7 @@ const Blog: React.FC<{}> = () => {
             title={articleMetaData[slug].title}
             publishedDateISO={articleMetaData[slug].publishedDateISO}
             publishedDateLabel={articleMetaData[slug].publishedDateLabel}
-            imageLink={articleMetaData[slug].imageLink}
+            svgLink={articleMetaData[slug].svgLink}
           />
         ))}
       </div>
