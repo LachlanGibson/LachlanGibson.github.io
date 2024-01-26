@@ -1,8 +1,9 @@
 import ArticleEvilGeniusMinionReady from "./articles/ArticleEvilGeniusMinionReady/ArticleEvilGeniusMinionReady";
 import ArticleGoogleFoobarChallenge from "./articles/ArticleGoogleFoobarChallenge/ArticleGoogleFoobarChallenge";
 import Codenames from "./articles/Codenames/Codenames";
-import GameConnectFour from "./articles/connectfour/GameConnectFour";
-import GameTicTacToe from "./articles/tictactoe/GameTicTacToe";
+import GameConnectFour from "./articles/ConnectFour/GameConnectFour";
+import Mastermind from "./articles/Mastermind/Mastermind";
+import GameTicTacToe from "./articles/Tictactoe/GameTicTacToe";
 
 export type ArticleType = {
   title: string;
@@ -24,6 +25,20 @@ export type ArticleType = {
 };
 
 const articleMetaData: { [slug: string]: ArticleType } = {
+  mastermind: {
+    title: "Mastermind",
+    author: "Lachlan Gibson",
+    authorImageLink: "/images/home/lachlan_gibson_200.webp",
+    type: "article",
+    publishedDateISO: "2024-01-26",
+    publishedDateLabel: "Work in progress",
+    svgLink: "/images/blog/thumbnail/svg/mastermind.svg",
+    imageLink: "/images/blog/thumbnail/webp/mastermind.webp",
+    imageResolution: ["1200", "800"],
+    description: "A functional game of Mastermind with an AI opponent.",
+    language: "en-au",
+    articleElement: <Mastermind />,
+  },
   codenames: {
     title: "Codenames",
     author: "Lachlan Gibson",
