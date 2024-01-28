@@ -1,8 +1,12 @@
 import React, { useCallback, useEffect } from "react";
-import { range, shuffleArray } from "../../../utility/utilities";
+import {
+  range,
+  shuffleArray,
+  transformHexColour,
+} from "../../../utility/utilities";
 
 const colourOptions = [
-  "#de473c", //red
+  "#e62c2c", //red
   "#5fde3c", //greed
   "#3f3cde", //blue
   "#dedb3c", //yellow
@@ -16,7 +20,23 @@ const minNumberOfColours = 6;
 const indexRange = range(0, maxNumberOfColours);
 const initialCodeSize = 4;
 
-const Mastermind: React.FC = (props) => {
+const MastermindPeg: React.FC<{ colour: string }> = ({ colour }) => {
+  if (colour === "black") {
+    return <div className="rounded-full aspect-square bg-black"></div>;
+  }
+
+  const lightColour = transformHexColour(colour, 40);
+  const darkColour = transformHexColour(colour, -40);
+
+  const customStyle = {
+    background: `radial-gradient(circle at 30% 30%, ${lightColour}, ${colour}, ${darkColour})`,
+    boxShadow: "0.4rem 0.4rem 0.5rem rgba(0, 0, 0, 0.4)",
+  };
+
+  return <div className="rounded-full aspect-square" style={customStyle}></div>;
+};
+
+const Mastermind: React.FC = () => {
   const [maxNumberOfGuesses, setMaxNumberOfGuesses] = React.useState(12);
   const [codeSize, setCodeSize] = React.useState(initialCodeSize);
   const [numberOfColours, setNumberOfColours] = React.useState(6);
@@ -30,24 +50,26 @@ const Mastermind: React.FC = (props) => {
   ]);
 
   return (
-    <div className="bg-slate-500 max-w-md mx-auto">
-      <div className="w-full grid grid-cols-1">
-        <div className="inputRow w-full grid grid-flow-col">
+    <div className="bg-slate-500 max-w-md mx-auto flex flex-col justify-center">
+      <div className="grid grid-flow-col gap-4 p-4">
+        {colourOptions.reduce((acc, colour, index) => {
+          acc.push(<MastermindPeg key={index} colour={colour}></MastermindPeg>);
+          return acc;
+        }, [] as JSX.Element[])}
+      </div>
+      <div className="w-full grid grid-cols-1 gap-4 p-4">
+        <div className="inputRow w-full grid grid-flow-col gap-4 border-b pb-4">
           {code.map((_, index) => (
-            <div
-              key={index}
-              className="rounded-full aspect-square bg-black m-4"
-            ></div>
+            <MastermindPeg key={index} colour={"black"}></MastermindPeg>
           ))}
         </div>
         {guesses?.map((guess, row) => (
-          <div key={`guess-${row}`} className="w-full grid grid-flow-col">
+          <div key={`guess-${row}`} className="w-full grid grid-flow-col gap-4">
             {guess.map((value, col) => (
-              <div
+              <MastermindPeg
                 key={col}
-                className={`rounded-full aspect-square m-4`}
-                style={{ backgroundColor: colourOptions[value] }}
-              ></div>
+                colour={colourOptions[value]}
+              ></MastermindPeg>
             ))}
           </div>
         ))}

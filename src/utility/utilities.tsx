@@ -48,3 +48,22 @@ export function randomChoice(probabilities: number[]): number {
   const index = cumProb.findIndex((prob) => prob > rand) - 1;
   return index;
 }
+
+export function transformHexColour(hexColour: string, magnitude: number) {
+  hexColour = hexColour.replace(`#`, ``);
+  if (hexColour.length === 6) {
+    const decimalColor = parseInt(hexColour, 16);
+    let r = (decimalColor >> 16) + magnitude;
+    r = Math.min(255, Math.max(0, r));
+    let g = ((decimalColor >> 8) & 0x00ff) + magnitude;
+    g = Math.min(255, Math.max(0, g));
+    let b = (decimalColor & 0x0000ff) + magnitude;
+    b = Math.min(255, Math.max(0, b));
+
+    return `#${r.toString(16).padStart(2, "0")}${g
+      .toString(16)
+      .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+  } else {
+    return hexColour;
+  }
+}
