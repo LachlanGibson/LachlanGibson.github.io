@@ -23,7 +23,7 @@ const Navbar: React.FC<{}> = () => {
         About
       </NavLink>
       <NavLink className={activeLink} to="/blog/">
-        Blog
+        Portfolio
       </NavLink>
     </nav>
   );
