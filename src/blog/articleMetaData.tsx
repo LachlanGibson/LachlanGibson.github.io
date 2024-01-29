@@ -1,7 +1,7 @@
 import ArticleEvilGeniusMinionReady from "./articles/ArticleEvilGeniusMinionReady/ArticleEvilGeniusMinionReady";
 import ArticleGoogleFoobarChallenge from "./articles/ArticleGoogleFoobarChallenge/ArticleGoogleFoobarChallenge";
 import Codenames from "./articles/Codenames/Codenames";
-import GameConnectFour from "./articles/ConnectFour/GameConnectFour";
+import ConnectFour from "./articles/ConnectFour/ConnectFour";
 import Mastermind from "./articles/Mastermind/Mastermind";
 import TicTacToe from "./articles/Tictactoe/TicTacToe";
 
@@ -58,14 +58,43 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
-    publishedDateISO: "2024-01-09",
-    publishedDateLabel: "Work in progress",
+    publishedDateISO: "2024-01-29",
+    publishedDateLabel: "29 January 2024",
     svgLink: "/images/blog/thumbnail/svg/connect-four.svg",
     imageLink: "/images/blog/thumbnail/webp/connect-four.webp",
     imageResolution: ["1200", "800"],
-    description: "A functional game of connect four with an AI opponent.",
+    description: "A functional game of Connect Four with an AI opponent.",
     language: "en-au",
-    articleElement: <GameConnectFour />,
+    metaTags: [
+      "ai",
+      "connect four",
+      "connect-four",
+      "connect 4",
+      "four up",
+      "four-in-a-row",
+      "four in a row",
+      "drop four",
+      "gravitrips",
+      "connect-four ai",
+      "artificial intelligence",
+      "minimax",
+      "minimax algorithm",
+      "alpha-beta pruning",
+      "alpha beta pruning",
+      "alpha beta",
+      "alpha-beta",
+      "softmax",
+      "dynamic programming",
+      "tree search",
+      "strategy game",
+      "decision making ai",
+      "game theory",
+      "zero-sum game",
+      "perfect information",
+      "policy",
+      "interactive game",
+    ],
+    articleElement: <ConnectFour />,
   },
   "tic-tac-toe": {
     title: "Tic Tac Toe",

@@ -289,6 +289,7 @@ const GameConnectFour: React.FC = () => {
             player === "R" ? "Y" : "R",
             noise
           );
+        console.log(action, score);
         if (
           (score > bestScore && player === "R") ||
           (score < bestScore && player === "Y")
@@ -389,194 +390,170 @@ const GameConnectFour: React.FC = () => {
   };
 
   return (
-    <>
-      <p>This is a work in progress</p>
-      <div className="bg-slate-700 p-2 mt-2 mb-4 mx-auto max-w-md rounded-xl">
-        <div className="text-2xl text-center">
-          {gameStatus !== "in progress"
-            ? gameStatus === "tie"
-              ? "It's a Tie!"
-              : `${gameStatus === "R wins" ? "Red" : "Yellow"} wins!`
-            : `${player === "R" ? "Red" : "Yellow"}'s turn`}
+    <div className="bg-slate-700 p-2 mt-2 mb-4 mx-auto max-w-md rounded-xl">
+      <div className="text-2xl text-center">
+        {gameStatus !== "in progress"
+          ? gameStatus === "tie"
+            ? "It's a Tie!"
+            : `${gameStatus === "R wins" ? "Red" : "Yellow"} wins!`
+          : `${player === "R" ? "Red" : "Yellow"}'s turn`}
+      </div>
+      <div className={styles.gameBoard}>
+        <div className={styles.inputRow}>
+          {slotAbove.map((cell, cellIndex) => (
+            <div
+              key={-1 - cellIndex}
+              className={styles.slotCell}
+              onClick={() => {
+                if (!isAiTurn) makeMove(cellIndex);
+              }}
+              onMouseEnter={() => handleMouseEnter(cellIndex)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className={previewCellClassName(cell, cellIndex)}></div>
+            </div>
+          ))}
         </div>
-        <div className={styles.gameBoard}>
-          <div className={styles.inputRow}>
-            {slotAbove.map((cell, cellIndex) => (
+        <div className={styles.slots}>
+          {board.map((column, columnIndex) => {
+            return (
               <div
-                key={-1 - cellIndex}
-                className={styles.slotCell}
+                key={columnIndex}
+                className={styles.column}
                 onClick={() => {
-                  if (!isAiTurn) makeMove(cellIndex);
+                  if (!isAiTurn) makeMove(columnIndex);
                 }}
-                onMouseEnter={() => handleMouseEnter(cellIndex)}
+                onMouseEnter={() => handleMouseEnter(columnIndex)}
                 onMouseLeave={handleMouseLeave}
               >
-                <div className={previewCellClassName(cell, cellIndex)}></div>
+                {column.map((cell, cellIndex) => {
+                  return (
+                    <div key={cellIndex} className={styles.cell}>
+                      <div
+                        className={`${styles.circle} ${
+                          cell ? styles[cell] : ""
+                        }`}
+                      ></div>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
-          </div>
-          <div className={styles.slots}>
-            {board.map((column, columnIndex) => {
-              return (
-                <div
-                  key={columnIndex}
-                  className={styles.column}
-                  onClick={() => {
-                    if (!isAiTurn) makeMove(columnIndex);
-                  }}
-                  onMouseEnter={() => handleMouseEnter(columnIndex)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  {column.map((cell, cellIndex) => {
-                    return (
-                      <div key={cellIndex} className={styles.cell}>
-                        <div
-                          className={`${styles.circle} ${
-                            cell ? styles[cell] : ""
-                          }`}
-                        ></div>
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
+            );
+          })}
         </div>
-        <div className="flex flex-col items-center justify-center">
-          <div className="flex items-center justify-center">
-            <div className={styles.checkboxDiv}>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  id="X-AI-switch"
-                  type="checkbox"
-                  role="switch"
-                  checked={isRAI}
-                  onChange={() => setIsRAI((prev) => !prev)}
-                  className="sr-only peer"
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <div className="flex items-center justify-center">
+          <div className={styles.checkboxDiv}>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                id="X-AI-switch"
+                type="checkbox"
+                role="switch"
+                checked={isRAI}
+                onChange={() => setIsRAI((prev) => !prev)}
+                className="sr-only peer"
+              />
+              <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+              <span className="ms-3 text-sm font-medium text-gray-300">
+                Red AI
+              </span>
+            </label>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                id="O-AI-switch"
+                type="checkbox"
+                role="switch"
+                checked={isYAI}
+                onChange={() => setIsYAI((prev) => !prev)}
+                className="sr-only peer"
+              />
+              <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white  after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+              <span className="ms-3 text-sm font-medium text-gray-300">
+                Yellow AI
+              </span>
+            </label>
+          </div>
+          <button
+            type="button"
+            onClick={resetGame}
+            className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
+          >
+            Reset
+          </button>
+        </div>
+        <div className="flex items-center mb-1">
+          <span className="block ml-0 mr-2 ms-3 text-sm font-medium text-gray-300">
+            Search depth
+          </span>
+          <div className="relative flex items-center max-w-[8rem]">
+            <button
+              type="button"
+              id="decrement-button"
+              disabled={depth <= 0}
+              onClick={() => setDepth((prev) => Math.max(prev - 1, 0))}
+              className="bg-gray-600 rounded-s-lg px-3 pb-3 pt-2.5 h-8 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
+            >
+              <svg
+                className="w-3 h-3 text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 18 2"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 1h16"
                 />
-                <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
-                <span className="ms-3 text-sm font-medium text-gray-300">
-                  Red AI
-                </span>
-              </label>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  id="O-AI-switch"
-                  type="checkbox"
-                  role="switch"
-                  checked={isYAI}
-                  onChange={() => setIsYAI((prev) => !prev)}
-                  className="sr-only peer"
-                />
-                <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white  after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
-                <span className="ms-3 text-sm font-medium text-gray-300">
-                  Yellow AI
-                </span>
-              </label>
+              </svg>
+            </button>
+            <div className="bg-gray-600 border-x-0 border-gray-300 h-8 w-4 text-center text-sm  block text-white">
+              <div className="w-fit h-fit m-auto pt-1.5">{depth}</div>
             </div>
             <button
               type="button"
-              onClick={resetGame}
-              className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
+              id="increment-button"
+              disabled={depth >= 6}
+              onClick={() => setDepth((prev) => Math.min(prev + 1, 6))}
+              className="bg-gray-600 rounded-e-lg px-3 pb-3 pt-2.5 h-8 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
             >
-              Reset
+              <svg
+                className="w-3 h-3 text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 18 18"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 1v16M1 9h16"
+                />
+              </svg>
             </button>
           </div>
-          <div className="flex items-center mb-1">
-            <span className="block ml-0 mr-2 ms-3 text-sm font-medium text-gray-300">
-              Search depth
-            </span>
-            <div className="relative flex items-center max-w-[8rem]">
-              <button
-                type="button"
-                id="decrement-button"
-                disabled={depth <= 0}
-                onClick={() => setDepth((prev) => Math.max(prev - 1, 0))}
-                className="bg-gray-600 hover:bg-gray-500 rounded-s-lg px-3 pb-3 pt-2.5 h-8 "
-              >
-                <svg
-                  className="w-3 h-3 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 2"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M1 1h16"
-                  />
-                </svg>
-              </button>
-              <div className="bg-gray-600 border-x-0 border-gray-300 h-8 w-4 text-center text-sm  block text-white">
-                <div className="w-fit h-fit m-auto pt-1.5">{depth}</div>
-              </div>
-              <button
-                type="button"
-                id="increment-button"
-                disabled={depth >= 6}
-                onClick={() => setDepth((prev) => Math.min(prev + 1, 6))}
-                className=" bg-gray-600 hover:bg-gray-500 rounded-e-lg px-3 pb-3 pt-2.5 h-8"
-              >
-                <svg
-                  className="w-3 h-3 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <label
-            htmlFor="ai-noise"
-            className="flex items-center justify-center"
-          >
-            <span className="text-sm font-medium text-gray-300">AI noise</span>
-            <input
-              id="ai-noise"
-              type="range"
-              min="0.001"
-              max="0.1"
-              step="0.001"
-              value={noise}
-              onChange={(e) => setNoise(Number(e.target.value))}
-              className="ml-1"
-            />
-          </label>
         </div>
+
+        <label htmlFor="ai-noise" className="flex items-center justify-center">
+          <span className="text-sm font-medium text-gray-300">AI noise</span>
+          <input
+            id="ai-noise"
+            type="range"
+            min="0.001"
+            max="0.1"
+            step="0.001"
+            value={noise}
+            onChange={(e) => setNoise(Number(e.target.value))}
+            className="ml-1"
+          />
+        </label>
       </div>
-      <div>
-        <h3>Rules</h3>
-        <ul>
-          <li>Players alternate turns</li>
-          <li>
-            Players choose a column with available space to place a piece in the
-            lowest available slot
-          </li>
-          <li>
-            The first player to get four of their pieces in a row wins the game
-          </li>
-          <li>The four in a row can be horizontal, vertical, or diagonal</li>
-          <li>
-            If the board is full and neither player has four in a row, the game
-            is a tie
-          </li>
-        </ul>
-      </div>
-    </>
+    </div>
   );
 };
 

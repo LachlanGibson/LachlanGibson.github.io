@@ -1,12 +1,13 @@
 .gameBoard {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr, 6fr;
+  grid-template-rows: 1fr 6fr;
   width: min(95%, 500px);
   margin: 0 auto;
   background-color: white;
   padding: min(0.5rem, 1%);
   border-radius: 5%;
+  aspect-ratio: 1/1;
 }
 
 .inputRow {
@@ -27,10 +28,17 @@
   border: solid min(0.25rem, 1vw) black;
 }
 
+.column {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(6, 1fr);
+}
+
 .cell,
 .slotCell {
-  aspect-ratio: 1 / 1;
   padding: 12%;
+  width: 100%;
+  height: 100%;
 }
 
 .circle.R {
