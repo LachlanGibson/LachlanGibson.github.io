@@ -3,7 +3,7 @@ import ArticleGoogleFoobarChallenge from "./articles/ArticleGoogleFoobarChalleng
 import Codenames from "./articles/Codenames/Codenames";
 import GameConnectFour from "./articles/ConnectFour/GameConnectFour";
 import Mastermind from "./articles/Mastermind/Mastermind";
-import GameTicTacToe from "./articles/Tictactoe/GameTicTacToe";
+import TicTacToe from "./articles/Tictactoe/TicTacToe";
 
 export type ArticleType = {
   title: string;
@@ -74,6 +74,8 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     type: "article",
     publishedDateISO: "2024-01-12",
     publishedDateLabel: "12 January 2024",
+    modifiedDateISO: "2024-01-29",
+    modifiedDateLabel: "29 January 2024",
     svgLink: "/images/blog/thumbnail/svg/tic-tac-toe.svg",
     imageLink: "/images/blog/thumbnail/webp/tic-tac-toe.webp",
     imageResolution: ["1200", "800"],
@@ -81,18 +83,26 @@ const articleMetaData: { [slug: string]: ArticleType } = {
       "A functional game of tic-tac-toe with an interesting AI opponent and explanation.",
     language: "en-au",
     metaTags: [
-      "AI",
+      "ai",
       "tic-tac-toe",
+      "tic tac toe",
+      "tic-tac-toe ai",
       "noughts and crosses",
+      "artificial intelligence",
       "minimax",
+      "minimax algorithm",
       "softmax",
       "dynamic programming",
       "tree search",
+      "strategy game",
+      "decision making ai",
+      "game theory",
       "zero-sum game",
       "perfect information",
       "policy",
+      "interactive game",
     ],
-    articleElement: <GameTicTacToe />,
+    articleElement: <TicTacToe />,
   },
   "evil-genius-minion-ready": {
     title: "Evil Genius, Minion Ready",

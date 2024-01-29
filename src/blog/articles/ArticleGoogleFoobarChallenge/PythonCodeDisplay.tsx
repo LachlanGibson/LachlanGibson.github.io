@@ -2,9 +2,12 @@ import React, { useEffect, useState, CSSProperties } from "react";
 import { Prism } from "react-syntax-highlighter";
 import { okaidia as codeStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-const PythonCodeDisplay: React.FC<{ codeFile: string }> = ({ codeFile }) => {
+const PythonCodeDisplay: React.FC<{
+  codeFile: string;
+  startOpen?: boolean;
+}> = ({ codeFile, startOpen = false }) => {
   const [code, setCode] = useState("");
-  const [showCode, setShowCode] = useState(false);
+  const [showCode, setShowCode] = useState(startOpen);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false); // New state
   const [isHoveringHide, setIsHoveringHide] = useState(false);
   const [isHoveringCopy, setIsHoveringCopy] = useState(false);

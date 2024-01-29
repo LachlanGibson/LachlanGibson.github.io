@@ -66,11 +66,9 @@ def check_gameover(board_state):
     ).sum(1)
     if 3 in sums:
         return (True, 1)
-    elif -3 in sums:
+    if -3 in sums:
         return (True, -1)
-    elif 0 not in board_state:
-        return (True, 0)
-    return (False, None)
+    return (0 not in board_state, 0)
 
 
 score(board, 1, print_probs=True)
