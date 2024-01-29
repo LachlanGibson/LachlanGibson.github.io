@@ -340,7 +340,7 @@ const GameTicTacToe = () => {
         <div className="mx-auto text-center text-sm font-medium text-gray-300">
           Precise &harr; Chaotic
         </div>
-        <label htmlFor="X-ai-difficulty" className={styles.aiDifficulty}>
+        <label htmlFor="X-ai-difficulty">
           <div className="flex items-center justify-center">
             <input
               id="X-ai-difficulty"
@@ -354,7 +354,7 @@ const GameTicTacToe = () => {
             <span className="ms-3 text-sm font-medium text-gray-300">X</span>
           </div>
         </label>
-        <label htmlFor="O-ai-difficulty" className={styles.aiDifficulty}>
+        <label htmlFor="O-ai-difficulty">
           <div className="flex items-center justify-center">
             <input
               id="O-ai-difficulty"

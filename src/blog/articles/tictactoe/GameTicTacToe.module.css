@@ -59,12 +59,6 @@
   text-align: center;
 }
 
-.aiDifficulty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .checkboxDiv {
   display: flex;
   flex-direction: column;
