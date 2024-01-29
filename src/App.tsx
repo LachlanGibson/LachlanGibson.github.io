@@ -9,10 +9,12 @@ import Footer from "./footer/Footer";
 import "./App.css";
 import ArticleNotFound from "./blog/ArticleNotFound";
 import { Helmet } from "react-helmet";
+import ScrollToTop from "./ScrollToTop";
 
 const App: React.FC = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Helmet>
         <title>Lachlan Gibson</title>
       </Helmet>
