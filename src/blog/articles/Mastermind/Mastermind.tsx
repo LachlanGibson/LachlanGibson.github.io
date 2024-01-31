@@ -38,10 +38,6 @@ const MastermindPeg: React.FC<{
   colour: string;
   onClick?: React.MouseEventHandler;
 }> = ({ colour, onClick }) => {
-  if (colour === "black") {
-    return <div className="rounded-full aspect-square bg-black"></div>;
-  }
-
   const lightColour = transformHexColour(colour, 40);
   const darkColour = transformHexColour(colour, -40);
 
@@ -76,7 +72,7 @@ const Mastermind: React.FC = () => {
   const [codeSize, setCodeSize] = React.useState(initialCodeSize);
   const [numberOfColours, setNumberOfColours] = React.useState(6);
   const [code, setCode] = React.useState<number[]>(
-    shuffleArray(indexRange).slice(0, initialCodeSize)
+    shuffleArray(indexRange.slice(0, numberOfColours)).slice(0, initialCodeSize)
   );
   const [currentGuess, setCurrentGuess] = React.useState<number[]>(
     Array(initialCodeSize).fill(-1)
@@ -134,12 +130,14 @@ const Mastermind: React.FC = () => {
   }, [code, codeSize, currentGuess, guesses.length, maxNumberOfGuesses]);
 
   const resetGame = useCallback(() => {
-    setCode(shuffleArray(indexRange).slice(0, codeSize));
+    setCode(
+      shuffleArray(indexRange.slice(0, numberOfColours)).slice(0, codeSize)
+    );
     setCurrentGuess(Array(codeSize).fill(-1));
     setGuesses([]);
     setGuessResults([]);
     setGameStatus(null);
-  }, [codeSize]);
+  }, [codeSize, numberOfColours]);
 
   return (
     <div className="bg-slate-600 rounded max-w-sm mx-auto flex flex-col justify-center">
