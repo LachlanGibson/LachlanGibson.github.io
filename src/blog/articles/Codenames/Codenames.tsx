@@ -139,40 +139,43 @@ const Codenames = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-slate-500 sm2:p-2 p-1 rounded-lg flex flex-col items-center">
-      <div
-        className={`text-2xl mb-2 text-center ${
-          turn === "red" ? "text-red-400" : "text-sky-400"
-        }`}
-      >
-        {turn === "red" ? "Red's clue: " : "Blue's clue: "}
-      </div>
-      <div
-        className={`grid sm:grid-cols-5 sm2:grid-cols-4 grid-cols-3 sm2:gap-2 gap-1 w-full`}
-      >
-        {boardIndices.map((wordIndex, i) => (
-          <button
-            key={i}
-            disabled={revealed[i]}
-            onClick={() => handleGuess(i)}
-            className={`sm2:h-12 h-9 px-0 rounded-md shadow-md m-0 text-center ${transitionClass} ${cardClassName(
-              i
-            )}`}
-          >
-            {wordList[wordIndex].toUpperCase()}
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col items-center mt-2">
-        <button
-          type="button"
-          onClick={reset}
-          className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
+    <>
+      <p>This is a work in progress.</p>
+      <div className="max-w-3xl mx-auto bg-slate-500 sm2:p-2 p-1 rounded-lg flex flex-col items-center">
+        <div
+          className={`text-2xl mb-2 text-center ${
+            turn === "red" ? "text-red-400" : "text-sky-400"
+          }`}
         >
-          Reset
-        </button>
+          {turn === "red" ? "Red's clue: " : "Blue's clue: "}
+        </div>
+        <div
+          className={`grid sm:grid-cols-5 sm2:grid-cols-4 grid-cols-3 sm2:gap-2 gap-1 w-full`}
+        >
+          {boardIndices.map((wordIndex, i) => (
+            <button
+              key={i}
+              disabled={revealed[i]}
+              onClick={() => handleGuess(i)}
+              className={`sm2:h-12 h-9 px-0 rounded-md shadow-md m-0 text-center ${transitionClass} ${cardClassName(
+                i
+              )}`}
+            >
+              {wordList[wordIndex].toUpperCase()}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col items-center mt-2">
+          <button
+            type="button"
+            onClick={reset}
+            className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
+          >
+            Reset
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

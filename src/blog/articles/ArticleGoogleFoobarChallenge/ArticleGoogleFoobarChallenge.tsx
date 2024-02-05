@@ -109,7 +109,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
       </div>
       <div style={{ overflowX: "auto", padding: "0 0.1rem" }}>
         <section className={styles.foobarChallenge} id="sec-challenge1">
-          <h2>Challenge 1</h2>
+          <h2 className={styles.challengeTitle}>Challenge 1</h2>
           <p>
             The first level contained only a single task, titled&nbsp;
             <a href="#sec-task-1">Re-ID</a>, which involved efficiently
@@ -198,7 +198,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
           </section>
         </section>
         <section className={styles.foobarChallenge} id="sec-challenge2">
-          <h2>Challenge 2</h2>
+          <h2 className={styles.challengeTitle}>Challenge 2</h2>
 
           <p>
             The second level contained two tasks, titled{" "}
@@ -357,7 +357,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
           </section>
         </section>
         <section className={styles.foobarChallenge} id="sec-challenge3">
-          <h2>Challenge 3</h2>
+          <h2 className={styles.challengeTitle}>Challenge 3</h2>
           <p>
             The third level contained three tasks, titled{" "}
             <a href="#sec-task-4">Prepare the Bunnies' Escape</a>,{" "}
@@ -687,7 +687,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
           </section>
         </section>
         <section className={styles.foobarChallenge} id="sec-challenge4">
-          <h2>Challenge 4</h2>
+          <h2 className={styles.challengeTitle}>Challenge 4</h2>
           <p>
             The fourth level contained two tasks, titled{" "}
             <a href="#sec-task-7">Bringing a Gun to a Trainer Fight</a> and{" "}
@@ -1116,7 +1116,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
           </section>
         </section>
         <section className={styles.foobarChallenge} id="sec-challenge5">
-          <h2>Challenge 5</h2>
+          <h2 className={styles.challengeTitle}>Challenge 5</h2>
           <p>
             The fifth and last level contained only a single task, titled{" "}
             <a href="#sec-task-9">Dodge the Lasers!</a>
@@ -1270,7 +1270,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
           </section>
         </section>
         <section className={styles.foobarChallenge} id="sec-bonus">
-          <h2>Bonus Tasks</h2>
+          <h2 className={styles.challengeTitle}>Bonus Tasks</h2>
           <p>
             After completing all five levels of the challenge, I found that I
             could still request new tasks. I believe these bonus tasks are

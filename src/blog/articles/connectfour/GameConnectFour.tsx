@@ -390,29 +390,14 @@ const GameConnectFour: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-700 p-2 mt-2 mb-4 mx-auto max-w-md rounded-xl">
-      <div className="text-2xl text-center">
-        {gameStatus !== "in progress"
-          ? gameStatus === "tie"
-            ? "It's a Tie!"
-            : `${gameStatus === "R wins" ? "Red" : "Yellow"} wins!`
-          : `${player === "R" ? "Red" : "Yellow"}'s turn`}
-      </div>
+    <div className="p-0 mt-2 mb-4 mx-auto max-w-md">
       <div className={styles.gameBoard}>
-        <div className={styles.inputRow}>
-          {slotAbove.map((cell, cellIndex) => (
-            <div
-              key={-1 - cellIndex}
-              className={styles.slotCell}
-              onClick={() => {
-                if (!isAiTurn) makeMove(cellIndex);
-              }}
-              onMouseEnter={() => handleMouseEnter(cellIndex)}
-              onMouseLeave={handleMouseLeave}
-            >
-              <div className={previewCellClassName(cell, cellIndex)}></div>
-            </div>
-          ))}
+        <div className={styles.headerMessage}>
+          {gameStatus !== "in progress"
+            ? gameStatus === "tie"
+              ? "It's a Tie!"
+              : `${gameStatus === "R wins" ? "Blue" : "Yellow"} wins!`
+            : `${player === "R" ? "Blue" : "Yellow"}'s turn`}
         </div>
         <div className={styles.slots}>
           {board.map((column, columnIndex) => {
@@ -442,7 +427,14 @@ const GameConnectFour: React.FC = () => {
           })}
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center">
+      <button
+        type="button"
+        onClick={resetGame}
+        className={`${styles.settings} ${styles.resetButton}`}
+      >
+        Reset
+      </button>
+      <div className={`flex items-center justify-center ${styles.settings}`}>
         <div className="flex items-center justify-center">
           <div className={styles.checkboxDiv}>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -456,7 +448,7 @@ const GameConnectFour: React.FC = () => {
               />
               <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
               <span className="ms-3 text-sm font-medium text-gray-300">
-                Red AI
+                Blue AI
               </span>
             </label>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -474,84 +466,81 @@ const GameConnectFour: React.FC = () => {
               </span>
             </label>
           </div>
-          <button
-            type="button"
-            onClick={resetGame}
-            className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
-          >
-            Reset
-          </button>
         </div>
-        <div className="flex items-center mb-1">
-          <span className="block ml-0 mr-2 ms-3 text-sm font-medium text-gray-300">
-            Search depth
-          </span>
-          <div className="relative flex items-center max-w-[8rem]">
-            <button
-              type="button"
-              id="decrement-button"
-              disabled={depth <= 0}
-              onClick={() => setDepth((prev) => Math.max(prev - 1, 0))}
-              className="bg-gray-600 rounded-s-lg px-3 pb-3 pt-2.5 h-8 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
-            >
-              <svg
-                className="w-3 h-3 text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 2"
+        <div className="flex flex-col items-center justify-center">
+          <label
+            htmlFor="ai-noise"
+            className="flex items-center justify-center"
+          >
+            <span className="text-sm font-medium text-gray-300">AI noise</span>
+            <input
+              id="ai-noise"
+              type="range"
+              min="0.001"
+              max="0.1"
+              step="0.001"
+              value={noise}
+              onChange={(e) => setNoise(Number(e.target.value))}
+              className="ml-1"
+            />
+          </label>
+          <div className="flex items-center mb-1">
+            <span className="block ml-0 mr-2 ms-3 text-sm font-medium text-gray-300">
+              Search depth
+            </span>
+            <div className="relative flex items-center max-w-[8rem]">
+              <button
+                type="button"
+                id="decrement-button"
+                disabled={depth <= 0}
+                onClick={() => setDepth((prev) => Math.max(prev - 1, 0))}
+                className="bg-gray-600 rounded-s-lg px-3 pb-3 pt-2.5 h-8 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 1h16"
-                />
-              </svg>
-            </button>
-            <div className="bg-gray-600 border-x-0 border-gray-300 h-8 w-4 text-center text-sm  block text-white">
-              <div className="w-fit h-fit m-auto pt-1.5">{depth}</div>
+                <svg
+                  className="w-3 h-3 text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 2"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M1 1h16"
+                  />
+                </svg>
+              </button>
+              <div className="bg-gray-600 border-x-0 border-gray-300 h-8 w-4 text-center text-sm  block text-white">
+                <div className="w-fit h-fit m-auto pt-1.5">{depth}</div>
+              </div>
+              <button
+                type="button"
+                id="increment-button"
+                disabled={depth >= 6}
+                onClick={() => setDepth((prev) => Math.min(prev + 1, 6))}
+                className="bg-gray-600 rounded-e-lg px-3 pb-3 pt-2.5 h-8 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
+              >
+                <svg
+                  className="w-3 h-3 text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 18"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 1v16M1 9h16"
+                  />
+                </svg>
+              </button>
             </div>
-            <button
-              type="button"
-              id="increment-button"
-              disabled={depth >= 6}
-              onClick={() => setDepth((prev) => Math.min(prev + 1, 6))}
-              className="bg-gray-600 rounded-e-lg px-3 pb-3 pt-2.5 h-8 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
-            >
-              <svg
-                className="w-3 h-3 text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 18"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9 1v16M1 9h16"
-                />
-              </svg>
-            </button>
           </div>
         </div>
-
-        <label htmlFor="ai-noise" className="flex items-center justify-center">
-          <span className="text-sm font-medium text-gray-300">AI noise</span>
-          <input
-            id="ai-noise"
-            type="range"
-            min="0.001"
-            max="0.1"
-            step="0.001"
-            value={noise}
-            onChange={(e) => setNoise(Number(e.target.value))}
-            className="ml-1"
-          />
-        </label>
       </div>
     </div>
   );
