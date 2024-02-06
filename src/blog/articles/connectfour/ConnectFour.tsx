@@ -24,12 +24,12 @@ const ConnectFour: React.FC = () => {
           >
             Hasbro
           </a>
-          , played on a 6x7 grid. Each player alternates dropping colored discs
-          (red or yellow) into one of the seven columns. The discs fall to the
-          lowest available space within the selected column. The objective is to
-          be the first player to align four discs in a row, which can be
-          achieved horizontally, vertically, or diagonally. The game reaches a
-          draw if all 42 spaces are filled without either player achieving this
+          , played on a 6x7 grid. Each player alternates dropping coloured discs
+          into one of the seven columns. The discs fall to the lowest available
+          space within the selected column. The objective is to be the first
+          player to align four discs in a row, which can be achieved
+          horizontally, vertically, or diagonally. The game reaches a draw if
+          all 42 spaces are filled without either player achieving this
           alignment. Given these rules, Connect Four classifies as a{" "}
           <a
             href="https://en.wikipedia.org/wiki/Perfect_information"
@@ -57,8 +57,8 @@ const ConnectFour: React.FC = () => {
             solved game
           </a>
           , Connect Four allows the first player to always secure a win with
-          optimal play. However, identifying the optimal move for each board
-          state using a brute-force approach, as I did with my{" "}
+          optimal play. However, identifying the optimal move in real time for
+          each board state using a brute-force approach, as I did with my{" "}
           <Link to="/blog/tic-tac-toe/">Tic Tac Toe</Link> AI, is not feasible
           in Connect Four due to the game's complexity. To address this, I
           programmed an AI using the{" "}

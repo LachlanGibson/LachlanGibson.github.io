@@ -1,5 +1,4 @@
 import React from "react";
-import "./Footer.css";
 import IconLinks from "../navigation/IconLinks";
 
 const Footer: React.FC<{}> = () => {

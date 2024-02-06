@@ -1,7 +1,7 @@
 import React from "react";
 
 const IconLinks = ({ className }: { className?: string }) => {
-  const defaultClassName = "m-4 h-4 flex gap-4 justify-center w-fit";
+  const defaultClassName = "m-4 h-4 flex w-20 justify-between";
   const svgClassName = "h-full";
   return (
     <div className={className ? className : defaultClassName}>

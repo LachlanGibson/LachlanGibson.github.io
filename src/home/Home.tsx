@@ -65,12 +65,12 @@ const Home: React.FC<{}> = () => {
         >
           Lachlan Gibson
         </div>
-        <p className="text-sky-700 max-w-48 text-center text-md leading-[0.9rem]">
+        <p className="text-sky-700 max-w-48 w-full text-center text-md leading-[0.9rem]">
           Data scientist & Developer
           <br />
           AI & Simulation
         </p>
-        <IconLinks className="m-4 h-4 flex gap-5 justify-center w-fit" />
+        <IconLinks />
         <div className="md2:pl-4 mt-4 w-full gap-4 grid grid-cols-2 md2:grid-cols-4 md2:max-w-3xl max-w-sm">
           <SkillCard
             title="Artificial Intelligence"

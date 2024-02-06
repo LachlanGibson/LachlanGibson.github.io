@@ -5,9 +5,9 @@ import { copy2DArray } from "../../../utility/utilities";
 type GameStatus = "in progress" | "R wins" | "Y wins" | "tie";
 type Player = "R" | "Y";
 
-const emptyRow = ["", "", "", "", "", "", ""];
-const miniumThinkTime = 600;
-const decidedTime = 400;
+const miniumThinkTime = 700;
+const decidedTime = 600;
+const thinkFlowRate = 300;
 
 const winPossibilities = [] as number[][][];
 for (let col = 0; col < 7; col++) {
@@ -233,7 +233,6 @@ const GameConnectFour: React.FC = () => {
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""],
   ]);
-  const [slotAbove, setSlotAbove] = useState([...emptyRow]);
   const [player, setPlayer] = useState<Player>("R");
   const [gameStatus, setgameStatus] = useState<GameStatus>("in progress");
   const [noise, setNoise] = useState<number>(0.022);
@@ -308,7 +307,7 @@ const GameConnectFour: React.FC = () => {
       const cell = options[optionIndex];
       optionIndex = (optionIndex + 1) % options.length;
       setAiConsiderCell(cell);
-    }, Math.floor(140 / options.length));
+    }, Math.floor(thinkFlowRate / options.length));
 
     let decidedTimeout: NodeJS.Timeout;
     const startTime = Date.now();
@@ -350,19 +349,6 @@ const GameConnectFour: React.FC = () => {
     depth,
   ]);
 
-  const handleMouseEnter = (columnIndex: number) => {
-    if (gameStatus !== "in progress") {
-      return;
-    }
-    const newSlotAbove = [...emptyRow];
-    newSlotAbove[columnIndex] = "hover";
-    setSlotAbove(newSlotAbove);
-  };
-
-  const handleMouseLeave = () => {
-    setSlotAbove([...emptyRow]);
-  };
-
   const resetGame = () => {
     setBoard([
       ["", "", "", "", "", ""],
@@ -377,14 +363,14 @@ const GameConnectFour: React.FC = () => {
     setgameStatus("in progress");
   };
 
-  const previewCellClassName = (cell: string, cellIndex: number) => {
-    let className = styles.circle;
+  const highlightSlot = (colIndex: number) => {
+    let className = styles.column;
     if (isAiTurn) {
-      if (cellIndex === aiConsiderCell) {
-        className += " " + styles[player];
+      if (colIndex === aiConsiderCell) {
+        className += " " + styles.slotConsider;
       }
-    } else {
-      className += ` ${cell ? styles[player] : ""}`;
+    } else if (gameStatus === "in progress") {
+      className += " " + styles.humanTurn;
     }
     return className;
   };
@@ -404,12 +390,10 @@ const GameConnectFour: React.FC = () => {
             return (
               <div
                 key={columnIndex}
-                className={styles.column}
+                className={highlightSlot(columnIndex)}
                 onClick={() => {
                   if (!isAiTurn) makeMove(columnIndex);
                 }}
-                onMouseEnter={() => handleMouseEnter(columnIndex)}
-                onMouseLeave={handleMouseLeave}
               >
                 {column.map((cell, cellIndex) => {
                   return (
@@ -432,112 +416,95 @@ const GameConnectFour: React.FC = () => {
         onClick={resetGame}
         className={`${styles.settings} ${styles.resetButton}`}
       >
-        Reset
+        Reset Game
       </button>
-      <div className={`flex items-center justify-center ${styles.settings}`}>
-        <div className="flex items-center justify-center">
-          <div className={styles.checkboxDiv}>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                id="X-AI-switch"
-                type="checkbox"
-                role="switch"
-                checked={isRAI}
-                onChange={() => setIsRAI((prev) => !prev)}
-                className="sr-only peer"
-              />
-              <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
-              <span className="ms-3 text-sm font-medium text-gray-300">
-                Blue AI
-              </span>
-            </label>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                id="O-AI-switch"
-                type="checkbox"
-                role="switch"
-                checked={isYAI}
-                onChange={() => setIsYAI((prev) => !prev)}
-                className="sr-only peer"
-              />
-              <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white  after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
-              <span className="ms-3 text-sm font-medium text-gray-300">
-                Yellow AI
-              </span>
-            </label>
-          </div>
+      <div
+        className={`flex flex-col items-center justify-center ${styles.settings}`}
+      >
+        <div className="text-xs font-medium text-gray-400 mt-1">
+          AI Settings
         </div>
-        <div className="flex flex-col items-center justify-center">
-          <label
-            htmlFor="ai-noise"
-            className="flex items-center justify-center"
-          >
-            <span className="text-sm font-medium text-gray-300">AI noise</span>
-            <input
-              id="ai-noise"
-              type="range"
-              min="0.001"
-              max="0.1"
-              step="0.001"
-              value={noise}
-              onChange={(e) => setNoise(Number(e.target.value))}
-              className="ml-1"
-            />
-          </label>
-          <div className="flex items-center mb-1">
-            <span className="block ml-0 mr-2 ms-3 text-sm font-medium text-gray-300">
-              Search depth
-            </span>
-            <div className="relative flex items-center max-w-[8rem]">
-              <button
-                type="button"
-                id="decrement-button"
-                disabled={depth <= 0}
-                onClick={() => setDepth((prev) => Math.max(prev - 1, 0))}
-                className="bg-gray-600 rounded-s-lg px-3 pb-3 pt-2.5 h-8 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
-              >
-                <svg
-                  className="w-3 h-3 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 2"
+        <div className="flex items-center justify-center gap-4 w-full m-1">
+          <div className="flex items-center justify-center">
+            <div className="flex flex-col items-start justify-center gap-1">
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  id="X-AI-switch"
+                  type="checkbox"
+                  role="switch"
+                  checked={isRAI}
+                  onChange={() => setIsRAI((prev) => !prev)}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-300">
+                  Blue
+                </span>
+              </label>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  id="O-AI-switch"
+                  type="checkbox"
+                  role="switch"
+                  checked={isYAI}
+                  onChange={() => setIsYAI((prev) => !prev)}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white  after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+                <span className="ms-3 text-sm font-medium text-gray-300">
+                  Yellow
+                </span>
+              </label>
+            </div>
+          </div>
+          <div className="flex flex-col items-start justify-center gap-1">
+            <label
+              htmlFor="ai-noise"
+              className="flex items-center justify-center"
+            >
+              <span className="text-sm font-medium text-gray-300 w-12">
+                Noise
+              </span>
+              <input
+                id="ai-noise"
+                type="range"
+                min="0.001"
+                max="0.1"
+                step="0.001"
+                value={noise}
+                onChange={(e) => setNoise(Number(e.target.value))}
+                className="w-20"
+              />
+            </label>
+            <div className="flex items-center">
+              <span className="block w-12 text-sm font-medium text-gray-300">
+                Depth
+              </span>
+              <div className="relative flex items-center max-w-[8rem]">
+                <button
+                  type="button"
+                  id="decrement-button"
+                  disabled={depth <= 0}
+                  onClick={() => setDepth((prev) => Math.max(prev - 1, 0))}
+                  className="flex justify-center items-center bg-gray-600 rounded-s px-3 h-4 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
                 >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M1 1h16"
-                  />
-                </svg>
-              </button>
-              <div className="bg-gray-600 border-x-0 border-gray-300 h-8 w-4 text-center text-sm  block text-white">
-                <div className="w-fit h-fit m-auto pt-1.5">{depth}</div>
+                  -
+                </button>
+                <div className="bg-gray-600 border-x-0 h-4 border-gray-300 w-4 text-center text-sm  block text-white">
+                  <div className="w-fit h-full m-auto flex justify-center items-center">
+                    {depth}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  id="increment-button"
+                  disabled={depth >= 6}
+                  onClick={() => setDepth((prev) => Math.min(prev + 1, 6))}
+                  className="flex justify-center items-center bg-gray-600 rounded-e px-3 h-4 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
+                >
+                  +
+                </button>
               </div>
-              <button
-                type="button"
-                id="increment-button"
-                disabled={depth >= 6}
-                onClick={() => setDepth((prev) => Math.min(prev + 1, 6))}
-                className="bg-gray-600 rounded-e-lg px-3 pb-3 pt-2.5 h-8 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
-              >
-                <svg
-                  className="w-3 h-3 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </button>
             </div>
           </div>
         </div>
