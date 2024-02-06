@@ -23,13 +23,13 @@
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: 1fr;
   margin: 0.5rem min(1.5rem, 6%) min(1.5rem, 6%) min(1.5rem, 6%);
-  aspect-ratio: 7 / 6;
 }
 
 .column {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(6, 1fr);
+  aspect-ratio: 1/6;
 }
 
 .slotConsider,
@@ -41,8 +41,6 @@
 .cell {
   padding: 14%;
   width: 100%;
-  height: 100%;
-  aspect-ratio: 1/1;
 }
 
 .circle.R {
