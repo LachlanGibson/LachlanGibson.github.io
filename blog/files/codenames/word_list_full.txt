@@ -3,6 +3,7 @@ agent
 air
 alien
 alps
+amazon
 ambulance
 america
 angel
@@ -24,8 +25,11 @@ beach
 bear
 beat
 bed
+beijing
 bell
 belt
+berlin
+bermuda
 berry
 bill
 block
@@ -64,6 +68,7 @@ charge
 check
 chest
 chick
+china
 chocolate
 church
 circle
@@ -109,8 +114,10 @@ drop
 duck
 dwarf
 eagle
+egypt
 embassy
 engine
+england
 europe
 eye
 face
@@ -143,6 +150,7 @@ glove
 gold
 grace
 grass
+greece
 green
 ground
 ham
@@ -170,6 +178,7 @@ ivory
 jack
 jam
 jet
+jupiter
 kangaroo
 ketchup
 key
@@ -184,6 +193,7 @@ laser
 lawyer
 lead
 lemon
+leprechaun
 life
 light
 limousine
@@ -191,6 +201,7 @@ line
 link
 lion
 litter
+loch ness
 lock
 log
 london
@@ -203,6 +214,7 @@ march
 mass
 match
 mercury
+mexico
 microscope
 millionaire
 mine
@@ -211,6 +223,7 @@ missile
 model
 mole
 moon
+moscow
 mount
 mouse
 mouth
@@ -242,6 +255,7 @@ part
 pass
 paste
 penguin
+phoenix
 piano
 pie
 pilot
@@ -254,6 +268,7 @@ pitch
 plane
 plastic
 plate
+platypus
 play
 plot
 point
@@ -278,6 +293,7 @@ ring
 robin
 robot
 rock
+rome
 root
 rose
 roulette
@@ -350,6 +366,7 @@ thumb
 tick
 tie
 time
+tokyo
 tooth
 torch
 tower
@@ -359,6 +376,7 @@ triangle
 trip
 trunk
 tube
+turkey
 undertaker
 unicorn
 vacuum
@@ -368,6 +386,7 @@ wake
 wall
 war
 washer
+washington
 watch
 water
 wave
