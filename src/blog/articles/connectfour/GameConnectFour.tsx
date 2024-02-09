@@ -4,12 +4,15 @@ import { copy2DArray } from "../../../utility/utilities";
 
 type GameStatus = "in progress" | "R wins" | "Y wins" | "tie";
 type Player = "R" | "Y";
+type Coordinates = [number, number];
+type CoordinateSet = Coordinates[];
+type Board = string[][];
 
-const miniumThinkTime = 700;
-const decidedTime = 600;
+const miniumThinkTime = 900;
+const decidedTime = 900;
 const thinkFlowRate = 300;
 
-const winPossibilities = [] as number[][][];
+const winPossibilities = [] as CoordinateSet[];
 for (let col = 0; col < 7; col++) {
   for (let row = 0; row < 3; row++) {
     winPossibilities.push([
@@ -47,9 +50,23 @@ for (let col = 0; col < 4; col++) {
   }
 }
 
+const findWinningCells = (
+  board: Board,
+  player: Player
+): CoordinateSet | undefined => {
+  for (const winPossibility of winPossibilities) {
+    const cell = winPossibility.find(
+      ([col, row]) => board[col][row] !== player
+    );
+    if (!cell) {
+      return winPossibility;
+    }
+  }
+};
+
 const evaluateMemo = {} as { [key: string]: number };
 
-const stringifyBoard = (board: string[][]): string => {
+const stringifyBoard = (board: Board): string => {
   return board
     .map((col) => {
       return col.map((cell) => (cell === "" ? "_" : cell)).join("");
@@ -58,7 +75,7 @@ const stringifyBoard = (board: string[][]): string => {
 };
 
 const minimax = (
-  prevBoard: string[][],
+  prevBoard: Board,
   action: number,
   depth: number,
   alpha: number,
@@ -101,7 +118,7 @@ const minimax = (
   return bestScore;
 };
 
-const evaluateBoard = (board: string[][]) => {
+const evaluateBoard = (board: Board) => {
   const boardString = stringifyBoard(board);
   if (evaluateMemo[boardString]) {
     return evaluateMemo[boardString];
@@ -120,7 +137,7 @@ const evaluateBoard = (board: string[][]) => {
   return evaluateMemo[boardString];
 };
 
-const thinkStep = (board: string[][], columnIndex: number, player: Player) => {
+const thinkStep = (board: Board, columnIndex: number, player: Player) => {
   const newBoard = copy2DArray(board);
   for (let i = newBoard[columnIndex].length - 1; i >= 0; i--) {
     if (newBoard[columnIndex][i] === "") {
@@ -131,7 +148,11 @@ const thinkStep = (board: string[][], columnIndex: number, player: Player) => {
   return newBoard;
 };
 
-const checkWin = (board: string[][], columnIndex: number): GameStatus => {
+const checkWin = (
+  board: Board,
+  columnIndex: number,
+  returnIndices = false
+): GameStatus => {
   // find row
   let row = -1;
   for (let i = 0; i < board[columnIndex].length; i++) {
@@ -213,7 +234,7 @@ const checkWin = (board: string[][], columnIndex: number): GameStatus => {
   return "in progress";
 };
 
-const availableMoves = (board: string[][]): number[] => {
+const availableMoves = (board: Board): number[] => {
   return board.reduce((acc, col, colIndex) => {
     if (!col[0]) {
       acc.push(colIndex);
@@ -224,7 +245,7 @@ const availableMoves = (board: string[][]): number[] => {
 
 const GameConnectFour: React.FC = () => {
   // note that the board array elements are in the order of columns, not rows
-  const [board, setBoard] = useState<string[][]>([
+  const [board, setBoard] = useState<Board>([
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""],
@@ -240,6 +261,8 @@ const GameConnectFour: React.FC = () => {
   const [isRAI, setIsRAI] = useState<boolean>(false);
   const [isYAI, setIsYAI] = useState<boolean>(true);
   const [aiConsiderCell, setAiConsiderCell] = useState<number>();
+  const [lastCoordinates, setLastCoordinates] = useState<[number, number]>();
+  const [winningCells, setWinningCells] = useState<CoordinateSet>();
 
   const isAiTurn = useMemo(() => {
     if (gameStatus !== "in progress") return false;
@@ -253,11 +276,18 @@ const GameConnectFour: React.FC = () => {
       if (board[columnIndex][0] !== "" || gameStatus !== "in progress") {
         return;
       }
-      const newBoard = thinkStep(board, columnIndex, player);
+      const currentPlayer = player;
+      const newBoard = thinkStep(board, columnIndex, currentPlayer);
       setBoard(newBoard);
       setPlayer((prev) => (prev === "R" ? "Y" : "R"));
+      setLastCoordinates([
+        columnIndex,
+        newBoard[columnIndex].findIndex((cell) => cell),
+      ]);
       const result = checkWin(newBoard, columnIndex);
       if (result !== "in progress") {
+        const winCells = findWinningCells(newBoard, currentPlayer);
+        setWinningCells(winCells);
         setgameStatus(result);
       }
     },
@@ -361,6 +391,8 @@ const GameConnectFour: React.FC = () => {
     ]);
     setPlayer("R");
     setgameStatus("in progress");
+    setLastCoordinates(undefined);
+    setWinningCells(undefined);
   };
 
   const highlightSlot = (colIndex: number) => {
@@ -373,6 +405,25 @@ const GameConnectFour: React.FC = () => {
       className += " " + styles.humanTurn;
     }
     return className;
+  };
+
+  const checkLastCell = (colIndex: number, cellIndex: number) => {
+    if (lastCoordinates && gameStatus === "in progress") {
+      return (
+        lastCoordinates[0] === colIndex && lastCoordinates[1] === cellIndex
+      );
+    }
+    return false;
+  };
+
+  const isAWinningCell = (colIndex: number, cellIndex: number) => {
+    if (winningCells) {
+      return winningCells.some(
+        ([winColIndex, winCellIndex]) =>
+          winColIndex === colIndex && winCellIndex === cellIndex
+      );
+    }
+    return false;
   };
 
   return (
@@ -397,11 +448,20 @@ const GameConnectFour: React.FC = () => {
               >
                 {column.map((cell, cellIndex) => {
                   return (
-                    <div key={cellIndex} className={styles.cell}>
+                    <div
+                      key={cellIndex}
+                      className={`${styles.cell} ${
+                        isAWinningCell(columnIndex, cellIndex)
+                          ? styles.winningCell
+                          : ""
+                      }`}
+                    >
                       <div
                         className={`${styles.circle} ${
-                          cell ? styles[cell] : ""
-                        }`}
+                          checkLastCell(columnIndex, cellIndex)
+                            ? styles.lastCell
+                            : ""
+                        } ${cell ? styles[cell] : ""}`}
                       ></div>
                     </div>
                   );

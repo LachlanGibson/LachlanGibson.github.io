@@ -30,25 +30,19 @@
   grid-template-columns: 1fr;
   grid-template-rows: repeat(6, 1fr);
   aspect-ratio: 1/6;
+  cursor: pointer;
 }
 
 .slotConsider,
-.humanTurn:hover {
-  background-color: rgba(216, 227, 234, 0.7);
+.humanTurn:hover,
+.winningCell {
+  background-color: rgba(216, 227, 234, 0.8);
   border-radius: 0.4rem;
 }
 
 .cell {
   padding: 14%;
   width: 100%;
-}
-
-.circle.R {
-  background-color: #7fd7fd;
-}
-
-.circle.Y {
-  background-color: #f8f778;
 }
 
 .circle {
@@ -58,7 +52,53 @@
   border-radius: 50%;
   margin: 0;
   padding: 0;
+  position: relative;
   border: min(0.2rem, 1vw) solid #324f75;
+}
+
+/* Define the keyframes for the flashing effect */
+@keyframes flashEffectR {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes flashEffectY {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.lastCell.R::before {
+  opacity: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  content: "";
+  background-color: white;
+  animation: flashEffectR 0.8s 2;
+}
+
+.lastCell.Y::before {
+  opacity: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  content: "";
+  background-color: white;
+  animation: flashEffectY 0.8s 2;
 }
 
 .circle.R {
