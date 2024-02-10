@@ -16,9 +16,9 @@ const colourOptions = [
   "#e3e3e3", //white
 ];
 const maxNumberOfColours = colourOptions.length;
-const minNumberOfColours = 6;
 const indexRange = range(0, maxNumberOfColours);
 const initialCodeSize = 4;
+const initialGuessLimit = 12;
 
 const compareCodes = (code: number[], guess: number[]): [number, number] => {
   return code.reduce(
@@ -68,7 +68,8 @@ const EmptyPeg: React.FC<{ onClick?: React.MouseEventHandler }> = ({
 };
 
 const Mastermind: React.FC = () => {
-  const [maxNumberOfGuesses, setMaxNumberOfGuesses] = React.useState(12);
+  const [maxNumberOfGuesses, setMaxNumberOfGuesses] =
+    React.useState(initialGuessLimit);
   const [codeSize, setCodeSize] = React.useState(initialCodeSize);
   const [numberOfColours, setNumberOfColours] = React.useState(6);
   const [code, setCode] = React.useState<number[]>(
@@ -85,25 +86,37 @@ const Mastermind: React.FC = () => {
     null
   );
 
-  const handleOptionClick = useCallback((optionIndex: number) => {
-    setCurrentGuess((currentGuess) => {
-      const newGuess = [...currentGuess];
-      const nextEmptyPegIndex = newGuess.indexOf(-1);
-      if (nextEmptyPegIndex !== -1) {
-        newGuess[nextEmptyPegIndex] = optionIndex;
-        return newGuess;
-      }
-      return currentGuess;
-    });
-  }, []);
+  const handleOptionClick = useCallback(
+    (optionIndex: number) => {
+      if (gameStatus) return;
+      setCurrentGuess((currentGuess) => {
+        const newGuess = [...currentGuess];
+        const nextEmptyPegIndex = newGuess.indexOf(-1);
+        if (nextEmptyPegIndex !== -1) {
+          newGuess[nextEmptyPegIndex] = optionIndex;
+          return newGuess;
+        }
+        return currentGuess;
+      });
+    },
+    [gameStatus]
+  );
 
-  const handleGuessClick = useCallback((guessIndex: number) => {
-    setCurrentGuess((guess) => {
-      const newGuess = [...guess];
-      newGuess[guessIndex] = -1;
-      return newGuess;
-    });
-  }, []);
+  const handleGuessClick = useCallback(
+    (guessIndex: number) => {
+      if (gameStatus) return;
+      setCurrentGuess((guess) => {
+        const newGuess = [...guess];
+        newGuess[guessIndex] = -1;
+        return newGuess;
+      });
+    },
+    [gameStatus]
+  );
+
+  useEffect(() => {
+    console.log(code);
+  }, [code]);
 
   const handleSubmit = useCallback(() => {
     if (currentGuess.includes(-1)) {
@@ -143,46 +156,60 @@ const Mastermind: React.FC = () => {
     <>
       <p>This is a work in progress.</p>
       <div className="bg-slate-600 rounded max-w-sm mx-auto flex flex-col justify-center">
-        <button
-          type="button"
-          onClick={resetGame}
-          className="text-white focus:ring-4 font-medium rounded-lg w-fit mx-auto mt-4 text-sm px-5 py-2.5  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-800"
-        >
-          Reset
-        </button>
         <div className="grid grid-flow-col gap-4 mt-4 p-3 rounded bg-slate-500 mx-4">
-          {colourOptions
-            .slice(0, numberOfColours)
-            .reduce((acc, colour, index) => {
-              if (currentGuess.includes(index)) {
-                acc.push(<EmptyPeg key={index} />);
-              } else {
-                acc.push(
-                  <MastermindPeg
-                    key={index}
-                    colour={colour}
-                    onClick={() => handleOptionClick(index)}
-                  />
-                );
-              }
-              return acc;
-            }, [] as JSX.Element[])}
+          {colourOptions.slice(0, numberOfColours).map((colour, index) => {
+            return currentGuess.includes(index) ? (
+              <EmptyPeg key={index} />
+            ) : (
+              <MastermindPeg
+                key={index}
+                colour={colour}
+                onClick={() => handleOptionClick(index)}
+              />
+            );
+          })}
         </div>
-        <div className="w-full grid grid-cols-[auto,1fr] gap-4 p-4">
+        <div className="w-full grid grid-cols-[3rem,1fr] gap-4 p-4">
           <div className="border-t pt-3 col-span-2 text-center">
             {gameStatus
               ? gameStatus === "win"
                 ? `You won with ${guesses.length} guesses!`
                 : "Too many guesses... Here is the correct code."
-              : `Guess ${guesses.length + 1}`}
+              : `Guess ${guesses.length + 1}/${maxNumberOfGuesses}`}
           </div>
+          {gameStatus && (
+            <button
+              type="button"
+              onClick={resetGame}
+              aria-label="Reset game"
+              className="text-white font-medium rounded-lg w-10 h-10 m-auto text-2xl border border-slate-700 bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
+            >
+              <svg
+                viewBox="0 0 1024 1024"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                className="h-6 m-auto"
+              >
+                <path d="M936.571429 603.428571q0 2.857143-0.571429 4-36.571429 153.142857-153.142857 248.285715T509.714286 950.857143q-83.428571 0-161.428572-31.428572T209.142857 829.714286l-73.714286 73.714285q-10.857143 10.857143-25.714285 10.857143t-25.714286-10.857143-10.857143-25.714285v-256q0-14.857143 10.857143-25.714286t25.714286-10.857143h256q14.857143 0 25.714285 10.857143t10.857143 25.714286-10.857143 25.714285l-78.285714 78.285715q40.571429 37.714286 92 58.285714t106.857143 20.571429q76.571429 0 142.857143-37.142858t106.285714-102.285714q6.285714-9.714286 30.285714-66.857143 4.571429-13.142857 17.142858-13.142857h109.714285q7.428571 0 12.857143 5.428572t5.428572 12.857142z m14.285714-457.142857v256q0 14.857143-10.857143 25.714286t-25.714286 10.857143h-256q-14.857143 0-25.714285-10.857143t-10.857143-25.714286 10.857143-25.714285l78.857142-78.857143Q626.857143 219.428571 512 219.428571q-76.571429 0-142.857143 37.142858T262.857143 358.857143q-6.285714 9.714286-30.285714 66.857143-4.571429 13.142857-17.142858 13.142857H101.714286q-7.428571 0-12.857143-5.428572T83.428571 420.571429v-4q37.142857-153.142857 154.285715-248.285715T512 73.142857q83.428571 0 162.285714 31.714286T814.285714 194.285714l74.285715-73.714285q10.857143-10.857143 25.714285-10.857143t25.714286 10.857143 10.857143 25.714285z" />
+              </svg>
+            </button>
+          )}
           {!gameStatus && (
             <button
               type="button"
               onClick={handleSubmit}
-              className="text-white border border-slate-900 font-medium rounded-lg text-sm p-2 h-fit my-auto  bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
+              aria-label="Submit guess"
+              className="text-white font-medium rounded-lg w-10 h-10 m-auto text-2xl border border-slate-700 bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
             >
-              Submit
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+                fill="currentColor"
+                className="h-6 m-auto"
+              >
+                <path d="M143 256.3L7 120.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0L313 86.3c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.4 9.5-24.6 9.5-34 .1zm34 192l136-136c9.4-9.4 9.4-24.6 0-33.9l-22.6-22.6c-9.4-9.4-24.6-9.4-33.9 0L160 352.1l-96.4-96.4c-9.4-9.4-24.6-9.4-33.9 0L7 278.3c-9.4 9.4-9.4 24.6 0 33.9l136 136c9.4 9.5 24.6 9.5 34 .1z" />
+              </svg>
             </button>
           )}
           {!gameStatus && (
@@ -201,8 +228,8 @@ const Mastermind: React.FC = () => {
               })}
             </div>
           )}
-          {gameStatus === "lose" && (
-            <div className="w-full grid grid-flow-col gap-4 col-span-2">
+          {gameStatus && (
+            <div className="w-full grid grid-flow-col gap-4">
               {code.map((value, index) => {
                 return (
                   <MastermindPeg
@@ -255,6 +282,55 @@ const Mastermind: React.FC = () => {
             </React.Fragment>
           ))}
         </div>
+        <button
+          type="button"
+          onClick={resetGame}
+          aria-label="Reset game"
+          className="text-white font-medium rounded-lg w-10 h-10 m-auto mb-2 text-2xl border border-slate-700 bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
+        >
+          <svg
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            className="h-6 m-auto"
+          >
+            <path d="M936.571429 603.428571q0 2.857143-0.571429 4-36.571429 153.142857-153.142857 248.285715T509.714286 950.857143q-83.428571 0-161.428572-31.428572T209.142857 829.714286l-73.714286 73.714285q-10.857143 10.857143-25.714285 10.857143t-25.714286-10.857143-10.857143-25.714285v-256q0-14.857143 10.857143-25.714286t25.714286-10.857143h256q14.857143 0 25.714285 10.857143t10.857143 25.714286-10.857143 25.714285l-78.285714 78.285715q40.571429 37.714286 92 58.285714t106.857143 20.571429q76.571429 0 142.857143-37.142858t106.285714-102.285714q6.285714-9.714286 30.285714-66.857143 4.571429-13.142857 17.142858-13.142857h109.714285q7.428571 0 12.857143 5.428572t5.428572 12.857142z m14.285714-457.142857v256q0 14.857143-10.857143 25.714286t-25.714286 10.857143h-256q-14.857143 0-25.714285-10.857143t-10.857143-25.714286 10.857143-25.714285l78.857142-78.857143Q626.857143 219.428571 512 219.428571q-76.571429 0-142.857143 37.142858T262.857143 358.857143q-6.285714 9.714286-30.285714 66.857143-4.571429 13.142857-17.142858 13.142857H101.714286q-7.428571 0-12.857143-5.428572T83.428571 420.571429v-4q37.142857-153.142857 154.285715-248.285715T512 73.142857q83.428571 0 162.285714 31.714286T814.285714 194.285714l74.285715-73.714285q10.857143-10.857143 25.714285-10.857143t25.714286 10.857143 10.857143 25.714285z" />
+          </svg>
+        </button>
+        <label>
+          <span>Guesses:</span>
+          <input
+            className="w-10 text-black"
+            type="number"
+            min="6"
+            max="12"
+            value={maxNumberOfGuesses}
+            onChange={(e) => setMaxNumberOfGuesses(+e.target.value)}
+          />
+        </label>
+        <label>
+          <span>Code size:</span>
+          <input
+            className="w-10 text-black"
+            type="number"
+            min={3}
+            max={numberOfColours}
+            value={codeSize}
+            onChange={(e) => setCodeSize(+e.target.value)}
+          />
+        </label>
+        <label>
+          <span>Colours:</span>
+          <input
+            className="w-10 text-black"
+            type="number"
+            min={codeSize}
+            max={maxNumberOfColours}
+            value={numberOfColours}
+            onChange={(e) => setNumberOfColours(+e.target.value)}
+          />
+        </label>
       </div>
     </>
   );
