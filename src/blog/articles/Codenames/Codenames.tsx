@@ -2,11 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { range, shuffleArray } from "../../../utility/utilities";
 import wordList from "./wordList";
 
+//const infinityString = "\u221E";
+
 type Team = "red" | "blue";
 type Card = Team | "assassin" | "bystander";
-type ClueNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | "\u221E";
-type Clue = [string, ClueNumber];
-type RawScores = { [word: string]: number[] };
+type Clue = [string, number];
+type RawScores = Record<string, number[]>;
 
 const initialKey: Card[] = [
   "assassin",
@@ -35,7 +36,7 @@ const initialKey: Card[] = [
   "bystander",
   "bystander",
 ];
-const boardSize = 25;
+const boardSize = initialKey.length;
 const arrayRange = range(0, wordList.length);
 
 const evaluateGapClues = (
@@ -45,8 +46,8 @@ const evaluateGapClues = (
   spyKey: string[],
   clueOptionsList: string[],
   rawScores: RawScores
-): [string, number][] => {
-  return clueOptionsList.reduce<[string, number][]>(
+): Clue[] => {
+  return clueOptionsList.reduce<Clue[]>(
     (acc, clue) => {
       const scores = codeIndices.map((index) => rawScores[clue][index]);
       const maxOpponent = spyKey.reduce((max, card, i) => {
@@ -63,7 +64,7 @@ const evaluateGapClues = (
       if (countBetter === acc[0][1]) return [...acc, [clue, countBetter]];
       return acc;
     },
-    [["", -1]] as [string, number][]
+    [["", -1]]
   );
 };
 
@@ -85,18 +86,18 @@ const decideClue = (
       clueOptionsList,
       rawScores
     );
-    const newScore = newClueScorePair[0][1] * (gap + 1);
+    const newScore = newClueScorePair[0][1] * (gap + 2);
     if (newScore > bestScore) {
       bestScore = newScore;
       clueScorePair = newClueScorePair;
     }
   }
-  const result =
+  const result: Clue =
     clueScorePair[Math.floor(Math.random() * clueScorePair.length)];
-  return [result[0].toUpperCase(), result[1] as ClueNumber];
+  return [result[0].toUpperCase(), result[1]];
 };
 
-const Codenames = () => {
+const Codenames: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [rawScores, setRawScores] = useState<RawScores>({});
   const [spyMasterKey, setSpyMasterKey] = useState<Card[]>([]);
@@ -105,9 +106,9 @@ const Codenames = () => {
   );
   const [revealed, setRevealed] = useState<boolean[]>([]);
   const [turn, setTurn] = useState<Team>("red");
-  const [clueOptions, setClueOptions] = useState({
-    red: [] as string[],
-    blue: [] as string[],
+  const [clueOptions, setClueOptions] = useState<Record<Team, string[]>>({
+    red: [],
+    blue: [],
   });
   const [currentClue, setCurrentClue] = useState<Clue>(["", 0]);
   const [guessNumber, setGuessNumber] = useState(0);
