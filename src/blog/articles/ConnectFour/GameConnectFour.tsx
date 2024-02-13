@@ -64,7 +64,7 @@ const findWinningCells = (
   }
 };
 
-const evaluateMemo = {} as { [key: string]: number };
+const evaluateMemo: Record<string, number> = {};
 
 const stringifyBoard = (board: Board): string => {
   return board
