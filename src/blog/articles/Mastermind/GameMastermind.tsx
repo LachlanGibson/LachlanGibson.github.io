@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect } from "react";
 import {
+  compareNumberArrays,
+  countUniqueStrings,
+  getPermutations,
   range,
   shuffleArray,
   transformHexColour,
@@ -43,6 +46,22 @@ const compareCodes = (guess: Code, code: Code): [number, number] => {
   return result;
 };
 
+const expectedNextSizes = (
+  possibilities: Code[],
+  choices = possibilities
+): number[] => {
+  return choices.map((guess) => {
+    const results = possibilities.map((code) =>
+      compareCodes(guess, code).join("")
+    );
+    const counts = countUniqueStrings(results);
+    return (
+      counts.reduce((acc, count) => acc + count[1] ** 2, 0) /
+      possibilities.length
+    );
+  });
+};
+
 const requiredTurnsMemo: Record<string, [number, Code]> = {};
 const requiredTurns = (
   possibilities: Code[],
@@ -61,14 +80,33 @@ const requiredTurns = (
     return [turns, possibilities[0]];
   }
 
+  let bestGuess: [number, Code] = [Infinity, possibilities[0]];
+  const alphaInput = alpha;
   for (let guess of possibilities) {
     let worstTurns = -Infinity;
     const results = possibilities.map((code) =>
       compareCodes(guess, code).join("")
     );
+    const counts = countUniqueStrings(results, "ascending");
+    alpha = alphaInput;
+    for (let [result] of counts) {
+      const nextPossibilities = possibilities.filter(
+        (code, index) => results[index] === result
+      );
+      worstTurns = Math.max(
+        worstTurns,
+        requiredTurns(nextPossibilities, turns + 1, alpha, beta)[0]
+      );
+      if (worstTurns >= beta) break;
+      alpha = Math.max(alpha, worstTurns);
+    }
+    if (worstTurns < bestGuess[0]) {
+      bestGuess = [worstTurns, guess];
+    }
+    if (bestGuess[0] <= alphaInput) break;
+    beta = Math.min(beta, bestGuess[0]);
   }
-
-  const bestGuess: [number, Code] = [Infinity, possibilities[0]];
+  requiredTurnsMemo[codeString] = [bestGuess[0] - turns, bestGuess[1]];
   return bestGuess;
 };
 
@@ -124,6 +162,11 @@ const GameMastermind: React.FC = () => {
     null
   );
 
+  const [possibleCodes, setPossibleCodes] = React.useState<Code[]>([]);
+  const [initialPossibleCodes, setinitialPossibleCodes] = React.useState<
+    Code[]
+  >([]);
+
   const handleOptionClick = useCallback(
     (optionIndex: number) => {
       if (gameStatus) return;
@@ -152,9 +195,25 @@ const GameMastermind: React.FC = () => {
     [gameStatus]
   );
 
+  const resetGame = useCallback(() => {
+    setCode(
+      shuffleArray(indexRange.slice(0, numberOfColours)).slice(0, codeSize)
+    );
+    setCurrentGuess(Array(codeSize).fill(-1));
+    setGuesses([]);
+    setGuessResults([]);
+    setGameStatus(null);
+    const permutations = getPermutations(
+      indexRange.slice(0, numberOfColours),
+      codeSize
+    );
+    setPossibleCodes(permutations);
+    setinitialPossibleCodes(permutations);
+  }, [codeSize, numberOfColours]);
+
   useEffect(() => {
-    console.log(code);
-  }, [code]);
+    resetGame();
+  }, [resetGame]);
 
   const handleSubmit = useCallback(() => {
     if (currentGuess.includes(-1)) {
@@ -166,6 +225,12 @@ const GameMastermind: React.FC = () => {
     } else if (guesses.length + 1 >= maxNumberOfGuesses) {
       setGameStatus("lose");
     }
+
+    setPossibleCodes((prevCodes) =>
+      prevCodes.filter((prevCode) =>
+        compareNumberArrays(result, compareCodes(currentGuess, prevCode))
+      )
+    );
 
     setGuessResults((guessResults) => {
       const newGuessResults = [...guessResults];
@@ -180,15 +245,32 @@ const GameMastermind: React.FC = () => {
     setCurrentGuess(Array(codeSize).fill(-1));
   }, [code, codeSize, currentGuess, guesses.length, maxNumberOfGuesses]);
 
-  const resetGame = useCallback(() => {
-    setCode(
-      shuffleArray(indexRange.slice(0, numberOfColours)).slice(0, codeSize)
-    );
-    setCurrentGuess(Array(codeSize).fill(-1));
-    setGuesses([]);
-    setGuessResults([]);
-    setGameStatus(null);
-  }, [codeSize, numberOfColours]);
+  const provideHint = useCallback(() => {
+    if (gameStatus) return;
+    // Guess randomly if no guesses have been made or if there are too many possibilities
+    if (guesses.length === 0 || possibleCodes.length >= 1000) {
+      const hint =
+        possibleCodes[Math.floor(Math.random() * possibleCodes.length)];
+      setCurrentGuess(hint);
+      return;
+    }
+    // If there is only one possibility left then choose that
+    if (possibleCodes.length === 1) {
+      setCurrentGuess(possibleCodes[0]);
+      return;
+    }
+    // If the number of possibilites are too large then choose a guess that minimises the expected size of the remaining possibilities
+    if (possibleCodes.length >= 100) {
+      const expectedSizes = expectedNextSizes(possibleCodes);
+      const hint =
+        possibleCodes[expectedSizes.indexOf(Math.min(...expectedSizes))];
+      setCurrentGuess(hint);
+      return;
+    }
+    // Choose a guess that minimises the maximum number of remaining guesses
+    const [, hint] = requiredTurns(possibleCodes, guesses.length);
+    setCurrentGuess(hint);
+  }, [gameStatus, guesses.length, possibleCodes]);
 
   return (
     <>
@@ -335,6 +417,14 @@ const GameMastermind: React.FC = () => {
             <path d="M936.571429 603.428571q0 2.857143-0.571429 4-36.571429 153.142857-153.142857 248.285715T509.714286 950.857143q-83.428571 0-161.428572-31.428572T209.142857 829.714286l-73.714286 73.714285q-10.857143 10.857143-25.714285 10.857143t-25.714286-10.857143-10.857143-25.714285v-256q0-14.857143 10.857143-25.714286t25.714286-10.857143h256q14.857143 0 25.714285 10.857143t10.857143 25.714286-10.857143 25.714285l-78.285714 78.285715q40.571429 37.714286 92 58.285714t106.857143 20.571429q76.571429 0 142.857143-37.142858t106.285714-102.285714q6.285714-9.714286 30.285714-66.857143 4.571429-13.142857 17.142858-13.142857h109.714285q7.428571 0 12.857143 5.428572t5.428572 12.857142z m14.285714-457.142857v256q0 14.857143-10.857143 25.714286t-25.714286 10.857143h-256q-14.857143 0-25.714285-10.857143t-10.857143-25.714286 10.857143-25.714285l78.857142-78.857143Q626.857143 219.428571 512 219.428571q-76.571429 0-142.857143 37.142858T262.857143 358.857143q-6.285714 9.714286-30.285714 66.857143-4.571429 13.142857-17.142858 13.142857H101.714286q-7.428571 0-12.857143-5.428572T83.428571 420.571429v-4q37.142857-153.142857 154.285715-248.285715T512 73.142857q83.428571 0 162.285714 31.714286T814.285714 194.285714l74.285715-73.714285q10.857143-10.857143 25.714285-10.857143t25.714286 10.857143 10.857143 25.714285z" />
           </svg>
         </button>
+        <button
+          type="button"
+          onClick={provideHint}
+          aria-label="Hint"
+          className="text-white font-medium rounded-lg w-10 h-10 m-auto mb-2 text-2xl border border-slate-700 bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
+        >
+          ?
+        </button>
         <label>
           <span>Guesses:</span>
           <input
@@ -368,6 +458,7 @@ const GameMastermind: React.FC = () => {
             onChange={(e) => setNumberOfColours(+e.target.value)}
           />
         </label>
+        <p>{`Remaining options: ${possibleCodes.length}`}</p>
       </div>
     </>
   );
