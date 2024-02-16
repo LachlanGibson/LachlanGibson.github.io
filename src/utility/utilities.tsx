@@ -303,3 +303,40 @@ export function countUniqueStrings(
 
   return entries;
 }
+
+/**
+ * Generates all possible permutations of a given array, with an optional parameter to limit the size of each permutation.
+ *
+ * This recursive function creates permutations by selecting each element in turn, combining it with all permutations
+ * of the remaining elements. By default, it generates permutations of the same length as the input array, but if a
+ * specific size is provided, it generates permutations of that size.
+ *
+ * @param array An array of elements of any type T from which to generate permutations.
+ * @param size Optional. The size of each permutation subset to generate. Defaults to the length of the input array.
+ * @returns A two-dimensional array of T, where each sub-array is one possible permutation of the given size.
+ *
+ * @example
+ * // Example usage:
+ * console.log(getPermutations([1, 2, 3])); // Outputs all permutations of [1, 2, 3]
+ * console.log(getPermutations([1, 2, 3], 2)); // Outputs all 2-element permutations of [1, 2, 3]
+ *
+ * @remarks
+ * - If the `size` parameter is not an integer between 1 and the length of the input array, the function will return an empty array.
+ * - This function can be computationally intensive for large arrays or large permutation sizes.
+ * - The order of the elements in the input array affects the order of the generated permutations, but each permutation is unique with respect to the elements it contains.
+ */
+export function getPermutations<T>(array: T[], size = array.length): T[][] {
+  if (size === 1) return array.map((value) => [value]);
+
+  const permutations: T[][] = [];
+  array.forEach((current, index) => {
+    const remaining = array.slice(0, index).concat(array.slice(index + 1));
+    const remainingPermutations = getPermutations(remaining, size - 1);
+    const permutationsWithCurrent: T[][] = remainingPermutations.map(
+      (permutation) => [current, ...permutation]
+    );
+    permutations.push(...permutationsWithCurrent);
+  });
+
+  return permutations;
+}
