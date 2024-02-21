@@ -59,7 +59,22 @@ const Mastermind: React.FC = () => {
       <p>
         In practice the factor of <InlineMath math={"|\\mathcal{P}|"} /> can be
         omitted as it is constant for all guesses.
+        <br />
+        <br />
+        In many cases it can happen that multiple guesses are equally optimal
+        according to these greedy metrics. Ties can be broken arbitrarily by
+        choosing the first, last or a random guess from the set of equally
+        greedily optimal guesses. Possibly a better approach would be to use
+        another greedy metric to break the tie. This is lexicographic
+        optimisation. In fact, these two greedy metrics are from the same class.
+        Consider the metric which minimises the expected size of the next
+        partition raised to the power of <InlineMath math={"l"} />.
       </p>
+      <BlockMath
+        math={
+          "T_l^*=\\min_{g\\in\\mathcal{G}}\\sum_{k\\in\\mathcal{K}}|\\mathcal{T}(\\mathcal{P},g,k)|^{l+1}"
+        }
+      />
     </>
   );
 };
