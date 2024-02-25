@@ -48,7 +48,11 @@ const Blog: React.FC<{}> = () => {
           <ArticleCard
             key={slug}
             slug={slug}
-            title={articleMetaData[slug].title}
+            title={`${
+              articleMetaData[slug].titleShort
+                ? articleMetaData[slug].titleShort
+                : articleMetaData[slug].title
+            }`}
             publishedDateISO={articleMetaData[slug].publishedDateISO}
             publishedDateLabel={articleMetaData[slug].publishedDateLabel}
             svgLink={articleMetaData[slug].svgLink}

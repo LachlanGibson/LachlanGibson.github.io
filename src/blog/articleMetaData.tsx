@@ -7,6 +7,7 @@ import TicTacToe from "./articles/Tictactoe/TicTacToe";
 
 export type ArticleType = {
   title: string;
+  titleShort?: string;
   author: string;
   authorImageLink: string;
   type: string;
@@ -26,7 +27,8 @@ export type ArticleType = {
 
 const articleMetaData: { [slug: string]: ArticleType } = {
   mastermind: {
-    title: "Mastermind",
+    title: "Building a Mastermind AI",
+    titleShort: "Mastermind with AI",
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
@@ -40,7 +42,8 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     articleElement: <Mastermind />,
   },
   codenames: {
-    title: "Codenames",
+    title: "Building a Codenames AI Spymaster",
+    titleShort: "Codenames with AI",
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
@@ -54,7 +57,8 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     articleElement: <Codenames />,
   },
   "connect-four": {
-    title: "Connect Four",
+    title: "Building a Connect Four AI",
+    titleShort: "Connect Four with AI",
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
@@ -99,7 +103,8 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     articleElement: <ConnectFour />,
   },
   "tic-tac-toe": {
-    title: "Tic Tac Toe",
+    title: "Building a Tic Tac Toe AI",
+    titleShort: "Tic Tac Toe with AI",
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
