@@ -47,11 +47,11 @@ const TicTacToe = () => {
           X, or O. However, most of these states are unreachable, such as those
           where two players have three in a row simultaneously, or where player
           O has taken more turns than player X. Therefore, the actual number of
-          unique board states is only <InlineMath math="5478" />. This makes it
-          feasible for the computer to use a brute force approach to explore all
-          possibilities when calculating the optimal move for each board state.
-          A typical approach to solving a two-player zero-sum game is finding
-          the{" "}
+          unique accessible board states is only <InlineMath math="5478" />.
+          This makes it feasible for the computer to use a brute force approach
+          to explore all possibilities when calculating the optimal move for
+          each board state. A typical approach to solving a two-player zero-sum
+          game is finding the{" "}
           <a
             href="https://en.wikipedia.org/wiki/Nash_equilibrium"
             target="_blank"
@@ -165,8 +165,49 @@ const TicTacToe = () => {
           chance of picking the winning move immediately. It also has a 0.02%
           chance of choosing the bottom right corner which would allow O to win
           next turn. However, O has a high temperature of 1, so it still has a
-          26.89% chance of not choosing that winning move. Below is some Python
-          code showing how the scores can be computed using recursive functions.
+          26.89% chance of not choosing that winning move.
+        </p>
+        <div className="grid gap-4 justify-center grid-cols-1 sm2:grid-cols-2 max-w-2xl mx-auto my-4">
+          <img
+            className="w-full"
+            src="/blog/files/tic-tac-toe/p_estimates_T1.svg"
+            alt=""
+          />
+          <img
+            className="w-full"
+            src="/blog/files/tic-tac-toe/p_estimates_T0.1.svg"
+            alt=""
+          />
+        </div>
+        <figcaption className="mb-4">
+          Estimated win probabilities of each player depending on{" "}
+          <InlineMath math="T_O" /> when <InlineMath math="T_X=1" /> (left) and{" "}
+          <InlineMath math="T_X=0.1" /> (right). Probabilities were estimated by
+          simulating 1000 games for each combination of temperatures.
+        </figcaption>
+        <div className="grid gap-4 justify-center grid-cols-1 sm2:grid-cols-2 max-w-2xl mx-auto my-4">
+          <img
+            className="w-full"
+            src="/blog/files/tic-tac-toe/scores_T1.svg"
+            alt=""
+          />
+          <img
+            className="w-full"
+            src="/blog/files/tic-tac-toe/scores_T0.1.svg"
+            alt=""
+          />
+        </div>
+        <figcaption className="mb-4">
+          Expected final scores when X starts on a corner, the centre or an
+          edge, depending on <InlineMath math="T_O" /> when{" "}
+          <InlineMath math="T_X=1" /> (left) and <InlineMath math="T_X=0.1" />{" "}
+          (right). If player X plays with a high temperature then their best
+          first move is always the centre, but if they play with a low
+          temperature then their best first move is usually a corner.
+        </figcaption>
+        <p>
+          Below is some Python code showing how the scores can be computed using
+          recursive functions.
         </p>
         <PythonCodeDisplay
           codeFile="/blog/files/tic-tac-toe/example.py"
