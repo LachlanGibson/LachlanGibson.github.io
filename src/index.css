@@ -33,12 +33,6 @@ img {
   max-width: 100%;
 }
 
-menu:not(article menu),
-ol:not(article ol),
-ul:not(article ul) {
-  list-style: none;
-}
-
 a {
   text-underline-position: under;
   text-decoration-thickness: 0.1rem;

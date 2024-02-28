@@ -28,7 +28,7 @@ export type ArticleType = {
 const articleMetaData: { [slug: string]: ArticleType } = {
   mastermind: {
     title: "Building a Mastermind AI",
-    titleShort: "Mastermind with AI",
+    titleShort: "AI: Mastermind",
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
@@ -43,7 +43,7 @@ const articleMetaData: { [slug: string]: ArticleType } = {
   },
   codenames: {
     title: "Building a Codenames AI Spymaster",
-    titleShort: "Codenames with AI",
+    titleShort: "AI: Codenames",
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
@@ -58,7 +58,7 @@ const articleMetaData: { [slug: string]: ArticleType } = {
   },
   "connect-four": {
     title: "Building a Connect Four AI",
-    titleShort: "Connect Four with AI",
+    titleShort: "AI: Connect Four",
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
@@ -103,15 +103,15 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     articleElement: <ConnectFour />,
   },
   "tic-tac-toe": {
-    title: "Building a Tic Tac Toe AI",
-    titleShort: "Tic Tac Toe with AI",
+    title: "Making tic-tac-toe interesting with AI",
+    titleShort: "AI: Tic Tac Toe",
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
     publishedDateISO: "2024-01-12",
     publishedDateLabel: "12 Jan 2024",
-    modifiedDateISO: "2024-01-29",
-    modifiedDateLabel: "29 Jan 2024",
+    modifiedDateISO: "2024-02-28",
+    modifiedDateLabel: "28 Feb 2024",
     svgLink: "/images/blog/thumbnail/svg/tic-tac-toe.svg",
     imageLink: "/images/blog/thumbnail/webp/tic-tac-toe.webp",
     imageResolution: ["1200", "800"],

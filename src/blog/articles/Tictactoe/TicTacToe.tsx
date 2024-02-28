@@ -38,7 +38,11 @@ const TicTacToe = () => {
           >
             zero-sum game
           </a>
-          .
+          . This page includes my implementation of tic-tac-toe above where both
+          X and O can be optionally controlled by a custom designed AI
+          algorithm. I explain below how I designed the AI to work with varying
+          degrees of proficiency, and how this feature can inform on how optimal
+          strategies can depend on the skill level of each player.
           <br />
           <br />
           It is possible to calculate an upper bound on the total number of
@@ -48,10 +52,9 @@ const TicTacToe = () => {
           where two players have three in a row simultaneously, or where player
           O has taken more turns than player X. Therefore, the actual number of
           unique accessible board states is only <InlineMath math="5478" />.
-          This makes it feasible for the computer to use a brute force approach
-          to explore all possibilities when calculating the optimal move for
-          each board state. A typical approach to solving a two-player zero-sum
-          game is finding the{" "}
+          This means a brute force algorithm which explores all possibilities
+          when calculating the optimal move for each board state is feasible. A
+          typical approach to solving a two-player zero-sum game is finding the{" "}
           <a
             href="https://en.wikipedia.org/wiki/Nash_equilibrium"
             target="_blank"
@@ -82,9 +85,9 @@ const TicTacToe = () => {
           optimally. To make the game more interesting, I implemented an AI
           using a{" "}
           <em>softmax-based probabilistic variant of the minimax algorithm</em>,
-          where the AI considers actions as if they are taken randomly, with
-          probabilities based on the expected scores. More specifically, the
-          log-probability of a move is proportional to its expected score,
+          where the AI considers actions as if both players take them randomly,
+          with probabilities based on the expected scores. More specifically,
+          the log-probability of a move depends linearly on its expected score,
           meaning the probability of a move is calculated using the{" "}
           <a
             href="https://en.wikipedia.org/wiki/Softmax_function"
@@ -95,18 +98,41 @@ const TicTacToe = () => {
           </a>{" "}
           with a temperature parameter. This means that moves with higher
           expected scores are more likely to be chosen, but not every time. The
-          temperature parameter controls the randomness of the AI's play or its
-          expectation of its opponent's play. Lower temperatures mean the AI
-          follows the minimax algorithm more closely, while higher temperatures
-          makes all moves more equally likely.
+          temperature parameter controls the randomness of the AI's play. Lower
+          temperatures mean the AI is more likely to choose the best move, while
+          higher temperatures makes all moves more equally likely.
           <br />
           <br />
           To compute the expected resulting score of a move, the AI needs to
           predict how its opponent will play. Therefore, the AI actually
           utilises two temperature parameters, one for choosing its own moves,
-          and the other for how it models the other player's strategy. Let's get
-          into the details of the mathematics of the algorithm. For a vector{" "}
-          <InlineMath math={"\\mathbf{x}"} /> with components{" "}
+          and the other for how it models the other player's strategy.
+          Interpreting temperature as a kind of proxy for skill, then computing
+          expected scores with two paramters in this way lets the algorithm
+          account for the different 'skill' levels of each player. Given a
+          starting board state, the algorithm for computing the expected score
+          works as follows:
+        </p>
+        <ol className="list-decimal list-outside max-w-md pl-4 mx-auto my-4">
+          <li>
+            Check if the game is over. If so, then return 1 if X won, -1 if O
+            won, or 0 if the game is a tie.
+          </li>
+          <li>Identify all available moves (all empty cells).</li>
+          <li>
+            Recursively compute expected scores of each move based on player
+            temperatures.
+          </li>
+          <li>
+            Compute probabilities of each move using the softmax function.
+          </li>
+          <li>
+            Return the average score weighted by their respective probabilities.
+          </li>
+        </ol>
+        <p>
+          Let's get into the details of the mathematics of the algorithm. For a
+          vector <InlineMath math={"\\mathbf{x}"} /> with components{" "}
           <InlineMath math={"x_i"} /> and a temperature{" "}
           <InlineMath math={"T"} />, the softmax function is
         </p>
@@ -166,6 +192,14 @@ const TicTacToe = () => {
           chance of choosing the bottom right corner which would allow O to win
           next turn. However, O has a high temperature of 1, so it still has a
           26.89% chance of not choosing that winning move.
+          <br />
+          <br />I mentioned before that the temperature parameter can be
+          interpreted as a kind of proxy for skill. To illustrate this, I
+          simulated games between to AI controlled players with varying
+          temperatures. For each combination of temperatures, I simulated 1000
+          games and estimated the win probabilities of each player. This
+          produced some interesting results, which are illustrated in the figure
+          below.
         </p>
         <div className="grid gap-4 justify-center grid-cols-1 sm2:grid-cols-2 max-w-2xl mx-auto my-4">
           <img
@@ -185,6 +219,28 @@ const TicTacToe = () => {
           <InlineMath math="T_X=0.1" /> (right). Probabilities were estimated by
           simulating 1000 games for each combination of temperatures.
         </figcaption>
+        <p>
+          There are two key take-aways from these results. Firstly, player X has
+          a large advantage by going first. Secondly, players do perform better
+          when they play with a lower temperature. When X plays with a
+          temperature of 1 then there is approximately a 20% chance of a draw
+          regardless of O's temperature. In this case, if O plays with a low
+          temperature, then X will almost never win. However, if O plays with a
+          temperature of 1 also, then X has more than 50% chance of winning.
+          Both players have an equal chance of winning when O plays with a
+          temperature of about 0.5. When X plays with a temperature of 0.1, then
+          the probability of O winning is almost zero regardless of O's
+          temperature. This is because X is almost always choosing the best
+          move. When O's temperature is low, the game usually results in a draw,
+          but when O's temperature is high, X wins roughly 90% of the time.
+          <br />
+          <br />
+          One thing I found interesting was how the optimal strategy depends on
+          both temperature parameters. For example, at the start of the game, X
+          has three options: choosing a corner, the centre, or an edge. The
+          figures below illustrate how the expected scores of these moves depend
+          on the player temperatures.
+        </p>
         <div className="grid gap-4 justify-center grid-cols-1 sm2:grid-cols-2 max-w-2xl mx-auto my-4">
           <img
             className="w-full"
@@ -206,8 +262,16 @@ const TicTacToe = () => {
           temperature then their best first move is usually a corner.
         </figcaption>
         <p>
-          Below is some Python code showing how the scores can be computed using
-          recursive functions.
+          If X plays with a high temperature then their best first move is
+          always the centre, probably because it allows for the most possible
+          winning options. However, if X plays with a low temperature then their
+          best first move is usually a corner, probably because it can guarentee
+          a win if O does not subsequently choose the centre. When O plays with
+          a high temperature then the expected score is slightly higher when X
+          chooses the centre.
+          <br />
+          <br />
+          Below is my Python code to compute these results.
         </p>
         <PythonCodeDisplay
           codeFile="/blog/files/tic-tac-toe/example.py"
