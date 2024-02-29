@@ -22,7 +22,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: 1fr;
-  margin: 0.5rem min(1.5rem, 6%) min(1.5rem, 6%) min(1.5rem, 6%);
+  margin: 0.5rem min(1.5rem, 6%) 0 min(1.5rem, 6%);
 }
 
 .column {

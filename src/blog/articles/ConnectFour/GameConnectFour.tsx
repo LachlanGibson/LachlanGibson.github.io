@@ -263,6 +263,7 @@ const GameConnectFour: React.FC = () => {
   const [aiConsiderCell, setAiConsiderCell] = useState<number>();
   const [lastCoordinates, setLastCoordinates] = useState<[number, number]>();
   const [winningCells, setWinningCells] = useState<CoordinateSet>();
+  const [showScores, setShowScores] = useState<boolean>(false);
 
   const isAiTurn = useMemo(() => {
     if (gameStatus !== "in progress") return false;
@@ -270,6 +271,25 @@ const GameConnectFour: React.FC = () => {
     if (player === "Y") return isYAI;
     return false;
   }, [player, isRAI, isYAI, gameStatus]);
+
+  const currentScores = useMemo(() => {
+    if (gameStatus !== "in progress") return undefined;
+    if (!showScores) return undefined;
+    const moves = availableMoves(board);
+    const scores = moves.map((action) => {
+      const score = minimax(
+        board,
+        action,
+        depth,
+        -Infinity,
+        Infinity,
+        player,
+        player === "R" ? "Y" : "R"
+      );
+      return score;
+    });
+    return [moves, scores];
+  }, [board, depth, gameStatus, player, showScores]);
 
   const makeMove = useCallback(
     (columnIndex: number) => {
@@ -318,7 +338,6 @@ const GameConnectFour: React.FC = () => {
             player === "R" ? "Y" : "R",
             noise
           );
-        console.log(action, score);
         if (
           (score > bestScore && player === "R") ||
           (score < bestScore && player === "Y")
@@ -470,6 +489,32 @@ const GameConnectFour: React.FC = () => {
             );
           })}
         </div>
+
+        <div
+          className="w-full h-5 grid grid-cols-7 text-black"
+          style={{
+            padding: "0 min(1.5rem, 6%)",
+            fontSize: "min(1rem, 80%)",
+          }}
+        >
+          {showScores &&
+            currentScores &&
+            board.map((column, columnIndex) => {
+              return (
+                <div key={columnIndex} className="w-full text-center">
+                  {currentScores[0].includes(columnIndex)
+                    ? Math.round(
+                        currentScores[1][
+                          currentScores[0].indexOf(columnIndex)
+                        ] * 1000
+                      ) /
+                        10 +
+                      "%"
+                    : ""}
+                </div>
+              );
+            })}
+        </div>
       </div>
       <button
         type="button"
@@ -568,6 +613,20 @@ const GameConnectFour: React.FC = () => {
             </div>
           </div>
         </div>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            id="show_scores-switch"
+            type="checkbox"
+            role="switch"
+            checked={showScores}
+            onChange={() => setShowScores((prev) => !prev)}
+            className="sr-only peer"
+          />
+          <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+          <span className="ms-3 text-sm font-medium text-gray-300">
+            Show Scores
+          </span>
+        </label>
       </div>
     </div>
   );
