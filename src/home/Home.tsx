@@ -1,6 +1,8 @@
 import React from "react";
 import IconLinks from "../navigation/IconLinks";
 import { Helmet } from "react-helmet";
+import ProjectSection from "./ProjectSection";
+import LinkList from "./LinkList";
 
 const SkillCard: React.FC<{ title: string; items: string[] }> = ({
   title,
@@ -103,6 +105,119 @@ const Home: React.FC<{}> = () => {
             title="Data Analytics"
             items={["Python, R, SQL", "PyTorch", "pandas", "Matplotlib"]}
           />
+        </div>
+        <h2 className="text-center text-3xl tracking-widest mt-10 pt-8 w-full">
+          Sample Projects
+        </h2>
+        <div className="flex flex-col w-full mt-4">
+          <ProjectSection title="Rare-Event Simulation via Generative Models">
+            <div className="flex w-full gap-4">
+              <p></p>
+            </div>
+            <LinkList
+              links={[
+                [
+                  "https://doi.org/10.48550/arXiv.2305.07863",
+                  "2023 - Normalizing Flows arXiv preprint",
+                ],
+                [
+                  "https://doi.org/10.1007/978-3-031-10193-9_8",
+                  "2022 - Springer book chapter",
+                ],
+              ]}
+            />
+          </ProjectSection>
+          <ProjectSection title="Control Optimisation with Q-Learning and the Whittle Index">
+            <LinkList
+              links={[
+                [
+                  "https://doi.org/10.1007/978-3-030-92511-6_10",
+                  "2021 - Conference paper",
+                ],
+                [
+                  "https://youtu.be/XoKw-bsBH98?si=AWUncfWXFox8pGCO&t=9",
+                  "2021 - Conference presentation",
+                ],
+              ]}
+            />
+          </ProjectSection>
+          <ProjectSection title="Modelling and Forecasting Environmental Changes">
+            <LinkList
+              links={[
+                [
+                  "https://www.frdc.com.au/project/2019-013",
+                  "2021 - FRDC Report",
+                ],
+              ]}
+            />
+          </ProjectSection>
+          <ProjectSection title="Categorical Vector Clustering using Denoising Autoencoders">
+            <p>
+              For my Master of Data Science capstone project in 2020 I developed
+              a denoising autoencoder neural network model that could be trained
+              on sparse datasets of votes to automatically classify voters and
+              items into latent classes and then predict missing votes using
+              these classifications. The autoencoder classifies voters or items
+              completely unsupervised. The model correctly predicted missing
+              votes made in the U.S. House of Representatives from 1990 to May
+              2020 with 92.6% accuracy. Furthermore, some of the learnt latent
+              classes corresponded to interpretable categories, such as party
+              affiliation, which could be identified with a 99.5% accuracy.
+            </p>
+          </ProjectSection>
+          <ProjectSection title="Optical Tweezers Microrheology">
+            <div className="flex w-full gap-4">
+              <div className="my-4 w-full">
+                <p>
+                  Light carries momentum, and when a laser is tightly focused
+                  under a microscope, it can exert forces on microscopic
+                  objects. This is the principle behind optical tweezers, a
+                  powerful tool for manipulating very small particles. During my
+                  undergraduate and PhD studies I worked with the Optical
+                  Micro-manipulation Group at The University of Queensland to
+                  research and develop novel techniques to apply optical
+                  tweezers to the field of microrheology, measuring viscoelastic
+                  properties of fluids in very small volumes by tracking the
+                  motion of trapped particles.
+                </p>
+                <LinkList
+                  links={[
+                    [
+                      "https://doi.org/10.1103/PhysRevE.95.042608",
+                      "2017 - Physical Review E article",
+                    ],
+                    [
+                      "https://doi.org/10.1364/OPTICA.4.001103",
+                      "2017 - Optica article",
+                    ],
+                    [
+                      "https://doi.org/10.1038/srep01759",
+                      "2013 - Scientific Reports article",
+                    ],
+                  ]}
+                />
+              </div>
+            </div>
+          </ProjectSection>
+          <ProjectSection title="Wall Effects on Optically Trapped Spheres">
+            <LinkList
+              links={[
+                [
+                  "https://doi.org/10.1103/PhysRevE.99.043304",
+                  "2019 - Physical Review E article",
+                ],
+                [
+                  "https://doi.org/10.1002/jbio.201900022",
+                  "2019 - Journal of Biophotonics article",
+                ],
+                [
+                  "https://doi.org/10.1039/C7LC01176H",
+                  "2017 - Lab on a Chip article",
+                ],
+              ]}
+            />
+          </ProjectSection>
+          <ProjectSection title="Machine Learning Drag Tensors of Non-Spherical Shapes"></ProjectSection>
         </div>
       </div>
     </>
