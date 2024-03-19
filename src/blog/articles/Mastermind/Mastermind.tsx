@@ -5,7 +5,30 @@ import { BlockMath, InlineMath } from "react-katex";
 const Mastermind: React.FC = () => {
   return (
     <>
-      <p>This is a work in progress.</p>
+      <div className="text-red-400 m-4">
+        <p className="font-bold text-xl">
+          This is a work in progress. Remaining tasks:
+        </p>
+        <ul className="list-disc ml-8">
+          <li>Add game logic to allow duplicate colours</li>
+          <li>
+            Improve UI
+            <ul className="list-disc ml-8">
+              <li>Beautify settings section</li>
+              <li>Possibly add drag and drop functionality for pegs</li>
+            </ul>
+          </li>
+          <li>
+            Write article explaining the game and AI
+            <ul className="list-disc ml-8">
+              <li>Explain the game</li>
+              <li>Explain the various types of AI approaches</li>
+              <li>Run experiments to compare AI performance</li>
+            </ul>
+          </li>
+          <li>Publish code and experimental results to GitHub</li>
+        </ul>
+      </div>
       <GameMastermind />
       <p>NOTES</p>
       <p>
