@@ -112,7 +112,33 @@ const Home: React.FC<{}> = () => {
         <div className="flex flex-col w-full mt-4">
           <ProjectSection title="Rare-Event Simulation via Generative Models">
             <div className="flex w-full gap-4">
-              <p></p>
+              <p>
+                During my time with ACEMS I worked with other researchers on
+                developing deep learning analogues to the{" "}
+                <a
+                  href="https://en.wikipedia.org/wiki/Cross-entropy_method"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Cross-entropy method
+                </a>{" "}
+                for rare-event simulation. Initially we built a neural network
+                framework for the simulation of independent random variables
+                from arbitrary distributions. The framework included two neural
+                networks that were trained simultaneously using a target
+                function, rather than a target dataset. One was a generative
+                model and the other estimated the probability density function
+                of the first. The framework was later refined to use a single{" "}
+                <a
+                  href="https://en.wikipedia.org/wiki/Flow-based_generative_model"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Normalizing Flow generative model
+                </a>
+                , which could, in principle, approximate any sampling
+                distribution arbitrarily well.
+              </p>
             </div>
             <LinkList
               links={[
@@ -128,6 +154,16 @@ const Home: React.FC<{}> = () => {
             />
           </ProjectSection>
           <ProjectSection title="Control Optimisation with Q-Learning and the Whittle Index">
+            <p>
+              During my time as a postdoctoral research fellow at UQ I worked
+              with Peter Jacko and Yoni Nazarathy to develop a method built on
+              an understanding of both the Whittle index and Q-learning for
+              learning index rules for multi-armed bandits, restless bandits,
+              and dynamic resource allocation. Our approach seemed to be able to
+              deliver similar or better performance than other state-of-the-art
+              methods but was potentially applicable to a much broader and more
+              general set of problems.
+            </p>
             <LinkList
               links={[
                 [
@@ -142,6 +178,13 @@ const Home: React.FC<{}> = () => {
             />
           </ProjectSection>
           <ProjectSection title="Modelling and Forecasting Environmental Changes">
+            <p>
+              During my time with CARM we worked on a project to model
+              environmental changes and effects on wild-caught species in
+              Queensland. My main contribution was to model and forecast
+              variables that had been correlated to the abundance of wild-caught
+              species like sea surface temperatures.
+            </p>
             <LinkList
               links={[
                 [
@@ -200,24 +243,45 @@ const Home: React.FC<{}> = () => {
             </div>
           </ProjectSection>
           <ProjectSection title="Wall Effects on Optically Trapped Spheres">
-            <LinkList
-              links={[
-                [
-                  "https://doi.org/10.1103/PhysRevE.99.043304",
-                  "2019 - Physical Review E article",
-                ],
-                [
-                  "https://doi.org/10.1002/jbio.201900022",
-                  "2019 - Journal of Biophotonics article",
-                ],
-                [
-                  "https://doi.org/10.1039/C7LC01176H",
-                  "2017 - Lab on a Chip article",
-                ],
-              ]}
-            />
+            <div className="flex w-full gap-4 flex-wrap md:flex-nowrap">
+              <div className="my-4">
+                <p>
+                  Optical tweezers are often used to manipulate spheres that are
+                  close to boundaries. During my PhD with the Optical
+                  Micro-manipulation Group at The University of Queensland I
+                  researched a range of analytical and numerical techniques for
+                  calculating how these nearby boundaries affect the dynamics of
+                  the trapped spheres. For example, the figure on the right
+                  illustrates how the viscous forces on a trapped spinning
+                  particle inside an artificial vesicle depend on how far it is
+                  from the boundary. The red circles show the wall effects
+                  measured by my colleague, and the green region shows the
+                  theoretically computed values.
+                </p>
+                <LinkList
+                  links={[
+                    [
+                      "https://doi.org/10.1103/PhysRevE.99.043304",
+                      "2019 - Physical Review E article",
+                    ],
+                    [
+                      "https://doi.org/10.1002/jbio.201900022",
+                      "2019 - Journal of Biophotonics article",
+                    ],
+                    [
+                      "https://doi.org/10.1039/C7LC01176H",
+                      "2017 - Lab on a Chip article",
+                    ],
+                  ]}
+                />
+              </div>
+              <img
+                className="max-w-72 w-full mt-4 mb-auto aspect-square"
+                src="/images/home/projects/optical_tweezers_wall_effects.webp"
+                alt="Optical Tweezers"
+              />
+            </div>
           </ProjectSection>
-          <ProjectSection title="Machine Learning Drag Tensors of Non-Spherical Shapes"></ProjectSection>
         </div>
       </div>
     </>
