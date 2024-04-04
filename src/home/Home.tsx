@@ -122,13 +122,14 @@ const Home: React.FC<{}> = () => {
                 >
                   Cross-entropy method
                 </a>{" "}
-                for rare-event simulation. Initially we built a neural network
-                framework for the simulation of independent random variables
-                from arbitrary distributions. The framework included two neural
-                networks that were trained simultaneously using a target
-                function, rather than a target dataset. One was a generative
+                for rare-event simulation. Our goal was to build a neural
+                network framework for the simulation of independent random
+                variables that could mimic arbitrary distributions, especially
+                ones conditioned on rare events. The initial framework we
+                developed included two neural networks that were trained
+                simultaneously using a target function. One was a generative
                 model and the other estimated the probability density function
-                of the first. The framework was later refined to use a single{" "}
+                of the first. We later refined the framework to use a single{" "}
                 <a
                   href="https://en.wikipedia.org/wiki/Flow-based_generative_model"
                   target="_blank"
@@ -152,6 +153,16 @@ const Home: React.FC<{}> = () => {
                 ],
               ]}
             />
+            <div className="grid grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <img
+                  className="w-full aspect-square"
+                  src={`/images/home/projects/normalising_flows${i}.svg`}
+                  alt="Optical Tweezers"
+                  key={i}
+                />
+              ))}
+            </div>
           </ProjectSection>
           <ProjectSection title="Control Optimisation with Q-Learning and the Whittle Index">
             <p>
