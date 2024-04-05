@@ -138,7 +138,9 @@ const Home: React.FC<{}> = () => {
                   Normalizing Flow generative model
                 </a>
                 , which could, in principle, approximate any sampling
-                distribution arbitrarily well.
+                distribution arbitrarily well. The figures below show the model
+                learning to approximate the target distribution of a truncated
+                normal distribution.
               </p>
             </div>
             <LinkList
@@ -153,12 +155,12 @@ const Home: React.FC<{}> = () => {
                 ],
               ]}
             />
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid sm:gap-4 gap-2 justify-center sm:grid-cols-4 grid-cols-2 mt-4">
               {[1, 2, 3, 4].map((i) => (
                 <img
                   className="w-full aspect-square"
                   src={`/images/home/projects/normalising_flows${i}.svg`}
-                  alt="Optical Tweezers"
+                  alt={`Normalizing Flows ${i}`}
                   key={i}
                 />
               ))}
@@ -173,7 +175,8 @@ const Home: React.FC<{}> = () => {
               and dynamic resource allocation. Our approach seemed to be able to
               deliver similar or better performance than other state-of-the-art
               methods but was potentially applicable to a much broader and more
-              general set of problems.
+              general set of problems. Below is a recording of a presentation I
+              gave at the EAI VALUETOOLS 2021 conference.
             </p>
             <LinkList
               links={[
@@ -187,6 +190,16 @@ const Home: React.FC<{}> = () => {
                 ],
               ]}
             />
+            <iframe
+              className="w-full aspect-video max-w-lg mx-auto mt-4"
+              src={
+                "https://www.youtube.com/embed/XoKw-bsBH98?si=wfTz9eYaTs4GgZsL&amp;start=9"
+              }
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen={true}
+            />
           </ProjectSection>
           <ProjectSection title="Modelling and Forecasting Environmental Changes">
             <p>
@@ -194,7 +207,11 @@ const Home: React.FC<{}> = () => {
               environmental changes and effects on wild-caught species in
               Queensland. My main contribution was to model and forecast
               variables that had been correlated to the abundance of wild-caught
-              species like sea surface temperatures.
+              species like sea surface temperatures. Below is an example where I
+              modelled and forecasted sea level changes in a specific Queensland
+              region using a combined linear and trigonometric model with
+              autoregressive residuals. It predicts a trend of about 2.8cm sea
+              level rise per decade.
             </p>
             <LinkList
               links={[
@@ -204,20 +221,35 @@ const Home: React.FC<{}> = () => {
                 ],
               ]}
             />
+            <img
+              className="w-full mx-auto max-w-2xl"
+              src="/images/home/projects/GSLA_R2.svg"
+              alt="Sea level forecast"
+            />
           </ProjectSection>
           <ProjectSection title="Categorical Vector Clustering using Denoising Autoencoders">
-            <p>
-              For my Master of Data Science capstone project in 2020 I developed
-              a denoising autoencoder neural network model that could be trained
-              on sparse datasets of votes to automatically classify voters and
-              items into latent classes and then predict missing votes using
-              these classifications. The autoencoder classifies voters or items
-              completely unsupervised. The model correctly predicted missing
-              votes made in the U.S. House of Representatives from 1990 to May
-              2020 with 92.6% accuracy. Furthermore, some of the learnt latent
-              classes corresponded to interpretable categories, such as party
-              affiliation, which could be identified with a 99.5% accuracy.
-            </p>
+            <div className="flex w-full gap-4 flex-wrap md:flex-nowrap">
+              <div className="my-4">
+                <p>
+                  For my Master of Data Science capstone project in 2020 I
+                  developed a denoising autoencoder neural network model that
+                  could be trained on sparse datasets of votes to automatically
+                  classify voters and items into latent classes and then predict
+                  missing votes using these classifications. The autoencoder
+                  classifies voters or items completely unsupervised. The model
+                  correctly predicted missing votes made in the U.S. House of
+                  Representatives from 1990 to May 2020 with 92.6% accuracy.
+                  Furthermore, some of the learnt latent classes corresponded to
+                  interpretable categories, such as party affiliation, which
+                  could be identified with a 99.5% accuracy.
+                </p>
+              </div>
+              <img
+                className="w-full mx-auto max-w-lg"
+                src="/images/home/projects/vote_model_robustness.svg"
+                alt="Sea level forecast"
+              />
+            </div>
           </ProjectSection>
           <ProjectSection title="Optical Tweezers Microrheology">
             <div className="flex w-full gap-4">
