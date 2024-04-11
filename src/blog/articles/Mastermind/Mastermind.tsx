@@ -98,6 +98,18 @@ const Mastermind: React.FC = () => {
           "T_l^*=\\min_{g\\in\\mathcal{G}}\\sum_{k\\in\\mathcal{K}}|\\mathcal{T}(\\mathcal{P},g,k)|^{l+1}"
         }
       />
+      <p>asdf</p>
+      <BlockMath math={"\\sum_{k\\in\\mathcal{K}}P(g,k) f(g,k)"} />
+      <p>
+        The expected number of turns remaining after this guess. If the guess is
+        correct then the key is <InlineMath math={"(K,0)"} />. The expected
+        number of turns remaining is then
+      </p>
+      <BlockMath
+        math={
+          "t(\\mathcal{P}) = \\min_{g\\in\\mathcal{G}}\\frac{1}{|\\mathcal{P}|}\\sum_{k\\in\\mathcal{K}\\setminus(K,0)} |\\mathcal{T}(\\mathcal{P},g,k)|(1+t(\\mathcal{T}(\\mathcal{P},g,k)))"
+        }
+      />
     </>
   );
 };
