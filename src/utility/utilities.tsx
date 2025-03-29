@@ -14,7 +14,7 @@
  * - The input array is not modified by this function.
  */
 export function sumArray(arr: number[]): number {
-  return arr.reduce((a, b) => a + b, 0);
+    return arr.reduce((a, b) => a + b, 0);
 }
 
 /**
@@ -38,7 +38,7 @@ export function sumArray(arr: number[]): number {
  * - This function is not suitable for deep copying scenarios where nested objects or arrays also need to be duplicated independently.
  */
 export function copy2DArray<T>(arr: T[][]): T[][] {
-  return arr.map((row) => row.slice());
+    return arr.map((row) => row.slice());
 }
 
 /**
@@ -69,9 +69,9 @@ export function copy2DArray<T>(arr: T[][]): T[][] {
  * - Very low or very high temperature values might leed to numerical instability.
  */
 export function softMaxT(values: number[], temperature: number): number[] {
-  const valuesExp = values.map((value) => Math.exp(value / temperature));
-  const valuesExpSum = valuesExp.reduce((acc, value) => acc + value, 0);
-  return valuesExp.map((value) => value / valuesExpSum);
+    const valuesExp = values.map((value) => Math.exp(value / temperature));
+    const valuesExpSum = valuesExp.reduce((acc, value) => acc + value, 0);
+    return valuesExp.map((value) => value / valuesExpSum);
 }
 
 /**
@@ -95,10 +95,10 @@ export function softMaxT(values: number[], temperature: number): number[] {
  * - Switching the order of the input arrays does not affect the result, as the dot product is commutative.
  */
 export function dotProduct(arr1: number[], arr2: number[]): number {
-  if (arr1.length !== arr2.length) {
-    throw new Error("Arrays must have the same length");
-  }
-  return arr1.reduce((acc, value, index) => acc + value * arr2[index], 0);
+    if (arr1.length !== arr2.length) {
+        throw new Error("Arrays must have the same length");
+    }
+    return arr1.reduce((acc, value, index) => acc + value * arr2[index], 0);
 }
 
 /**
@@ -121,13 +121,13 @@ export function dotProduct(arr1: number[], arr2: number[]): number {
  *
  * @remarks
  * - The function specifically compares arrays of numbers. It is not suitable for arrays containing elements of other types.
- * - This comparison method is efficient for number arrays as it avoids the overhead of serializing arrays and is accurate for numeric comparisons,
+ * - This comparison method is efficient for number arrays as it avoids the overhead of serialising arrays and is accurate for numeric comparisons,
  *   including handling of NaN values, which are considered unequal to themselves.
  * - The comparison is order-sensitive, meaning that the same numbers in a different order will result in `false`.
  */
 export function compareNumberArrays(arr1: number[], arr2: number[]): boolean {
-  if (arr1.length !== arr2.length) return false;
-  return arr1.every((item, index) => item === arr2[index]);
+    if (arr1.length !== arr2.length) return false;
+    return arr1.every((item, index) => item === arr2[index]);
 }
 
 /**
@@ -150,12 +150,12 @@ export function compareNumberArrays(arr1: number[], arr2: number[]): boolean {
  * - The Fisher-Yates shuffle algorithm is used to shuffle the array in O(n) time complexity.
  */
 export function shuffleArray<T>(inputArray: T[]): T[] {
-  const array = [...inputArray];
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+    const array = [...inputArray];
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
 /**
@@ -180,10 +180,7 @@ export function shuffleArray<T>(inputArray: T[]): T[] {
  * - It is designed to work with integers. Using non-integer values for `start`, `end`, or `step` may lead to unexpected results.
  */
 export function range(start: number, end: number, step: number = 1): number[] {
-  return Array.from(
-    { length: Math.max(Math.ceil((end - start) / step), 0) },
-    (_, i) => start + i * step
-  );
+    return Array.from({ length: Math.max(Math.ceil((end - start) / step), 0) }, (_, i) => start + i * step);
 }
 
 /**
@@ -207,13 +204,10 @@ export function range(start: number, end: number, step: number = 1): number[] {
  * - The function employs `Math.random()` for generating randomness, which produces a number between 0 (inclusive) and 1 (exclusive).
  */
 export function randomChoice(probabilities: number[]): number {
-  const cumProb = probabilities.reduce(
-    (acc, prob) => [...acc, acc[acc.length - 1] + prob],
-    [0]
-  );
-  const rand = Math.random() * cumProb[cumProb.length - 1];
-  const index = cumProb.findIndex((prob) => prob > rand) - 1;
-  return index;
+    const cumProb = probabilities.reduce((acc, prob) => [...acc, acc[acc.length - 1] + prob], [0]);
+    const rand = Math.random() * cumProb[cumProb.length - 1];
+    const index = cumProb.findIndex((prob) => prob > rand) - 1;
+    return index;
 }
 
 /**
@@ -246,20 +240,18 @@ export function randomChoice(probabilities: number[]): number {
  * potentially leading to saturation if the magnitude is large enough.
  */
 export function transformHexColour(hexColour: string, magnitude: number) {
-  if (hexColour.length !== 7) return hexColour;
+    if (hexColour.length !== 7) return hexColour;
 
-  hexColour = hexColour.replace(`#`, ``);
-  const decimalColour = parseInt(hexColour, 16);
-  let r = (decimalColour >> 16) + magnitude;
-  r = Math.min(255, Math.max(0, r));
-  let g = ((decimalColour >> 8) & 0x00ff) + magnitude;
-  g = Math.min(255, Math.max(0, g));
-  let b = (decimalColour & 0x0000ff) + magnitude;
-  b = Math.min(255, Math.max(0, b));
+    hexColour = hexColour.replace(`#`, ``);
+    const decimalColour = parseInt(hexColour, 16);
+    let r = (decimalColour >> 16) + magnitude;
+    r = Math.min(255, Math.max(0, r));
+    let g = ((decimalColour >> 8) & 0x00ff) + magnitude;
+    g = Math.min(255, Math.max(0, g));
+    let b = (decimalColour & 0x0000ff) + magnitude;
+    b = Math.min(255, Math.max(0, b));
 
-  return `#${r.toString(16).padStart(2, "0")}${g
-    .toString(16)
-    .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
 }
 
 /**
@@ -284,24 +276,21 @@ export function transformHexColour(hexColour: string, magnitude: number) {
  * @remarks
  * This function does not modify the input array. It is case-sensitive, meaning 'Apple' and 'apple' would be counted as two different strings.
  */
-export function countUniqueStrings(
-  array: string[],
-  sortOrder?: "ascending" | "descending"
-): [string, number][] {
-  const counts = array.reduce<Record<string, number>>((acc, value) => {
-    acc[value] = (acc[value] || 0) + 1;
-    return acc;
-  }, {});
+export function countUniqueStrings(array: string[], sortOrder?: "ascending" | "descending"): [string, number][] {
+    const counts = array.reduce<Record<string, number>>((acc, value) => {
+        acc[value] = (acc[value] || 0) + 1;
+        return acc;
+    }, {});
 
-  let entries = Object.entries(counts);
+    let entries = Object.entries(counts);
 
-  if (sortOrder) {
-    entries = entries.sort((a, b) => {
-      return sortOrder === "ascending" ? a[1] - b[1] : b[1] - a[1];
-    });
-  }
+    if (sortOrder) {
+        entries = entries.sort((a, b) => {
+            return sortOrder === "ascending" ? a[1] - b[1] : b[1] - a[1];
+        });
+    }
 
-  return entries;
+    return entries;
 }
 
 /**
@@ -326,17 +315,47 @@ export function countUniqueStrings(
  * - The order of the elements in the input array affects the order of the generated permutations, but each permutation is unique with respect to the elements it contains.
  */
 export function getPermutations<T>(array: T[], size = array.length): T[][] {
-  if (size === 1) return array.map((value) => [value]);
+    if (size === 1) return array.map((value) => [value]);
 
-  const permutations: T[][] = [];
-  array.forEach((current, index) => {
-    const remaining = array.slice(0, index).concat(array.slice(index + 1));
-    const remainingPermutations = getPermutations(remaining, size - 1);
-    const permutationsWithCurrent: T[][] = remainingPermutations.map(
-      (permutation) => [current, ...permutation]
-    );
-    permutations.push(...permutationsWithCurrent);
-  });
+    const permutations: T[][] = [];
+    array.forEach((current, index) => {
+        const remaining = array.slice(0, index).concat(array.slice(index + 1));
+        const remainingPermutations = getPermutations(remaining, size - 1);
+        const permutationsWithCurrent: T[][] = remainingPermutations.map((permutation) => [current, ...permutation]);
+        permutations.push(...permutationsWithCurrent);
+    });
 
-  return permutations;
+    return permutations;
+}
+/**
+ * Creates a memoised version of a function that caches its results based on input arguments.
+ * When the memoised function is called with the same arguments, it returns the cached result
+ * instead of executing the original function again.
+ *
+ * @template T - The type of the function being memoised
+ * @param fn - The original function to memoise
+ * @returns A memoised version of the original function with the same signature
+ *
+ * @example
+ * // Memoise an expensive calculation function
+ * const calculateFactorial = (n: number): number => {
+ *   if (n <= 1) return 1;
+ *   return n * calculateFactorial(n - 1);
+ * };
+ *
+ * const memoisedFactorial = memoise(calculateFactorial);
+ * memoisedFactorial(10); // Calculates result
+ * memoisedFactorial(10); // Returns cached result without recalculation
+ */
+export function memoise<T extends (...args: any[]) => any>(fn: T): T {
+    const cache = new Map();
+    return ((...args: any[]) => {
+        const key = JSON.stringify(args);
+        if (cache.has(key)) {
+            return cache.get(key);
+        }
+        const result = fn(...args);
+        cache.set(key, result);
+        return result;
+    }) as T;
 }
