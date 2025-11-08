@@ -12,7 +12,7 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-katex": "^3.0.1",
-    "react-router-dom": "^6.20.0",
+    "react-router-dom": "^7.9.5",
     "react-syntax-highlighter": "^15.5.0"
   },
   "scripts": {
@@ -45,7 +45,6 @@
     "@types/node": "^24.10.0",
     "@types/react": "^18.2.45",
     "@types/react-helmet": "^6.1.11",
-    "@types/react-router-dom": "^5.3.3",
     "@types/react-syntax-highlighter": "^15.5.11",
     "@vitejs/plugin-react": "^5.1.0",
     "autoprefixer": "^10.4.21",
