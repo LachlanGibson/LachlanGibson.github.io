@@ -1,6 +1,5 @@
 import "./index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
 import { hydrateRoot, createRoot } from "react-dom/client";
 
 const rootElement = document.getElementById("root");
@@ -12,5 +11,3 @@ if (rootElement) {
     root.render(<App />);
   }
 }
-
-reportWebVitals();
