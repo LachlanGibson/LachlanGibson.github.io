@@ -108,12 +108,12 @@ const requiredTurns = (possibilities: Code[], turns = 0, alpha = -Infinity, beta
 
     let bestGuess: [number, Code] = [Infinity, possibilities[0]];
     const alphaInput = alpha;
-    for (let guess of possibilities) {
+    for (const guess of possibilities) {
         let worstTurns = -Infinity;
         const results = possibilities.map((code) => compareCodes(guess, code).join(""));
         const counts = countUniqueStrings(results, "ascending");
         alpha = alphaInput;
-        for (let [result] of counts) {
+        for (const [result] of counts) {
             const nextPossibilities = possibilities.filter((code, index) => results[index] === result);
             worstTurns = Math.max(worstTurns, requiredTurns(nextPossibilities, turns + 1, alpha, beta)[0]);
             if (worstTurns >= beta) break;

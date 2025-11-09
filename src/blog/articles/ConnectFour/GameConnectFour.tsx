@@ -186,7 +186,7 @@ const checkWin = (
   }
 
   // check row
-  let [, win] = board.reduce(
+  const [, win] = board.reduce(
     (acc, col): [number, boolean] => {
       let [count, win] = acc;
       if (col[row] === player) {

@@ -13,7 +13,7 @@ type Action = [number, number];
 
 const miniumThinkTime = 500;
 const decidedTime = 300;
-let minimaxMemo: { [key: string]: number } = {};
+const minimaxMemo: { [key: string]: number } = {};
 let expectedValueMemo: { [key: string]: number } = {};
 
 const availableActions = (board: string[][]): Action[] =>
