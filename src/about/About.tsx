@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Helmet } from "react-helmet";
 
 const abstracts = {
   mastersCapstone: `
@@ -95,23 +94,21 @@ Python, R, SQL, PyTorch, pandas, Matplotlib, physics, mathematics, statistics`;
 const About: React.FC<{}> = () => {
   return (
     <>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta property="og:description" content={description} />
-        <meta name="twitter:description" content={description} />
-        <meta property="og:title" content={title} />
-        <meta name="twitter:title" content={title} />
-        <meta name="author" content={name} />
-        <meta property="og:image" content={imageUrl} />
-        <meta name="twitter:image" content={imageUrl} />
-        <meta property="og:url" content={pageUrl} />
-        <link rel="canonical" href={pageUrl} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="robots" content="index, follow" />
-        <meta name="keywords" content={keyWords} />
-      </Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:description" content={description} />
+      <meta name="twitter:description" content={description} />
+      <meta property="og:title" content={title} />
+      <meta name="twitter:title" content={title} />
+      <meta name="author" content={name} />
+      <meta property="og:image" content={imageUrl} />
+      <meta name="twitter:image" content={imageUrl} />
+      <meta property="og:url" content={pageUrl} />
+      <link rel="canonical" href={pageUrl} />
+      <meta property="og:type" content="website" />
+      <meta name="twitter:card" content="summary" />
+      <meta name="robots" content="index, follow" />
+      <meta name="keywords" content={keyWords} />
       <h1 className="text-3xl font-bold text-center tracking-wider py-3">
         Academic History
       </h1>

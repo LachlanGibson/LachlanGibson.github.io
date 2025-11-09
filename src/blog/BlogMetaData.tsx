@@ -1,13 +1,12 @@
 import React from "react";
 import { ArticleType } from "./articleMetaData";
-import { Helmet } from "react-helmet";
 
 const BlogMetaData: React.FC<{ slug: string; metaData: ArticleType }> = ({
   slug,
   metaData,
 }) => {
   return (
-    <Helmet>
+    <>
       <title>{metaData.title}</title>
       <meta property="og:title" content={metaData.title} />
       <meta property="og:type" content={metaData.type} />
@@ -78,7 +77,7 @@ const BlogMetaData: React.FC<{ slug: string; metaData: ArticleType }> = ({
       {metaData.otherMetaElements?.map((element, index) =>
         React.cloneElement(element, { key: index })
       )}
-    </Helmet>
+    </>
   );
 };
 

@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import ArticleEvilGeniusMinionReady from "./articles/ArticleEvilGeniusMinionReady/ArticleEvilGeniusMinionReady";
 import ArticleGoogleFoobarChallenge from "./articles/ArticleGoogleFoobarChallenge/ArticleGoogleFoobarChallenge";
 import Codenames from "./articles/Codenames/Codenames";
@@ -19,10 +20,10 @@ export type ArticleType = {
   svgLink: string;
   imageLink: string;
   imageResolution: [string, string];
-  otherMetaElements?: JSX.Element[];
+  otherMetaElements?: ReactElement[];
   metaTags?: string[];
   language: string;
-  articleElement: JSX.Element;
+  articleElement: ReactElement;
 };
 
 const articleMetaData: { [slug: string]: ArticleType } = {
