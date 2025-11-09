@@ -9,9 +9,9 @@ const SkillCard: React.FC<{ title: string; items: string[] }> = ({
   items,
 }) => {
   return (
-    <div className="flex flex-col items-left">
+    <div className="flex flex-col items-start">
       <h3 className="text-base">{title}</h3>
-      <ul className="flex flex-col items-left list-outside list-none m-0 text-slate-400 text-left text-xs">
+      <ul className="flex flex-col items-start list-outside list-none m-0 text-slate-400 text-left text-xs">
         {items.map((item, i) => (
           <li key={i}>- {item}</li>
         ))}

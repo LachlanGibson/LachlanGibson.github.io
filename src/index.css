@@ -1,76 +1,80 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-sm2: 500px;
+  --breakpoint-md2: 740px;
+}
 
 /*
 Boiler plate from
 https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
 */
-
-html {
-  -webkit-text-size-adjust: none; /* for iOS Safari */
-  text-size-adjust: none; /* for other mobile browsers */
-  font-family: "Outfit", sans-serif;
-  overflow-y: scroll;
-}
-
-body {
-  font-size: 1rem;
-  background-color: rgb(24, 37, 54);
-  color: #e8eaed;
-  max-width: 62.5rem;
-  margin: auto;
-}
-
-main {
-  padding: 0 1rem;
-  max-width: 62.5rem;
-  margin: auto;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-a {
-  text-underline-position: under;
-  text-decoration-thickness: 0.1rem;
-  /* color: rgb(124, 212, 179); */
-  color: rgb(76, 192, 212);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 0.1rem;
-}
-
-:focus:not(:focus-visible) {
-  outline: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
+@layer base {
   html {
-    scroll-behavior: smooth;
+    -webkit-text-size-adjust: none; /* for iOS Safari */
+    text-size-adjust: none; /* for other mobile browsers */
+    font-family: "Outfit", sans-serif;
+    overflow-y: scroll;
   }
-}
 
-label,
-button,
-select,
-summary,
-[type="radio"],
-[type="submit"],
-[type="checkbox"] {
-  cursor: pointer;
-}
+  body {
+    font-size: 1rem;
+    background-color: rgb(24, 37, 54);
+    color: #e8eaed;
+    max-width: 62.5rem;
+    margin: auto;
+  }
 
-p {
-  text-align: justify;
-  overflow-y: hidden;
-}
+  main {
+    padding: 0 1rem;
+    max-width: 62.5rem;
+    margin: auto;
+  }
 
-.active-link {
-  text-decoration: underline;
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    text-underline-position: under;
+    text-decoration-thickness: 0.1rem;
+    /* color: rgb(124, 212, 179); */
+    color: rgb(76, 192, 212);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 0.1rem;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  label,
+  button,
+  select,
+  summary,
+  [type="radio"],
+  [type="submit"],
+  [type="checkbox"] {
+    cursor: pointer;
+  }
+
+  p {
+    text-align: justify;
+    overflow-y: hidden;
+  }
+
+  .active-link {
+    text-decoration: underline;
+  }
 }

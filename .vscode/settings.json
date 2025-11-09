@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["Codenames"]
+  "cSpell.words": ["Codenames"],
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.scss": "tailwindcss"
+  }
 }
