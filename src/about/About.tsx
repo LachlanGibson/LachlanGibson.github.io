@@ -118,6 +118,21 @@ const About: React.FC = () => {
         </h2>
         <CVTimeSection
           leftBar={[
+            "Gilmour Space Technologies",
+            "Software Services",
+            "2024 \u2014 present",
+          ]}
+          title="Software Engineer"
+        >
+          I develop scalable software systems for launch vehicles and
+          satellites, including full-stack web applications supporting
+          mechanical design and production. I use Golang, Vue.js, and modern
+          DevOps practices such as CI/CD and infrastructure automation, and have
+          worked on simulation software requiring strong programming and
+          mathematical skills to meet regulatory and stakeholder needs.
+        </CVTimeSection>
+        <CVTimeSection
+          leftBar={[
             "The University of Queensland",
             "CARM, ACEMS",
             "2020 \u2014 2022",
