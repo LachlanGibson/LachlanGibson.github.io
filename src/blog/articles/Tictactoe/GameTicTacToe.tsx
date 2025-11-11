@@ -31,7 +31,7 @@ const thinkMove = (board: string[][], player: Player, action: Action) => {
 const getActionValues = (
   board: string[][],
   player: Player,
-  expectedValue: any
+  expectedValue: (board: string[][], player: Player, move: Action) => number
 ): [Action[], number[]] => {
   const actions = availableActions(board);
   const values = availableActions(board).map((move) => {
@@ -309,7 +309,7 @@ const GameTicTacToe = () => {
                 onChange={() => setIsXHuman((prev) => !prev)}
                 className="sr-only peer"
               />
-              <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
+              <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
               <span className="ms-3 text-sm font-mediumtext-gray-300">
                 X AI
               </span>
@@ -323,7 +323,7 @@ const GameTicTacToe = () => {
                 onChange={() => setIsOHuman((prev) => !prev)}
                 className="sr-only peer"
               />
-              <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
+              <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all border-gray-600 peer-checked:bg-blue-600"></div>
               <span className="ms-3 text-sm font-medium text-gray-300">
                 O AI
               </span>

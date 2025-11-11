@@ -148,11 +148,7 @@ const thinkStep = (board: Board, columnIndex: number, player: Player) => {
   return newBoard;
 };
 
-const checkWin = (
-  board: Board,
-  columnIndex: number,
-  returnIndices = false
-): GameStatus => {
+const checkWin = (board: Board, columnIndex: number): GameStatus => {
   // find row
   let row = -1;
   for (let i = 0; i < board[columnIndex].length; i++) {
@@ -541,7 +537,7 @@ const GameConnectFour: React.FC = () => {
                   onChange={() => setIsRAI((prev) => !prev)}
                   className="sr-only peer"
                 />
-                <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+                <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
                 <span className="ms-3 text-sm font-medium text-gray-300">
                   Blue
                 </span>
@@ -555,7 +551,7 @@ const GameConnectFour: React.FC = () => {
                   onChange={() => setIsYAI((prev) => !prev)}
                   className="sr-only peer"
                 />
-                <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white  after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+                <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white  after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
                 <span className="ms-3 text-sm font-medium text-gray-300">
                   Yellow
                 </span>
@@ -585,7 +581,7 @@ const GameConnectFour: React.FC = () => {
               <span className="block w-12 text-sm font-medium text-gray-300">
                 Depth
               </span>
-              <div className="relative flex items-center max-w-[8rem]">
+              <div className="relative flex items-center max-w-32">
                 <button
                   type="button"
                   id="decrement-button"
@@ -622,7 +618,7 @@ const GameConnectFour: React.FC = () => {
             onChange={() => setShowScores((prev) => !prev)}
             className="sr-only peer"
           />
-          <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
+          <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
           <span className="ms-3 text-sm font-medium text-gray-300">
             Show Scores
           </span>

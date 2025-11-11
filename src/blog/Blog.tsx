@@ -18,7 +18,7 @@ Python, R, SQL, PyTorch, pandas, Matplotlib, physics, mathematics, statistics,
 blog, articles, projects, portfolio, projects, tic-tac-toe, connect four, 
 chatGPT, GPT-2, GPT-3, OpenAI, Google, TensorFlow`;
 
-const Blog: React.FC<{}> = () => {
+const Blog: React.FC = () => {
   return (
     <>
       <title>{title}</title>

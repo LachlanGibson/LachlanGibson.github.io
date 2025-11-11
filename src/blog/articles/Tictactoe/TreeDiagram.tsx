@@ -1,7 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Tree } from "react-d3-tree";
+import {
+  CustomNodeElementProps,
+  Tree,
+  TreeLinkDatum,
+  TreeNodeDatum,
+} from "react-d3-tree";
 
-const renderRectSvgNode = ({ nodeDatum }: { nodeDatum: any }) => {
+export interface GameTreeNode extends TreeNodeDatum {
+  score: number;
+  probability?: string;
+  board: string[][];
+  children?: GameTreeNode[];
+}
+
+const renderRectSvgNode = ({ nodeDatum }: CustomNodeElementProps) => {
+  const node = nodeDatum as GameTreeNode;
   const gridTextX = ["2.7", "19.2", "36"];
   const gridTextY = ["14", "30.7", "47.4"];
   return (
@@ -22,7 +35,7 @@ const renderRectSvgNode = ({ nodeDatum }: { nodeDatum: any }) => {
         textAnchor="middle"
         stroke="transparent"
       >
-        {nodeDatum.score}
+        {node.score}
       </text>
       <text
         fill="#c7405e"
@@ -31,14 +44,14 @@ const renderRectSvgNode = ({ nodeDatum }: { nodeDatum: any }) => {
         textAnchor="middle"
         stroke="transparent"
       >
-        {nodeDatum.probability}
+        {node.probability}
       </text>
       <svg x="-25" y="-25" fill="black" strokeWidth="0.5">
         <line x1="16.6" y1="0" x2="16.6" y2="50" stroke="black" />
         <line x1="33.3" y1="0" x2="33.3" y2="50" stroke="black" />
         <line x1="0" y1="16.7" x2="50" y2="16.7" stroke="black" />
         <line x1="0" y1="33.3" x2="50" y2="33.3" stroke="black" />
-        {nodeDatum.board.map((row: string[], i: number) =>
+        {node.board.map((row: string[], i: number) =>
           row.map((cell: string, j: number) => {
             return (
               <text
@@ -68,7 +81,8 @@ const TreeDiagram: React.FC = () => {
     }
   }, []);
 
-  const treeData = [
+  const __rd3t = { id: "", depth: 0, collapsed: false }; // Make dummy __rd3t for TS
+  const treeData: GameTreeNode[] = [
     {
       name: "Initial State",
       score: 0.9813,
@@ -77,6 +91,7 @@ const TreeDiagram: React.FC = () => {
         ["O", "O", ""],
         ["X", "O", ""],
       ],
+      __rd3t,
       children: [
         {
           name: "Move 1",
@@ -87,6 +102,7 @@ const TreeDiagram: React.FC = () => {
             ["O", "O", "X"],
             ["X", "O", ""],
           ],
+          __rd3t,
           children: [
             {
               name: "Move 1.1",
@@ -97,6 +113,7 @@ const TreeDiagram: React.FC = () => {
                 ["O", "O", "X"],
                 ["X", "O", ""],
               ],
+              __rd3t,
               children: [
                 {
                   name: "Move 1.1.1",
@@ -107,6 +124,7 @@ const TreeDiagram: React.FC = () => {
                     ["O", "O", "X"],
                     ["X", "O", "X"],
                   ],
+                  __rd3t,
                 },
               ],
             },
@@ -119,6 +137,7 @@ const TreeDiagram: React.FC = () => {
                 ["O", "O", "X"],
                 ["X", "O", "O"],
               ],
+              __rd3t,
               children: [
                 {
                   name: "Move 1.2.1",
@@ -129,6 +148,7 @@ const TreeDiagram: React.FC = () => {
                     ["O", "O", "X"],
                     ["X", "O", "O"],
                   ],
+                  __rd3t,
                 },
               ],
             },
@@ -143,6 +163,7 @@ const TreeDiagram: React.FC = () => {
             ["O", "O", ""],
             ["X", "O", ""],
           ],
+          __rd3t,
         },
         {
           name: "Move 3",
@@ -153,6 +174,7 @@ const TreeDiagram: React.FC = () => {
             ["O", "O", ""],
             ["X", "O", "X"],
           ],
+          __rd3t,
           children: [
             {
               name: "Move 3.1",
@@ -163,6 +185,7 @@ const TreeDiagram: React.FC = () => {
                 ["O", "O", ""],
                 ["X", "O", "X"],
               ],
+              __rd3t,
               children: [
                 {
                   name: "Move 3.1.1",
@@ -173,6 +196,7 @@ const TreeDiagram: React.FC = () => {
                     ["O", "O", "X"],
                     ["X", "O", "X"],
                   ],
+                  __rd3t,
                 },
               ],
             },
@@ -185,6 +209,7 @@ const TreeDiagram: React.FC = () => {
                 ["O", "O", "O"],
                 ["X", "O", "X"],
               ],
+              __rd3t,
             },
           ],
         },
@@ -193,9 +218,9 @@ const TreeDiagram: React.FC = () => {
   ];
 
   const straightPathFunc = (
-    linkDatum: { source: any; target: any },
+    linkDatum: TreeLinkDatum,
     orientation: string
-  ) => {
+  ): string => {
     const { source, target } = linkDatum;
     return orientation === "horizontal"
       ? `M${source.y},${source.x}L${target.y},${target.x}`

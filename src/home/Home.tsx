@@ -33,7 +33,7 @@ numerical methods, scientific computing, MATLAB, finite element method,
 finite difference method, discrete event simulation, data analytics, 
 Python, R, SQL, PyTorch, pandas, Matplotlib, physics, mathematics, statistics`;
 
-const Home: React.FC<{}> = () => {
+const Home: React.FC = () => {
   return (
     <>
       <title>{title}</title>

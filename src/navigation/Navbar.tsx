@@ -5,7 +5,7 @@ import "./Navbar.css";
 const activeLink = ({ isActive }: { isActive: boolean }) =>
   isActive ? "active-link" : "";
 
-const Navbar: React.FC<{}> = () => {
+const Navbar: React.FC = () => {
   return (
     <nav>
       <div>
