@@ -1,6 +1,6 @@
 import React from "react";
 import GameConnectFour from "./GameConnectFour";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import PythonCodeDisplay from "../ArticleGoogleFoobarChallenge/PythonCodeDisplay";
 
 const ConnectFour: React.FC = () => {

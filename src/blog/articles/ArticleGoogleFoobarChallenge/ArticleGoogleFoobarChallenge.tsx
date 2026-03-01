@@ -1,8 +1,20 @@
 import React from "react";
 import styles from "./ArticleGoogleFoobarChallenge.module.css";
 import "katex/dist/katex.min.css";
-import { InlineMath, BlockMath } from "react-katex";
+import * as ReactKatexModule from "react-katex";
 import PythonCodeDisplay from "./PythonCodeDisplay";
+
+type KatexExports = {
+  InlineMath: React.ComponentType<{ math: string }>;
+  BlockMath: React.ComponentType<{ math: string }>;
+};
+
+const reactKatexAny = ReactKatexModule as unknown as {
+  default?: KatexExports;
+} & Partial<KatexExports>;
+const ReactKatex = (reactKatexAny.default ?? reactKatexAny) as KatexExports;
+
+const { InlineMath, BlockMath } = ReactKatex;
 
 const ArticleGoogleFoobarChallenge: React.FC = () => {
   return (

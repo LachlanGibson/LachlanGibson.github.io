@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router";
 import articleMetaData, { ArticleType } from "./articleMetaData";
 import ShareLinks, { SocialMediaLinks } from "./ShareLinks";
-import BlogMetaData from "./BlogMetaData";
 
 const AuthorCard: React.FC<{
   metaData: ArticleType;
@@ -82,7 +81,6 @@ const Article: React.FC = () => {
 
   return (
     <>
-      <BlogMetaData slug={slug} metaData={articleMetaData[slug]} />
       <AuthorCard metaData={articleMetaData[slug]} shareLinks={shareLinks} />
       {articleMetaData[slug].articleElement}
     </>

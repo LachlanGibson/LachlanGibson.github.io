@@ -1,8 +1,20 @@
 import React from "react";
-import { BlockMath, InlineMath } from "react-katex";
+import * as ReactKatexModule from "react-katex";
 import TreeDiagram from "./TreeDiagram";
 import PythonCodeDisplay from "../ArticleGoogleFoobarChallenge/PythonCodeDisplay";
 import GameTicTacToe from "./GameTicTacToe";
+
+type KatexExports = {
+  InlineMath: React.ComponentType<{ math: string }>;
+  BlockMath: React.ComponentType<{ math: string }>;
+};
+
+const reactKatexAny = ReactKatexModule as unknown as {
+  default?: KatexExports;
+} & Partial<KatexExports>;
+const ReactKatex = (reactKatexAny.default ?? reactKatexAny) as KatexExports;
+
+const { BlockMath, InlineMath } = ReactKatex;
 
 const TicTacToe = () => {
   return (

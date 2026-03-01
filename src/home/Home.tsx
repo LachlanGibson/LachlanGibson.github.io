@@ -19,39 +19,9 @@ const SkillCard: React.FC<{ title: string; items: string[] }> = ({
   );
 };
 
-const name = "Lachlan Gibson";
-const title = "Lachlan Gibson";
-const description =
-  "Lachlan Gibson is a data scientist and developer with experience in AI, algorithmic design, scientific computing, and data analytics.";
-const imageUrl =
-  "https://www.lachlangibson.dev/images/home/lachlan_gibson.webp";
-const pageUrl = "https://www.lachlangibson.dev/";
-const keyWords = `Lachlan Gibson, data scientist, developer, AI, simulation, 
-machine learning, deep learning, reinforcement learning, dimensionality reduction, 
-algorithmic design, neural network architecture, Q-Learning, dynamic programming, 
-numerical methods, scientific computing, MATLAB, finite element method, 
-finite difference method, discrete event simulation, data analytics, 
-Python, R, SQL, PyTorch, pandas, Matplotlib, physics, mathematics, statistics`;
-
 const Home: React.FC = () => {
   return (
     <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:description" content={description} />
-      <meta name="twitter:description" content={description} />
-      <meta property="og:title" content={name} />
-      <meta name="twitter:title" content={name} />
-      <meta name="author" content={name} />
-      <meta property="og:image" content={imageUrl} />
-      <meta name="twitter:image" content={imageUrl} />
-      <meta property="og:url" content={pageUrl} />
-      <link rel="canonical" href={pageUrl} />
-      <meta property="og:type" content="website" />
-      <meta name="twitter:card" content="summary" />
-      <meta name="robots" content="index, follow" />
-      <meta name="keywords" content={keyWords} />
-
       <div className=" w-full flex flex-col items-center">
         <div className="max-w-48 max-h-48 w-full aspect-square bg-slate-200 overflow-hidden rounded-full relative border-sky-600 border-solid border-2">
           <img

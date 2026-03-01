@@ -27,7 +27,19 @@ export default [
       "react-hooks/exhaustive-deps": "warn",
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+          allowExportNames: [
+            "meta",
+            "links",
+            "loader",
+            "action",
+            "headers",
+            "clientLoader",
+            "clientAction",
+            "handle",
+          ],
+        },
       ],
     },
     settings: {

@@ -1,6 +1,18 @@
 import React from "react";
 import GameMastermind from "./GameMastermind";
-import { BlockMath, InlineMath } from "react-katex";
+import * as ReactKatexModule from "react-katex";
+
+type KatexExports = {
+  InlineMath: React.ComponentType<{ math: string }>;
+  BlockMath: React.ComponentType<{ math: string }>;
+};
+
+const reactKatexAny = ReactKatexModule as unknown as {
+  default?: KatexExports;
+} & Partial<KatexExports>;
+const ReactKatex = (reactKatexAny.default ?? reactKatexAny) as KatexExports;
+
+const { BlockMath, InlineMath } = ReactKatex;
 
 const Mastermind: React.FC = () => {
   return (
