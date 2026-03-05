@@ -38,7 +38,7 @@ const renderRectSvgNode = ({ nodeDatum }: CustomNodeElementProps) => {
         {node.score}
       </text>
       <text
-        fill="#c7405e"
+        fill="var(--site-link)"
         strokeWidth="0.5"
         y="-55"
         textAnchor="middle"
@@ -63,7 +63,7 @@ const renderRectSvgNode = ({ nodeDatum }: CustomNodeElementProps) => {
                 {cell}
               </text>
             );
-          })
+          }),
         )}
       </svg>
     </g>
@@ -219,7 +219,7 @@ const TreeDiagram: React.FC = () => {
 
   const straightPathFunc = (
     linkDatum: TreeLinkDatum,
-    orientation: string
+    orientation: string,
   ): string => {
     const { source, target } = linkDatum;
     return orientation === "horizontal"
@@ -230,8 +230,7 @@ const TreeDiagram: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="overflow-auto mx-auto my-4 max-w-fit bg-slate-600 rounded-lg"
-      style={{ height: "470px", cursor: "default" }}
+      className="mx-auto my-4 h-117 max-w-fit cursor-default overflow-auto rounded-lg bg-(--site-surface-alt)"
     >
       <Tree
         data={treeData}

@@ -36,15 +36,11 @@ const PopUpAbstract: React.FC<{
       onMouseEnter={() => setShowPopup(true)}
       onMouseLeave={() => setShowPopup(false)}
     >
-      <span
-        style={{ color: "rgb(76, 192, 212)" }}
-        className="hover:cursor-pointer"
-      >
+      <span className="text-(--site-link) hover:cursor-pointer">
         {children}
       </span>
       <div
-        style={{ width: "50vw" }}
-        className={`absolute bg-slate-700 shadow-lg p-2 rounded-lg text-xs  ${
+        className={`absolute w-[50vw] rounded-lg border border-(--site-border) bg-(--site-surface-alt) p-2 text-xs shadow-lg ${
           showPopup ? "block" : "hidden"
         }`}
       >
@@ -62,16 +58,20 @@ const CVTimeSection: React.FC<{
 }> = ({ leftBar, title, children }) => {
   return (
     <>
-      <div className=" text-right flex flex-col items-end text-slate-300 italic text-xs pt-1 max-w-56">
+      <div
+        className=" flex max-w-56 flex-col items-end pt-1 text-right text-xs text-(--site-text-muted) italic"
+      >
         {leftBar.map((item, index) => (
-          <div key={index} className="pr-1 mb-1">
+          <div key={index} className="mb-1 pr-1">
             {item}
           </div>
         ))}
       </div>
       <div className="flex flex-col items-start">
-        <h3 className="font-bold text-lg">{title}</h3>
-        <div className="text-sm text-slate-300">{children}</div>
+        <h3 className="text-lg font-bold">{title}</h3>
+        <div className="text-sm text-(--site-text-muted)">
+          {children}
+        </div>
       </div>
     </>
   );
@@ -80,11 +80,11 @@ const CVTimeSection: React.FC<{
 const About: React.FC = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold text-center tracking-wider py-3">
+      <h1 className="py-3 text-center text-3xl font-bold tracking-wider">
         Academic History
       </h1>
-      <div className="grid md:grid-cols-[auto,1fr] grid-cols-[2fr,7fr]  gap-2 md:gap-4">
-        <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
+      <div className="grid grid-cols-[2fr,7fr] gap-2  md:grid-cols-[auto,1fr] md:gap-4">
+        <h2 className="col-span-2 border-t py-3 text-center text-xl font-bold tracking-wider">
           Employment
         </h2>
         <CVTimeSection
@@ -152,7 +152,7 @@ const About: React.FC = () => {
           ordinary differential equations, electromagnetism, and statistical
           methods for data science.
         </CVTimeSection>
-        <h2 className="py-3 col-span-2 border-t font-bold text-xl tracking-wider text-center">
+        <h2 className="col-span-2 border-t py-3 text-center text-xl font-bold tracking-wider">
           Education
         </h2>
         <CVTimeSection

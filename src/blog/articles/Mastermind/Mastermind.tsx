@@ -17,22 +17,22 @@ const { BlockMath, InlineMath } = ReactKatex;
 const Mastermind: React.FC = () => {
   return (
     <>
-      <div className="text-red-400 m-4">
-        <p className="font-bold text-xl">
+      <div className="m-4 text-red-400">
+        <p className="text-xl font-bold">
           This is a work in progress. Remaining tasks:
         </p>
-        <ul className="list-disc ml-8">
+        <ul className="ml-8 list-disc">
           <li>Add game logic to allow duplicate colours</li>
           <li>
             Improve UI
-            <ul className="list-disc ml-8">
+            <ul className="ml-8 list-disc">
               <li>Beautify settings section</li>
               <li>Possibly add drag and drop functionality for pegs</li>
             </ul>
           </li>
           <li>
             Write article explaining the game and AI
-            <ul className="list-disc ml-8">
+            <ul className="ml-8 list-disc">
               <li>Explain the game</li>
               <li>Explain the various types of AI approaches</li>
               <li>Run experiments to compare AI performance</li>

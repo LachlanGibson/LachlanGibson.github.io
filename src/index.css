@@ -5,6 +5,34 @@
   --breakpoint-md2: 740px;
 }
 
+:root {
+  color-scheme: dark;
+  --site-bg: #182536;
+  --site-surface: #21314a;
+  --site-surface-alt: #2a3f5d;
+  --blog-thumb-bg: #334c6d;
+  --site-text: #e8eaed;
+  --site-text-muted: #b8c2d1;
+  --site-link: #4cc0d4;
+  --site-border: #3e5679;
+  --site-warning: #c86e6e;
+  --site-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --site-bg: #f8fbff;
+  --site-surface: #ffffff;
+  --site-surface-alt: #f0f5fd;
+  --blog-thumb-bg: #f0f5fd;
+  --site-text: #1b2b42;
+  --site-text-muted: #586d8b;
+  --site-link: #0b77a7;
+  --site-border: #d3deed;
+  --site-warning: #a33e3e;
+  --site-shadow: 0 10px 24px rgba(15, 35, 60, 0.1);
+}
+
 /*
 Boiler plate from
 https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
@@ -14,15 +42,18 @@ https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
     -webkit-text-size-adjust: none; /* for iOS Safari */
     text-size-adjust: none; /* for other mobile browsers */
     font-family: "Outfit", sans-serif;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   body {
     font-size: 1rem;
-    background-color: rgb(24, 37, 54);
-    color: #e8eaed;
+    background-color: var(--site-bg);
+    color: var(--site-text);
     max-width: 62.5rem;
     margin: auto;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   main {
@@ -39,8 +70,7 @@ https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
   a {
     text-underline-position: under;
     text-decoration-thickness: 0.1rem;
-    /* color: rgb(124, 212, 179); */
-    color: rgb(76, 192, 212);
+    color: var(--site-link);
     text-decoration: none;
   }
 
@@ -72,9 +102,61 @@ https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
   p {
     text-align: justify;
     overflow-y: hidden;
+    line-height: 1.6;
   }
 
-  .active-link {
-    text-decoration: underline;
+  p,
+  .p-card,
+  .p-menu .p-menuitem-link {
+    color: var(--site-text);
   }
+}
+
+.p-button.p-button-outlined {
+  border-color: var(--site-border);
+  color: var(--site-text);
+}
+
+.p-button.p-button-outlined:hover {
+  background-color: var(--site-surface-alt);
+  border-color: var(--site-border);
+}
+
+.p-card {
+  background-color: var(--site-surface);
+  color: var(--site-text);
+}
+
+.p-card .p-card-body,
+.p-card .p-card-content,
+.p-card .p-card-title,
+.p-card .p-card-subtitle,
+.p-card .p-card-footer {
+  background-color: transparent;
+  color: inherit;
+}
+
+.p-menu {
+  border-color: var(--site-border);
+  background-color: var(--site-surface);
+}
+
+.p-menu .p-menuitem-link {
+  color: var(--site-text);
+}
+
+.p-menu .p-menuitem-link:hover {
+  background-color: var(--site-surface-alt);
+}
+
+.theme-image-light {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-image-dark {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-image-light {
+  display: block;
 }

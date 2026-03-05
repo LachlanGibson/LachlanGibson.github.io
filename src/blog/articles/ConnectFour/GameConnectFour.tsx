@@ -1,4 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Button } from "primereact/button";
+import { InputSwitch } from "primereact/inputswitch";
+import { Slider } from "primereact/slider";
 import styles from "./GameConnectFour.module.css";
 import { copy2DArray } from "../../../utility/utilities";
 
@@ -52,11 +55,11 @@ for (let col = 0; col < 4; col++) {
 
 const findWinningCells = (
   board: Board,
-  player: Player
+  player: Player,
 ): CoordinateSet | undefined => {
   for (const winPossibility of winPossibilities) {
     const cell = winPossibility.find(
-      ([col, row]) => board[col][row] !== player
+      ([col, row]) => board[col][row] !== player,
     );
     if (!cell) {
       return winPossibility;
@@ -82,7 +85,7 @@ const minimax = (
   beta: number,
   prevPlayer: Player,
   player: Player,
-  noise?: number
+  noise?: number,
 ) => {
   const board = thinkStep(prevBoard, action, prevPlayer);
   const result = checkWin(board, action);
@@ -195,7 +198,7 @@ const checkWin = (board: Board, columnIndex: number): GameStatus => {
       }
       return [count, win];
     },
-    [0, false] as [number, boolean]
+    [0, false] as [number, boolean],
   );
   if (win) {
     return player === "R" ? "R wins" : "Y wins";
@@ -280,7 +283,7 @@ const GameConnectFour: React.FC = () => {
         -Infinity,
         Infinity,
         player,
-        player === "R" ? "Y" : "R"
+        player === "R" ? "Y" : "R",
       );
       return score;
     });
@@ -307,7 +310,7 @@ const GameConnectFour: React.FC = () => {
         setgameStatus(result);
       }
     },
-    [board, gameStatus, player]
+    [board, gameStatus, player],
   );
 
   useEffect(() => {
@@ -332,7 +335,7 @@ const GameConnectFour: React.FC = () => {
             Infinity,
             player,
             player === "R" ? "Y" : "R",
-            noise
+            noise,
           );
         if (
           (score > bestScore && player === "R") ||
@@ -347,12 +350,15 @@ const GameConnectFour: React.FC = () => {
 
     const options = availableMoves(board);
     let optionIndex = 0;
-    const thinkInterval = setInterval(() => {
-      //const cell = options[Math.floor(Math.random() * options.length)];
-      const cell = options[optionIndex];
-      optionIndex = (optionIndex + 1) % options.length;
-      setAiConsiderCell(cell);
-    }, Math.floor(thinkFlowRate / options.length));
+    const thinkInterval = setInterval(
+      () => {
+        //const cell = options[Math.floor(Math.random() * options.length)];
+        const cell = options[optionIndex];
+        optionIndex = (optionIndex + 1) % options.length;
+        setAiConsiderCell(cell);
+      },
+      Math.floor(thinkFlowRate / options.length),
+    );
 
     let decidedTimeout: NodeJS.Timeout;
     const startTime = Date.now();
@@ -435,14 +441,14 @@ const GameConnectFour: React.FC = () => {
     if (winningCells) {
       return winningCells.some(
         ([winColIndex, winCellIndex]) =>
-          winColIndex === colIndex && winCellIndex === cellIndex
+          winColIndex === colIndex && winCellIndex === cellIndex,
       );
     }
     return false;
   };
 
   return (
-    <div className="p-0 mt-2 mb-4 mx-auto max-w-md">
+    <div className="mx-auto mt-2 mb-4 max-w-md p-0">
       <div className={styles.gameBoard}>
         <div className={styles.headerMessage}>
           {gameStatus !== "in progress"
@@ -486,13 +492,7 @@ const GameConnectFour: React.FC = () => {
           })}
         </div>
 
-        <div
-          className="w-full h-5 grid grid-cols-7 text-black"
-          style={{
-            padding: "0 min(1.5rem, 6%)",
-            fontSize: "min(1rem, 80%)",
-          }}
-        >
+        <div className="grid h-5 w-full grid-cols-7 px-[min(1.5rem,6%)] text-[min(1rem,80%)] text-(--site-text)">
           {showScores &&
             currentScores &&
             board.map((column, columnIndex) => {
@@ -502,7 +502,7 @@ const GameConnectFour: React.FC = () => {
                     ? Math.round(
                         currentScores[1][
                           currentScores[0].indexOf(columnIndex)
-                        ] * 1000
+                        ] * 1000,
                       ) /
                         10 +
                       "%"
@@ -512,49 +512,36 @@ const GameConnectFour: React.FC = () => {
             })}
         </div>
       </div>
-      <button
+      <Button
         type="button"
         onClick={resetGame}
+        label="Reset Game"
         className={`${styles.settings} ${styles.resetButton}`}
-      >
-        Reset Game
-      </button>
+      />
       <div
         className={`flex flex-col items-center justify-center ${styles.settings}`}
       >
-        <div className="text-xs font-medium text-gray-400 mt-1">
+        <div className="mt-1 text-xs font-medium text-(--site-text-muted)">
           AI Settings
         </div>
-        <div className="flex items-center justify-center gap-4 w-full m-1">
+        <div className="m-1 flex w-full items-center justify-center gap-4">
           <div className="flex items-center justify-center">
             <div className="flex flex-col items-start justify-center gap-1">
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  id="X-AI-switch"
-                  type="checkbox"
-                  role="switch"
+              <label className="flex items-center gap-2">
+                <InputSwitch
+                  inputId="X-AI-switch"
                   checked={isRAI}
                   onChange={() => setIsRAI((prev) => !prev)}
-                  className="sr-only peer"
                 />
-                <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
-                <span className="ms-3 text-sm font-medium text-gray-300">
-                  Blue
-                </span>
+                <span className="text-sm font-medium">Blue</span>
               </label>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  id="O-AI-switch"
-                  type="checkbox"
-                  role="switch"
+              <label className="flex items-center gap-2">
+                <InputSwitch
+                  inputId="O-AI-switch"
                   checked={isYAI}
                   onChange={() => setIsYAI((prev) => !prev)}
-                  className="sr-only peer"
                 />
-                <div className="w-9 h-4 peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white  after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
-                <span className="ms-3 text-sm font-medium text-gray-300">
-                  Yellow
-                </span>
+                <span className="text-sm font-medium">Yellow</span>
               </label>
             </div>
           </div>
@@ -563,65 +550,48 @@ const GameConnectFour: React.FC = () => {
               htmlFor="ai-noise"
               className="flex items-center justify-center"
             >
-              <span className="text-sm font-medium text-gray-300 w-12">
-                Noise
-              </span>
-              <input
+              <span className="w-12 text-sm font-medium">Noise</span>
+              <Slider
                 id="ai-noise"
-                type="range"
-                min="0.001"
-                max="0.1"
-                step="0.001"
+                min={0.001}
+                max={0.1}
+                step={0.001}
                 value={noise}
-                onChange={(e) => setNoise(Number(e.target.value))}
-                className="w-20"
+                onChange={(e) => setNoise(Number(e.value))}
+                className="w-28"
               />
             </label>
             <div className="flex items-center">
-              <span className="block w-12 text-sm font-medium text-gray-300">
-                Depth
-              </span>
-              <div className="relative flex items-center max-w-32">
-                <button
+              <span className="block w-12 text-sm font-medium">Depth</span>
+              <div className="relative flex max-w-32 items-center">
+                <Button
                   type="button"
-                  id="decrement-button"
+                  severity="secondary"
                   disabled={depth <= 0}
                   onClick={() => setDepth((prev) => Math.max(prev - 1, 0))}
-                  className="flex justify-center items-center bg-gray-600 rounded-s px-3 h-4 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
                 >
                   -
-                </button>
-                <div className="bg-gray-600 border-x-0 h-4 border-gray-300 w-4 text-center text-sm  block text-white">
-                  <div className="w-fit h-full m-auto flex justify-center items-center">
-                    {depth}
-                  </div>
-                </div>
-                <button
+                </Button>
+                <div className="block w-8 text-center text-sm">{depth}</div>
+                <Button
                   type="button"
-                  id="increment-button"
+                  severity="secondary"
                   disabled={depth >= 6}
                   onClick={() => setDepth((prev) => Math.min(prev + 1, 6))}
-                  className="flex justify-center items-center bg-gray-600 rounded-e px-3 h-4 hover:bg-gray-500 disabled:hover:bg-gray-600 disabled:cursor-default"
                 >
                   +
-                </button>
+                </Button>
               </div>
             </div>
           </div>
         </div>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            id="show_scores-switch"
-            type="checkbox"
-            role="switch"
+        <label className="flex items-center gap-2">
+          <InputSwitch
+            inputId="show_scores-switch"
             checked={showScores}
             onChange={() => setShowScores((prev) => !prev)}
-            className="sr-only peer"
           />
-          <div className="w-9 h-4  peer-focus:outline-none rounded-full peer bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all  peer-checked:bg-blue-600"></div>
-          <span className="ms-3 text-sm font-medium text-gray-300">
-            Show Scores
-          </span>
+          <span className="text-sm font-medium">Show Scores</span>
         </label>
       </div>
     </div>

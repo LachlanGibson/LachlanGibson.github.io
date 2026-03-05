@@ -3,6 +3,7 @@ import tseslint from "typescript-eslint";
 import reactPlugin from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import tailwindcss from "eslint-plugin-tailwindcss";
 
 export default [
   js.configs.recommended,
@@ -44,6 +45,19 @@ export default [
     },
     settings: {
       react: { version: "detect" },
+    },
+  },
+  {
+    files: ["**/*.{ts,tsx,js,jsx}"],
+    plugins: {
+      tailwindcss,
+    },
+    rules: {
+      // Temporarily disabled: current Tailwind v4 beta plugin path resolution
+      // is unstable in CLI for this project environment.
+      "tailwindcss/classnames-order": "off",
+      "tailwindcss/enforces-shorthand": "off",
+      "tailwindcss/no-contradicting-classname": "off",
     },
   },
 ];

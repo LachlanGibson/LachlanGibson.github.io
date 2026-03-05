@@ -1,8 +1,8 @@
 .conversationDiv {
-  font-family: Söhne, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+  font-family: Soehne, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
     Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica Neue, Arial,
     Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-  background-color: rgb(52, 53, 65);
+  background-color: var(--site-surface);
 }
 
 .conversationHeader {
@@ -14,11 +14,11 @@
 
 .gptDiv,
 .conversationHeader {
-  background-color: rgb(68, 70, 84);
+  background-color: var(--site-surface-alt);
 }
 
 .chatgptLogoDiv {
-  background-color: rgb(171, 104, 255);
+  background-color: #ab68ff;
   padding: 4px;
 }
 
@@ -83,7 +83,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  border: solid 1px #444;
+  border: solid 1px var(--site-border);
   width: fit-content;
   padding: 0;
 }
@@ -92,13 +92,13 @@
   padding: 0.3125rem 0.625rem;
   text-align: center;
   width: 100%;
-  border-top: solid 1px #444;
-  color: rgb(137, 156, 212);
+  border-top: solid 1px var(--site-border);
+  color: var(--site-link);
 }
 
 #conversationContents a:hover {
-  background-color: #ddd;
-  color: rgb(35, 39, 51);
+  background-color: var(--site-surface-alt);
+  color: var(--site-text);
 }
 
 .contentsDiv {

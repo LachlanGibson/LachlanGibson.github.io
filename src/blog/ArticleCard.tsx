@@ -15,28 +15,26 @@ const ArticleCard = ({
   svgLink: string;
 }) => {
   return (
-    <Link
-      to={`/blog/${slug}/`}
-      className="hover:no-underline hover:-translate-x-1 hover:-translate-y-1 hover:shadow-md hover:shadow-slate-600 duration-100 ease-in-out transform h-full rounded-lg overflow-hidden"
-    >
-      <div className="max-w-sm border rounded-lg shadow bg-gray-800 border-gray-700 ">
-        <div className="rounded-t-lg relative bg-slate-100">
+    <Link to={`/blog/${slug}/`} className="group h-full no-underline">
+      <article className="flex h-full flex-col border border-(--site-border) bg-(--site-surface) transition-all duration-150 group-hover:-translate-y-0.5 group-hover:border-(--site-link)">
+        <div className="relative border-b border-(--site-border) bg-(--blog-thumb-bg)">
           <img
             src={svgLink}
             alt=""
-            className="max-w-full h-40 m-auto relative p-4"
+            className="relative m-auto aspect-4/3 w-full max-w-full p-4 object-contain"
           />
         </div>
-        <div className="px-2 pt-2 pb-1 h-full">
-          <h5 className="text-lg tracking-tight text-white">{title}</h5>
-
-          <p className="font-normal text-gray-400 text-xs">
+        <div className="flex h-full flex-col justify-between px-3 py-2.5">
+          <h2 className="text-xl leading-snug font-semibold tracking-tight text-(--site-text)">
+            {title}
+          </h2>
+          <p className="mt-1.5 text-sm leading-tight text-(--site-text-muted)">
             <span>
               <time dateTime={publishedDateISO}>{publishedDateLabel}</time>
             </span>
           </p>
         </div>
-      </div>
+      </article>
     </Link>
   );
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import { Card } from "primereact/card";
 
 type ProjectSectionProps = {
   children?: React.ReactNode;
@@ -7,12 +8,18 @@ type ProjectSectionProps = {
 
 const ProjectSection: React.FC<ProjectSectionProps> = ({ children, title }) => {
   return (
-    <div className="w-full p-4 mt-4 bg-slate-800">
-      <h3 className="font-bold tracking-widest text-xl text-left mb-2">
+    <Card
+      className="mt-5 w-full rounded-xl border border-(--site-border) bg-(--site-surface)"
+      pt={{
+        body: { className: "p-4 md:p-5" },
+        content: { className: "p-0" },
+      }}
+    >
+      <h3 className="mb-2 text-left text-2xl leading-tight font-bold tracking-wide md:text-3xl">
         {title}
       </h3>
       {children}
-    </div>
+    </Card>
   );
 };
 

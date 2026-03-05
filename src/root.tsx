@@ -7,6 +7,9 @@ import {
   ScrollRestoration,
 } from "react-router";
 import stylesheet from "./index.css?url";
+import primeReactStyles from "primereact/resources/primereact.min.css?url";
+import primeIconsStyles from "primeicons/primeicons.css?url";
+import { lightThemeHref } from "./theme/themeHrefs";
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
@@ -14,10 +17,17 @@ export function Layout({ children }: { children: ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#182536" />
         <link rel="icon" href="/navbar/icons/LG_logo.svg" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="stylesheet" href={stylesheet} />
+        <link rel="stylesheet" href={primeReactStyles} />
+        <link rel="stylesheet" href={primeIconsStyles} />
+        <link
+          id="app-theme"
+          rel="stylesheet"
+          href={lightThemeHref}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"

@@ -1,7 +1,3 @@
-html {
-  scroll-padding-top: 1.75rem;
-}
-
 .challengeTitle {
   font-size: 1.5rem;
   margin: 1.25rem 0 0.625rem 0;
@@ -10,8 +6,8 @@ html {
 .foobarTaskDescription {
   font-family: "Share Tech Mono", monospace;
   font-size: 1rem;
-  background-color: #111111;
-  color: #fff;
+  background-color: var(--site-surface-alt);
+  color: var(--site-text);
   padding: 1rem;
   margin: 1.25rem 0;
   overflow-x: auto;
@@ -19,15 +15,14 @@ html {
 
 .tableOfContents {
   position: sticky;
-  background-color: rgb(24, 37, 54);
-  border-bottom: solid 1px #444;
+  background-color: var(--site-bg);
+  border-bottom: solid 1px var(--site-border);
   list-style: none;
   padding: 0;
   margin: 0.5rem 0 0 0;
   display: flex;
   justify-content: center;
   overflow: hidden;
-  display: flex;
 }
 
 .tocLayer1 {
@@ -43,7 +38,7 @@ html {
 }
 
 .tableOfContents a {
-  color: rgb(137, 156, 212);
+  color: var(--site-link);
   text-align: center;
   height: 100%;
   display: inline-flex;
@@ -56,8 +51,8 @@ html {
 }
 
 .tableOfContents a:hover {
-  background-color: #ddd;
-  color: rgb(35, 39, 51);
+  background-color: var(--site-surface-alt);
+  color: var(--site-text);
 }
 
 .noBefore {
@@ -67,11 +62,6 @@ html {
 
 .noBefore::before {
   display: none;
-}
-
-p {
-  overflow-x: hidden;
-  overflow-y: hidden;
 }
 
 .numberedList {
@@ -157,19 +147,6 @@ p {
 }
 .gridTable tr {
   height: 1.25rem;
-}
-
-figure {
-  margin: 0;
-  padding: 0;
-}
-
-figcaption {
-  max-width: 31.25rem;
-  margin: 0.3125rem auto;
-  text-align: justify;
-  font-style: italic;
-  padding: 0;
 }
 
 @media only screen and (max-width: 600px) {

@@ -9,20 +9,20 @@ const AuthorCard: React.FC<{
 }> = ({ metaData, shareLinks }) => {
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-4xl tracking-wide my-4 text-center">
+      <h1 className="my-4 text-center text-4xl tracking-wide">
         {metaData.title}
       </h1>
-      <div className="flex gap-4 items-center mb-4">
-        <div className="w-12 h-12 aspect-square bg-slate-200 overflow-hidden rounded-full relative">
+      <div className="mb-4 flex flex-wrap items-center justify-center gap-4">
+        <div className="relative aspect-square h-12 w-12 overflow-hidden rounded-full bg-(--site-surface-alt)">
           <img
             className="h-full"
             src={metaData.authorImageLink}
             alt={metaData.author}
           />
         </div>
-        <div className="h-fit">
-          <div className="tracking-wide text-xl">{metaData.author}</div>
-          <div className="text-sky-600 text-xs">
+        <div className="h-fit text-center sm:text-left">
+          <div className="text-xl tracking-wide">{metaData.author}</div>
+          <div className="text-xs text-(--site-link)">
             <time dateTime={metaData.publishedDateISO}>
               {metaData.publishedDateLabel}
             </time>

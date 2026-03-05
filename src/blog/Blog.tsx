@@ -4,12 +4,13 @@ import ArticleCard from "./ArticleCard";
 
 const Blog: React.FC = () => {
   return (
-    <>
-      <h1 className="text-xl font-bold mb-3">Blog</h1>
-      <div
-        className="grid gap-4 justify-center"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(12rem, 1fr))" }}
-      >
+    <section className="pt-2 pb-4">
+      <div className="border-b border-(--site-border) pb-3">
+        <h1 className="text-4xl font-semibold tracking-[0.015em] text-(--site-text)">
+          Blog
+        </h1>
+      </div>
+      <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(13.5rem,1fr))] gap-4 md:gap-5">
         {Object.keys(articleMetaData).map((slug) => (
           <ArticleCard
             key={slug}
@@ -25,7 +26,7 @@ const Blog: React.FC = () => {
           />
         ))}
       </div>
-    </>
+    </section>
   );
 };
 

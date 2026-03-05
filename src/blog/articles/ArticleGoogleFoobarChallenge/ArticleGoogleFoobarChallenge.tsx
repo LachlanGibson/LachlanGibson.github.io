@@ -119,7 +119,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
         solution must be under 32000 characters in length including new lines
         and other non-printing characters.
       </div>
-      <div style={{ overflowX: "auto", padding: "0 0.1rem" }}>
+      <div className="overflow-x-auto px-[0.1rem]">
         <section className={styles.foobarChallenge} id="sec-challenge1">
           <h2 className={styles.challengeTitle}>Challenge 1</h2>
           <p>

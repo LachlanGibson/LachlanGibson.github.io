@@ -1110,15 +1110,7 @@ const ArticleEvilGeniusMinionReady = () => {
                 />
               </div>
               <div className={styles.chatTextDiv}>
-                <p
-                  style={{
-                    fontStyle: "italic",
-                    color: "rgb(200, 110, 110)",
-                    fontSize: "1rem",
-                    margin: 0,
-                    padding: 0,
-                  }}
-                >
+                <p className="m-0 p-0 text-base text-(--site-warning) italic">
                   Note: I had a network error and had to regenerate this
                   response.
                 </p>

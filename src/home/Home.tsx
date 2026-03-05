@@ -1,117 +1,173 @@
 import React from "react";
 import IconLinks from "../navigation/IconLinks";
-import ProjectSection from "./ProjectSection";
 import LinkList from "./LinkList";
+
+const skills: { title: string; items: string[] }[] = [
+  {
+    title: "Artificial Intelligence",
+    items: [
+      "Machine learning",
+      "Deep learning",
+      "Reinforcement learning",
+      "Dimensionality reduction",
+    ],
+  },
+  {
+    title: "Algorithmic Design",
+    items: [
+      "Neural network architecture",
+      "Q-Learning",
+      "Dynamic programming",
+      "Numerical methods",
+    ],
+  },
+  {
+    title: "Scientific Computing",
+    items: [
+      "MATLAB",
+      "Finite element method",
+      "Finite difference method",
+      "Discrete event simulation",
+    ],
+  },
+  {
+    title: "Data Analytics",
+    items: ["Python, R, SQL", "PyTorch", "pandas", "Matplotlib"],
+  },
+];
 
 const SkillCard: React.FC<{ title: string; items: string[] }> = ({
   title,
   items,
 }) => {
   return (
-    <div className="flex flex-col items-start">
-      <h3 className="text-base">{title}</h3>
-      <ul className="flex flex-col items-start list-outside list-none m-0 text-slate-400 text-left text-xs">
-        {items.map((item, i) => (
-          <li key={i}>- {item}</li>
+    <article className="border-l-2 border-(--site-border) pl-3">
+      <h3 className="text-lg leading-tight font-semibold text-(--site-text)">
+        {title}
+      </h3>
+      <ul className="mt-2 space-y-0.5 text-sm leading-tight text-(--site-text-muted)">
+        {items.map((item) => (
+          <li key={item} className="before:mr-1 before:content-['-']">
+            {item}
+          </li>
         ))}
       </ul>
-    </div>
+    </article>
+  );
+};
+
+const ProjectSection: React.FC<{
+  title: string;
+  children: React.ReactNode;
+  noTopBorder?: boolean;
+}> = ({ title, children, noTopBorder = false }) => {
+  return (
+    <section
+      className={`${noTopBorder ? "" : "border-t border-(--site-border)"} pt-6`}
+    >
+      <h3 className="text-xl leading-tight font-bold tracking-[0.01em] text-(--site-text) md:text-2xl">
+        {title}
+      </h3>
+      <div className="mt-3 space-y-3 text-(--site-text) [&_p]:leading-6 [&_p]:text-justify">
+        {children}
+      </div>
+    </section>
+  );
+};
+
+const ThemedImage: React.FC<{
+  darkSrc: string;
+  lightSrc: string;
+  alt: string;
+  className?: string;
+}> = ({ darkSrc, lightSrc, alt, className }) => {
+  return (
+    <>
+      <img className={`theme-image-dark ${className ?? ""}`} src={darkSrc} alt={alt} />
+      <img className={`theme-image-light ${className ?? ""}`} src={lightSrc} alt={alt} />
+    </>
   );
 };
 
 const Home: React.FC = () => {
   return (
-    <>
-      <div className=" w-full flex flex-col items-center">
-        <div className="max-w-48 max-h-48 w-full aspect-square bg-slate-200 overflow-hidden rounded-full relative border-sky-600 border-solid border-2">
-          <img
-            className="h-full"
-            src="/images/home/lachlan_gibson_600.webp"
-            alt="Lachlan Gibson"
-          />
+    <div className="space-y-10 pb-8 md:space-y-12">
+      <section className="border-b border-(--site-border) pb-8">
+        <div className="grid items-start gap-8 pt-2 md:grid-cols-[1fr_auto] md:gap-12">
+          <div>
+            <p className="text-sm font-semibold tracking-[0.18em] text-(--site-link)/90 uppercase">
+              Data Scientist and Developer
+            </p>
+            <h1 className="mt-2 text-4xl leading-tight font-bold tracking-tight text-(--site-text) md:text-5xl">
+              Lachlan Gibson
+            </h1>
+            <p className="mt-2 text-base text-(--site-text-muted)">
+              AI and Simulation
+            </p>
+            <IconLinks className="mt-3 flex h-5 w-28 justify-between" />
+          </div>
+
+          <div className="relative mx-auto aspect-square h-36 overflow-hidden border border-(--site-link) bg-(--site-surface-alt) md:h-40">
+            <img
+              className="h-full w-full object-cover"
+              src="/images/home/lachlan_gibson_600.webp"
+              alt="Lachlan Gibson"
+            />
+          </div>
         </div>
-        <div
-          className="my-1 font-bold tracking-wider"
-          style={{ fontSize: "1.8rem", lineHeight: "2.25rem" }}
-        >
-          Lachlan Gibson
+
+        <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {skills.map((skill) => (
+            <SkillCard
+              key={skill.title}
+              title={skill.title}
+              items={skill.items}
+            />
+          ))}
         </div>
-        <p className="text-sky-700 max-w-48 w-full text-center text-md leading-[0.9rem]">
-          Data scientist & Developer
-          <br />
-          AI & Simulation
-        </p>
-        <IconLinks />
-        <div className="md2:pl-4 mt-4 w-full gap-4 grid grid-cols-2 md2:grid-cols-4 md2:max-w-3xl max-w-sm">
-          <SkillCard
-            title="Artificial Intelligence"
-            items={[
-              "Machine learning",
-              "Deep learning",
-              "Reinforcement learning",
-              "Dimensionality reduction",
-            ]}
-          />
-          <SkillCard
-            title="Algorithmic Design"
-            items={[
-              "Neural network architecture",
-              "Q-Learning",
-              "Dynamic programming",
-              "Numerical methods",
-            ]}
-          />
-          <SkillCard
-            title="Scientific Computing"
-            items={[
-              "MATLAB",
-              "Finite element method",
-              "Finite difference method",
-              "Discrete event simulation",
-            ]}
-          />
-          <SkillCard
-            title="Data Analytics"
-            items={["Python, R, SQL", "PyTorch", "pandas", "Matplotlib"]}
-          />
+      </section>
+
+      <section>
+        <div className="border-b border-(--site-border) py-4">
+          <h2 className="text-center text-3xl font-semibold tracking-[0.02em] text-(--site-text) md:text-4xl">
+            Featured Projects
+          </h2>
         </div>
-        <h2 className="text-center text-3xl tracking-widest mt-10 pt-8 w-full">
-          Sample Projects
-        </h2>
-        <div className="flex flex-col w-full mt-4">
-          <ProjectSection title="Rare-Event Simulation via Generative Models">
-            <div className="flex w-full gap-4">
-              <p>
-                During my time with ACEMS I worked with other researchers on
-                developing deep learning analogues to the{" "}
-                <a
-                  href="https://en.wikipedia.org/wiki/Cross-entropy_method"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Cross-entropy method
-                </a>{" "}
-                for rare-event simulation. Our goal was to build a neural
-                network framework for the simulation of independent random
-                variables that could mimic arbitrary distributions, especially
-                ones conditioned on rare events. The initial framework we
-                developed included two neural networks that were trained
-                simultaneously using a target function. One was a generative
-                model and the other estimated the probability density function
-                of the first. We later refined the framework to use a single{" "}
-                <a
-                  href="https://en.wikipedia.org/wiki/Flow-based_generative_model"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Normalizing Flow generative model
-                </a>
-                , which could, in principle, approximate any sampling
-                distribution arbitrarily well. The figures below show the model
-                learning to approximate the target distribution of a truncated
-                normal distribution.
-              </p>
-            </div>
+        <div className="mt-6 space-y-8">
+          <ProjectSection
+            title="Rare-Event Simulation via Generative Models"
+            noTopBorder
+          >
+            <p>
+              During my time with ACEMS I worked with other researchers on
+              developing deep learning analogues to the{" "}
+              <a
+                href="https://en.wikipedia.org/wiki/Cross-entropy_method"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Cross-entropy method
+              </a>{" "}
+              for rare-event simulation. Our goal was to build a neural network
+              framework for the simulation of independent random variables that
+              could mimic arbitrary distributions, especially ones conditioned
+              on rare events. The initial framework we developed included two
+              neural networks that were trained simultaneously using a target
+              function. One was a generative model and the other estimated the
+              probability density function of the first. We later refined the
+              framework to use a single{" "}
+              <a
+                href="https://en.wikipedia.org/wiki/Flow-based_generative_model"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Normalizing Flow generative model
+              </a>
+              , which could, in principle, approximate any sampling distribution
+              arbitrarily well. The figures below show the model learning to
+              approximate the target distribution of a truncated normal
+              distribution.
+            </p>
             <LinkList
               links={[
                 [
@@ -124,17 +180,19 @@ const Home: React.FC = () => {
                 ],
               ]}
             />
-            <div className="grid sm:gap-4 gap-2 justify-center sm:grid-cols-4 grid-cols-2 mt-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <img
-                  className="w-full aspect-square"
-                  src={`/images/home/projects/normalising_flows${i}.svg`}
+                <ThemedImage
+                  className="home-plot-image aspect-square w-full"
+                  darkSrc={`/images/home/projects/normalising_flows${i}.svg`}
+                  lightSrc={`/images/home/projects/normalising_flows${i}_light.svg`}
                   alt={`Normalizing Flows ${i}`}
                   key={i}
                 />
               ))}
             </div>
           </ProjectSection>
+
           <ProjectSection title="Control Optimisation with Q-Learning and the Whittle Index">
             <p>
               During my time as a postdoctoral research fellow at UQ I worked
@@ -159,17 +217,20 @@ const Home: React.FC = () => {
                 ],
               ]}
             />
-            <iframe
-              className="w-full aspect-video max-w-lg mx-auto mt-4"
-              src={
-                "https://www.youtube.com/embed/XoKw-bsBH98?si=wfTz9eYaTs4GgZsL&amp;start=9"
-              }
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen={true}
-            />
+            <div className="overflow-hidden border border-(--site-border)">
+              <iframe
+                className="mx-auto aspect-video w-full"
+                src={
+                  "https://www.youtube.com/embed/XoKw-bsBH98?si=wfTz9eYaTs4GgZsL&amp;start=9"
+                }
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen={true}
+              />
+            </div>
           </ProjectSection>
+
           <ProjectSection title="Modelling and Forecasting Environmental Changes">
             <p>
               During my time with CARM we worked on a project to model
@@ -190,73 +251,71 @@ const Home: React.FC = () => {
                 ],
               ]}
             />
-            <img
-              className="w-full mx-auto max-w-2xl"
-              src="/images/home/projects/GSLA_R2.svg"
+            <ThemedImage
+              className="home-plot-image mx-auto w-full max-w-2xl"
+              darkSrc="/images/home/projects/GSLA_R2.svg"
+              lightSrc="/images/home/projects/GSLA_R2_light.svg"
               alt="Sea level forecast"
             />
           </ProjectSection>
+
           <ProjectSection title="Categorical Vector Clustering using Denoising Autoencoders">
-            <div className="flex w-full gap-4 flex-wrap md:flex-nowrap">
-              <div className="my-4">
-                <p>
-                  For my Master of Data Science capstone project in 2020 I
-                  developed a denoising autoencoder neural network model that
-                  could be trained on sparse datasets of votes to automatically
-                  classify voters and items into latent classes and then predict
-                  missing votes using these classifications. The autoencoder
-                  classifies voters or items completely unsupervised. The model
-                  correctly predicted missing votes made in the U.S. House of
-                  Representatives from 1990 to May 2020 with 92.6% accuracy.
-                  Furthermore, some of the learnt latent classes corresponded to
-                  interpretable categories, such as party affiliation, which
-                  could be identified with a 99.5% accuracy.
-                </p>
-              </div>
-              <img
-                className="w-full mx-auto max-w-lg"
-                src="/images/home/projects/vote_model_robustness.svg"
-                alt="Sea level forecast"
+            <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+              <p>
+                For my Master of Data Science capstone project in 2020 I
+                developed a denoising autoencoder neural network model that
+                could be trained on sparse datasets of votes to automatically
+                classify voters and items into latent classes and then predict
+                missing votes using these classifications. The autoencoder
+                classifies voters or items completely unsupervised. The model
+                correctly predicted missing votes made in the U.S. House of
+                Representatives from 1990 to May 2020 with 92.6% accuracy.
+                Furthermore, some of the learnt latent classes corresponded to
+                interpretable categories, such as party affiliation, which could
+                be identified with a 99.5% accuracy.
+              </p>
+              <ThemedImage
+                className="home-plot-image w-full max-w-lg"
+                darkSrc="/images/home/projects/vote_model_robustness.svg"
+                lightSrc="/images/home/projects/vote_model_robustness_light.svg"
+                alt="Voting model robustness"
               />
             </div>
           </ProjectSection>
+
           <ProjectSection title="Optical Tweezers Microrheology">
-            <div className="flex w-full gap-4">
-              <div className="my-4 w-full">
-                <p>
-                  Light carries momentum, and when a laser is tightly focused
-                  under a microscope, it can exert forces on microscopic
-                  objects. This is the principle behind optical tweezers, a
-                  powerful tool for manipulating very small particles. During my
-                  undergraduate and PhD studies I worked with the Optical
-                  Micro-manipulation Group at The University of Queensland to
-                  research and develop novel techniques to apply optical
-                  tweezers to the field of microrheology, measuring viscoelastic
-                  properties of fluids in very small volumes by tracking the
-                  motion of trapped particles.
-                </p>
-                <LinkList
-                  links={[
-                    [
-                      "https://doi.org/10.1103/PhysRevE.95.042608",
-                      "2017 - Physical Review E article",
-                    ],
-                    [
-                      "https://doi.org/10.1364/OPTICA.4.001103",
-                      "2017 - Optica article",
-                    ],
-                    [
-                      "https://doi.org/10.1038/srep01759",
-                      "2013 - Scientific Reports article",
-                    ],
-                  ]}
-                />
-              </div>
-            </div>
+            <p>
+              Light carries momentum, and when a laser is tightly focused under
+              a microscope, it can exert forces on microscopic objects. This is
+              the principle behind optical tweezers, a powerful tool for
+              manipulating very small particles. During my undergraduate and PhD
+              studies I worked with the Optical Micro-manipulation Group at The
+              University of Queensland to research and develop novel techniques
+              to apply optical tweezers to the field of microrheology, measuring
+              viscoelastic properties of fluids in very small volumes by
+              tracking the motion of trapped particles.
+            </p>
+            <LinkList
+              links={[
+                [
+                  "https://doi.org/10.1103/PhysRevE.95.042608",
+                  "2017 - Physical Review E article",
+                ],
+                [
+                  "https://doi.org/10.1364/OPTICA.4.001103",
+                  "2017 - Optica article",
+                ],
+                [
+                  "https://doi.org/10.1038/srep01759",
+                  "2013 - Scientific Reports article",
+                ],
+              ]}
+            />
           </ProjectSection>
+
           <ProjectSection title="Wall Effects on Optically Trapped Spheres">
-            <div className="flex w-full gap-4 flex-wrap md:flex-nowrap">
-              <div className="my-4">
+            <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+              <div>
                 <p>
                   Optical tweezers are often used to manipulate spheres that are
                   close to boundaries. During my PhD with the Optical
@@ -287,16 +346,17 @@ const Home: React.FC = () => {
                   ]}
                 />
               </div>
-              <img
-                className="max-w-72 w-full mt-4 mb-auto aspect-square"
-                src="/images/home/projects/optical_tweezers_wall_effects.webp"
-                alt="Optical Tweezers"
+              <ThemedImage
+                className="w-full max-w-72"
+                darkSrc="/images/home/projects/optical_tweezers_wall_effects.webp"
+                lightSrc="/images/home/projects/optical_tweezers_wall_effects_light.png"
+                alt="Optical Tweezers wall effects"
               />
             </div>
           </ProjectSection>
         </div>
-      </div>
-    </>
+      </section>
+    </div>
   );
 };
 

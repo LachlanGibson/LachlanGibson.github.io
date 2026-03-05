@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect } from "react";
+import { Button } from "primereact/button";
+import { InputNumber } from "primereact/inputnumber";
 import {
   compareNumberArrays,
   countUniqueStrings,
@@ -154,7 +156,8 @@ const requiredTurns = (
 const MastermindPeg: React.FC<{
   colour: string;
   onClick?: React.MouseEventHandler;
-}> = ({ colour, onClick }) => {
+  sizeClass?: string;
+}> = ({ colour, onClick, sizeClass = "w-11" }) => {
   const lightColour = transformHexColour(colour, 40);
   const darkColour = transformHexColour(colour, -40);
 
@@ -165,20 +168,20 @@ const MastermindPeg: React.FC<{
 
   return (
     <div
-      className="rounded-full aspect-square"
+      className={`${sizeClass} aspect-square rounded-full`}
       style={customStyle}
       onClick={onClick}
     ></div>
   );
 };
 
-const EmptyPeg: React.FC<{ onClick?: React.MouseEventHandler }> = ({
-  onClick,
-}) => {
+const EmptyPeg: React.FC<{
+  onClick?: React.MouseEventHandler;
+  sizeClass?: string;
+}> = ({ onClick, sizeClass = "w-11" }) => {
   return (
     <div
-      className="rounded-full aspect-square bg-black"
-      style={{ margin: "25%" }}
+      className={`${sizeClass} aspect-square rounded-full bg-black/95`}
       onClick={onClick}
     ></div>
   );
@@ -312,194 +315,158 @@ const GameMastermind: React.FC = () => {
   }, [gameStatus, guesses.length, possibleCodes]);
 
   return (
-    <>
-      <div className="bg-slate-600 rounded max-w-sm mx-auto flex flex-col justify-center">
-        <div className="grid grid-flow-col gap-4 mt-4 p-3 rounded bg-slate-500 mx-4">
-          {colourOptions.slice(0, numberOfColours).map((colour, index) => {
-            return currentGuess.includes(index) ? (
-              <EmptyPeg key={index} />
-            ) : (
+    <div className="mx-auto flex max-w-lg flex-col rounded border border-(--site-border) bg-(--site-surface) p-4">
+      <div
+        className="grid justify-items-center gap-2 rounded bg-(--site-surface-alt) p-3 md:gap-3"
+        style={{
+          gridTemplateColumns: `repeat(${numberOfColours}, minmax(0, 1fr))`,
+        }}
+      >
+        {colourOptions.slice(0, numberOfColours).map((colour, index) =>
+          currentGuess.includes(index) ? (
+            <EmptyPeg key={index} sizeClass="w-full max-w-11" />
+          ) : (
+            <MastermindPeg
+              key={index}
+              colour={colour}
+              sizeClass="w-full max-w-11"
+              onClick={() => handleOptionClick(index)}
+            />
+          )
+        )}
+      </div>
+
+      <div className="mt-4 grid w-full grid-cols-[3rem_1fr] gap-4 border-t border-(--site-border) pt-4">
+        <div className="col-span-2 text-center text-2xl font-semibold">
+          {gameStatus
+            ? gameStatus === "win"
+              ? `You won with ${guesses.length} guesses!`
+              : "Too many guesses... Here is the correct code."
+            : `Guess ${guesses.length + 1}/${maxNumberOfGuesses}`}
+        </div>
+        <Button
+          type="button"
+          onClick={gameStatus ? resetGame : handleSubmit}
+          aria-label={gameStatus ? "Reset game" : "Submit guess"}
+          icon={gameStatus ? "pi pi-refresh" : "pi pi-check"}
+          className="m-auto h-10 w-10"
+          text
+        />
+        <div
+          className="grid w-full justify-items-center gap-2 md:gap-3"
+          style={{ gridTemplateColumns: `repeat(${codeSize}, minmax(0, 1fr))` }}
+        >
+          {(gameStatus ? code : currentGuess).map((value, index) => {
+            if (!gameStatus && value === -1) {
+              return <EmptyPeg key={`currentguess-${index}`} />;
+            }
+            return (
               <MastermindPeg
-                key={index}
-                colour={colour}
-                onClick={() => handleOptionClick(index)}
+                key={`${gameStatus ? "code" : "currentguess"}-${index}`}
+                colour={colourOptions[value]}
+                onClick={!gameStatus ? () => handleGuessClick(index) : undefined}
               />
             );
           })}
         </div>
-        <div className="w-full grid grid-cols-[3rem,1fr] gap-4 p-4">
-          <div className="border-t pt-3 col-span-2 text-center">
-            {gameStatus
-              ? gameStatus === "win"
-                ? `You won with ${guesses.length} guesses!`
-                : "Too many guesses... Here is the correct code."
-              : `Guess ${guesses.length + 1}/${maxNumberOfGuesses}`}
+
+        <div className="col-span-2 border-t border-(--site-border) pt-4">
+          <div className="mx-auto mb-3 flex w-fit items-center gap-2 text-sm text-(--site-text-muted)">
+            <span className="font-semibold">History</span>
+            <span>(red-white)</span>
           </div>
-          {gameStatus && (
-            <button
-              type="button"
-              onClick={resetGame}
-              aria-label="Reset game"
-              className="text-white font-medium rounded-lg w-10 h-10 m-auto text-2xl border border-slate-700 bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
-            >
-              <svg
-                viewBox="0 0 1024 1024"
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className="h-6 m-auto"
-              >
-                <path d="M936.571429 603.428571q0 2.857143-0.571429 4-36.571429 153.142857-153.142857 248.285715T509.714286 950.857143q-83.428571 0-161.428572-31.428572T209.142857 829.714286l-73.714286 73.714285q-10.857143 10.857143-25.714285 10.857143t-25.714286-10.857143-10.857143-25.714285v-256q0-14.857143 10.857143-25.714286t25.714286-10.857143h256q14.857143 0 25.714285 10.857143t10.857143 25.714286-10.857143 25.714285l-78.285714 78.285715q40.571429 37.714286 92 58.285714t106.857143 20.571429q76.571429 0 142.857143-37.142858t106.285714-102.285714q6.285714-9.714286 30.285714-66.857143 4.571429-13.142857 17.142858-13.142857h109.714285q7.428571 0 12.857143 5.428572t5.428572 12.857142z m14.285714-457.142857v256q0 14.857143-10.857143 25.714286t-25.714286 10.857143h-256q-14.857143 0-25.714285-10.857143t-10.857143-25.714286 10.857143-25.714285l78.857142-78.857143Q626.857143 219.428571 512 219.428571q-76.571429 0-142.857143 37.142858T262.857143 358.857143q-6.285714 9.714286-30.285714 66.857143-4.571429 13.142857-17.142858 13.142857H101.714286q-7.428571 0-12.857143-5.428572T83.428571 420.571429v-4q37.142857-153.142857 154.285715-248.285715T512 73.142857q83.428571 0 162.285714 31.714286T814.285714 194.285714l74.285715-73.714285q10.857143-10.857143 25.714285-10.857143t25.714286 10.857143 10.857143 25.714285z" />
-              </svg>
-            </button>
-          )}
-          {!gameStatus && (
-            <button
-              type="button"
-              onClick={handleSubmit}
-              aria-label="Submit guess"
-              className="text-white font-medium rounded-lg w-10 h-10 m-auto text-2xl border border-slate-700 bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 320 512"
-                fill="currentColor"
-                className="h-6 m-auto"
-              >
-                <path d="M143 256.3L7 120.3c-9.4-9.4-9.4-24.6 0-33.9l22.6-22.6c9.4-9.4 24.6-9.4 33.9 0l96.4 96.4 96.4-96.4c9.4-9.4 24.6-9.4 33.9 0L313 86.3c9.4 9.4 9.4 24.6 0 33.9l-136 136c-9.4 9.5-24.6 9.5-34 .1zm34 192l136-136c9.4-9.4 9.4-24.6 0-33.9l-22.6-22.6c-9.4-9.4-24.6-9.4-33.9 0L160 352.1l-96.4-96.4c-9.4-9.4-24.6-9.4-33.9 0L7 278.3c-9.4 9.4-9.4 24.6 0 33.9l136 136c9.4 9.5 24.6 9.5 34 .1z" />
-              </svg>
-            </button>
-          )}
-          {!gameStatus && (
-            <div className="inputRow w-full grid grid-flow-col gap-4">
-              {currentGuess.map((guess, index) => {
-                if (guess === -1) {
-                  return <EmptyPeg key={`currentguess-${index}`} />;
-                }
-                return (
-                  <MastermindPeg
-                    key={`currentguess-${index}`}
-                    colour={colourOptions[guess]}
-                    onClick={() => handleGuessClick(index)}
-                  ></MastermindPeg>
-                );
-              })}
-            </div>
-          )}
-          {gameStatus && (
-            <div className="w-full grid grid-flow-col gap-4">
-              {code.map((value, index) => {
-                return (
-                  <MastermindPeg
-                    key={`code-${index}`}
-                    colour={colourOptions[value]}
-                    onClick={() => handleGuessClick(index)}
-                  ></MastermindPeg>
-                );
-              })}
-            </div>
-          )}
-          <div className="border-b h-3 col-span-2"></div>
-          {guesses.length > 0 && (
-            <div className="text-center flex justify-center items-center gap-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                fill="currentColor"
-                className="h-4"
-              >
-                <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
-              </svg>
-              {` \u2013 `}
-              <svg
-                fill="currentColor"
-                className="h-4"
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 92 92"
-              >
-                <path d="M92,55.5c0,1.1-0.4,2.1-1.2,2.8L72.2,76.9c-0.8,0.8-1.8,1.1-2.8,1.1c-1,0-2.1-0.5-2.8-1.2 c-1.6-1.6-1.6-4.2,0-5.8l11.7-12H39.2c-2.2,0-4-1.8-4-4s1.8-4,4-4h39.1L66.6,39.5c-1.6-1.6-1.6-3.9,0-5.4c1.6-1.6,4.1-1.6,5.7,0 l18.6,18.6C91.6,53.4,92,54.4,92,55.5z M13.7,41h39.1c2.2,0,4-1.8,4-4s-1.8-4-4-4H13.7l11.7-12c1.6-1.6,1.6-4.2,0-5.8 s-4.1-1.6-5.7-0.1L1.2,33.7C0.4,34.4,0,35.4,0,36.5s0.4,2.1,1.2,2.8l18.6,18.6c0.8,0.8,1.8,1.2,2.8,1.2c1,0,2.1-0.4,2.8-1.2 c1.6-1.6,1.6-3.9,0-5.4L13.7,41z"></path>
-              </svg>
-            </div>
-          )}
-          {guesses.length > 0 && <div className="text-center">Guesses</div>}
-          {guesses?.map((guess, row) => (
-            <React.Fragment key={`guessRow-${row}`}>
-              <div className="flex justify-center items-center">
-                <div>{`${guessResults[row][0]} \u2013 ${guessResults[row][1]}`}</div>
-              </div>
-              <div className="w-full grid grid-flow-col gap-4">
-                {guess.map((value, col) => (
-                  <MastermindPeg
-                    key={`col-${col}`}
-                    colour={colourOptions[value]}
-                  />
-                ))}
-              </div>
-            </React.Fragment>
-          ))}
+          <div className="grid grid-cols-[3rem_1fr] gap-x-4 gap-y-2">
+            {guesses.map((guess, row) => (
+              <React.Fragment key={`guessRow-${row}`}>
+                <div className="flex items-center justify-center text-sm font-semibold">
+                  {`${guessResults[row][0]} - ${guessResults[row][1]}`}
+                </div>
+                <div
+                  className="grid w-full justify-items-center gap-2 md:gap-3"
+                  style={{
+                    gridTemplateColumns: `repeat(${guess.length}, minmax(0, 1fr))`,
+                  }}
+                >
+                  {guess.map((value, col) => (
+                    <MastermindPeg
+                      key={`col-${row}-${col}`}
+                      colour={colourOptions[value]}
+                    />
+                  ))}
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={resetGame}
-          aria-label="Reset game"
-          className="text-white font-medium rounded-lg w-10 h-10 m-auto mb-2 text-2xl border border-slate-700 bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
-        >
-          <svg
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            className="h-6 m-auto"
-          >
-            <path d="M936.571429 603.428571q0 2.857143-0.571429 4-36.571429 153.142857-153.142857 248.285715T509.714286 950.857143q-83.428571 0-161.428572-31.428572T209.142857 829.714286l-73.714286 73.714285q-10.857143 10.857143-25.714285 10.857143t-25.714286-10.857143-10.857143-25.714285v-256q0-14.857143 10.857143-25.714286t25.714286-10.857143h256q14.857143 0 25.714285 10.857143t10.857143 25.714286-10.857143 25.714285l-78.285714 78.285715q40.571429 37.714286 92 58.285714t106.857143 20.571429q76.571429 0 142.857143-37.142858t106.285714-102.285714q6.285714-9.714286 30.285714-66.857143 4.571429-13.142857 17.142858-13.142857h109.714285q7.428571 0 12.857143 5.428572t5.428572 12.857142z m14.285714-457.142857v256q0 14.857143-10.857143 25.714286t-25.714286 10.857143h-256q-14.857143 0-25.714285-10.857143t-10.857143-25.714286 10.857143-25.714285l78.857142-78.857143Q626.857143 219.428571 512 219.428571q-76.571429 0-142.857143 37.142858T262.857143 358.857143q-6.285714 9.714286-30.285714 66.857143-4.571429 13.142857-17.142858 13.142857H101.714286q-7.428571 0-12.857143-5.428572T83.428571 420.571429v-4q37.142857-153.142857 154.285715-248.285715T512 73.142857q83.428571 0 162.285714 31.714286T814.285714 194.285714l74.285715-73.714285q10.857143-10.857143 25.714285-10.857143t25.714286 10.857143 10.857143 25.714285z" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          onClick={provideHint}
-          aria-label="Hint"
-          className="text-white font-medium rounded-lg w-10 h-10 m-auto mb-2 text-2xl border border-slate-700 bg-gray-500 hover:bg-gray-700 active:bg-gray-600"
-        >
-          ?
-        </button>
-        <label>
-          <span>Guesses:</span>
-          <input
-            className="w-10 text-black"
-            type="number"
-            min="6"
-            max="12"
-            value={maxNumberOfGuesses}
-            onChange={(e) => setMaxNumberOfGuesses(+e.target.value)}
-          />
-        </label>
-        <label>
-          <span>Code size:</span>
-          <input
-            className="w-10 text-black"
-            type="number"
-            min={3}
-            max={numberOfColours}
-            value={codeSize}
-            onChange={(e) => setCodeSize(+e.target.value)}
-          />
-        </label>
-        <label>
-          <span>Colours:</span>
-          <input
-            className="w-10 text-black"
-            type="number"
-            min={codeSize}
-            max={maxNumberOfColours}
-            value={numberOfColours}
-            onChange={(e) => setNumberOfColours(+e.target.value)}
-          />
-        </label>
-        <p>{`Remaining options: ${possibleCodes.length}`}</p>
       </div>
-    </>
+
+      <div className="mt-5 border-t border-(--site-border) pt-4">
+        <div className="mb-4 flex items-center justify-center gap-3">
+          <Button
+            type="button"
+            onClick={resetGame}
+            aria-label="Reset game"
+            icon="pi pi-refresh"
+            className="h-10 w-10"
+            text
+          />
+          <Button
+            type="button"
+            onClick={provideHint}
+            aria-label="Hint"
+            icon="pi pi-question"
+            className="h-10 w-10"
+            text
+          />
+        </div>
+
+        <div className="mx-auto grid w-full max-w-xs gap-2">
+          <label className="grid grid-cols-[1fr_5rem] items-center gap-3 text-sm">
+            <span>Guesses:</span>
+            <InputNumber
+              inputClassName="w-full text-center"
+              className="w-20"
+              min={6}
+              max={12}
+              value={maxNumberOfGuesses}
+              onValueChange={(e) => {
+                if (e.value !== null) setMaxNumberOfGuesses(Number(e.value));
+              }}
+              useGrouping={false}
+            />
+          </label>
+          <label className="grid grid-cols-[1fr_5rem] items-center gap-3 text-sm">
+            <span>Code size:</span>
+            <InputNumber
+              inputClassName="w-full text-center"
+              className="w-20"
+              min={3}
+              max={numberOfColours}
+              value={codeSize}
+              onValueChange={(e) => {
+                if (e.value !== null) setCodeSize(Number(e.value));
+              }}
+              useGrouping={false}
+            />
+          </label>
+          <label className="grid grid-cols-[1fr_5rem] items-center gap-3 text-sm">
+            <span>Colours:</span>
+            <InputNumber
+              inputClassName="w-full text-center"
+              className="w-20"
+              min={codeSize}
+              max={maxNumberOfColours}
+              value={numberOfColours}
+              onValueChange={(e) => {
+                if (e.value !== null) setNumberOfColours(Number(e.value));
+              }}
+              useGrouping={false}
+            />
+          </label>
+          <p className="mt-1 text-center text-xl font-semibold">{`Remaining options: ${possibleCodes.length}`}</p>
+        </div>
+      </div>
+    </div>
   );
 };
 

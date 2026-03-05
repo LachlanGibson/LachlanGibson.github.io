@@ -125,7 +125,7 @@ const TicTacToe = () => {
           starting board state, the algorithm for computing the expected score
           works as follows:
         </p>
-        <ol className="list-decimal list-outside max-w-md pl-4 mx-auto my-4">
+        <ol className="mx-auto my-4 max-w-md list-outside list-decimal pl-4">
           <li>
             Check if the game is over. If so, then return 1 if X won, -1 if O
             won, or 0 if the game is a tie.
@@ -213,7 +213,7 @@ const TicTacToe = () => {
           produced some interesting results, which are illustrated in the figure
           below.
         </p>
-        <div className="grid gap-4 justify-center grid-cols-1 sm2:grid-cols-2 max-w-2xl mx-auto my-4">
+        <div className="sm2:grid-cols-2 mx-auto my-4 grid max-w-2xl grid-cols-1 justify-center gap-4">
           <img
             className="w-full"
             src="/blog/files/tic-tac-toe/p_estimates_T1.svg"
@@ -253,7 +253,7 @@ const TicTacToe = () => {
           figures below illustrate how the expected scores of these moves depend
           on the player temperatures.
         </p>
-        <div className="grid gap-4 justify-center grid-cols-1 sm2:grid-cols-2 max-w-2xl mx-auto my-4">
+        <div className="sm2:grid-cols-2 mx-auto my-4 grid max-w-2xl grid-cols-1 justify-center gap-4">
           <img
             className="w-full"
             src="/blog/files/tic-tac-toe/scores_T1.svg"
