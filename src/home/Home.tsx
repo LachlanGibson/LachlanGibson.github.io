@@ -2,67 +2,15 @@ import React from "react";
 import IconLinks from "../navigation/IconLinks";
 import LinkList from "./LinkList";
 
-const skills: { title: string; items: string[] }[] = [
-  {
-    title: "Artificial Intelligence",
-    items: [
-      "Machine learning",
-      "Deep learning",
-      "Reinforcement learning",
-      "Dimensionality reduction",
-    ],
-  },
-  {
-    title: "Algorithmic Design",
-    items: [
-      "Neural network architecture",
-      "Q-Learning",
-      "Dynamic programming",
-      "Numerical methods",
-    ],
-  },
-  {
-    title: "Scientific Computing",
-    items: [
-      "MATLAB",
-      "Finite element method",
-      "Finite difference method",
-      "Discrete event simulation",
-    ],
-  },
-  {
-    title: "Data Analytics",
-    items: ["Python, R, SQL", "PyTorch", "pandas", "Matplotlib"],
-  },
-];
-
-const SkillCard: React.FC<{ title: string; items: string[] }> = ({
-  title,
-  items,
-}) => {
-  return (
-    <article className="border-l-2 border-(--site-border) pl-3">
-      <h3 className="text-lg leading-tight font-semibold text-(--site-text)">
-        {title}
-      </h3>
-      <ul className="mt-2 space-y-0.5 text-sm leading-tight text-(--site-text-muted)">
-        {items.map((item) => (
-          <li key={item} className="before:mr-1 before:content-['-']">
-            {item}
-          </li>
-        ))}
-      </ul>
-    </article>
-  );
-};
-
 const ProjectSection: React.FC<{
+  id?: string;
   title: string;
   children: React.ReactNode;
   noTopBorder?: boolean;
-}> = ({ title, children, noTopBorder = false }) => {
+}> = ({ id, title, children, noTopBorder = false }) => {
   return (
     <section
+      id={id}
       className={`${noTopBorder ? "" : "border-t border-(--site-border)"} pt-6`}
     >
       <h3 className="text-xl leading-tight font-bold tracking-[0.01em] text-(--site-text) md:text-2xl">
@@ -83,8 +31,16 @@ const ThemedImage: React.FC<{
 }> = ({ darkSrc, lightSrc, alt, className }) => {
   return (
     <>
-      <img className={`theme-image-dark ${className ?? ""}`} src={darkSrc} alt={alt} />
-      <img className={`theme-image-light ${className ?? ""}`} src={lightSrc} alt={alt} />
+      <img
+        className={`theme-image-dark ${className ?? ""}`}
+        src={darkSrc}
+        alt={alt}
+      />
+      <img
+        className={`theme-image-light ${className ?? ""}`}
+        src={lightSrc}
+        alt={alt}
+      />
     </>
   );
 };
@@ -92,8 +48,8 @@ const ThemedImage: React.FC<{
 const Home: React.FC = () => {
   return (
     <div className="space-y-10 pb-8 md:space-y-12">
-      <section className="border-b border-(--site-border) pb-8">
-        <div className="grid items-start gap-8 pt-2 md:grid-cols-[1fr_auto] md:gap-12">
+      <section className="pb-8">
+        <div className="grid items-start gap-8 pt-2 sm:grid-cols-[1fr_auto] sm:grid-rows-[auto_auto] sm:items-stretch sm:gap-x-12 sm:gap-y-6">
           <div>
             <p className="text-sm font-semibold tracking-[0.18em] text-(--site-link)/90 uppercase">
               Data Scientist and Developer
@@ -107,34 +63,31 @@ const Home: React.FC = () => {
             <IconLinks className="mt-3 flex h-5 w-28 justify-between" />
           </div>
 
-          <div className="relative mx-auto aspect-square h-36 overflow-hidden border border-(--site-link) bg-(--site-surface-alt) md:h-40">
+          <div className="relative mx-auto aspect-square h-36 overflow-hidden border border-(--site-link) bg-(--site-surface-alt) sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mx-0 sm:h-auto sm:w-52 sm:self-stretch sm:aspect-auto">
             <img
               className="h-full w-full object-cover"
               src="/images/home/lachlan_gibson_600.webp"
               alt="Lachlan Gibson"
             />
           </div>
-        </div>
 
-        <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {skills.map((skill) => (
-            <SkillCard
-              key={skill.title}
-              title={skill.title}
-              items={skill.items}
-            />
-          ))}
+          <p className="text-left text-(--site-text) sm:col-start-1 sm:row-start-2">
+            I am a software engineer with a background in physics, simulation,
+            AI, and mathematical modelling. My work spans research, teaching,
+            and full-stack software development.
+          </p>
         </div>
       </section>
 
       <section>
-        <div className="border-b border-(--site-border) py-4">
+        <div className="flex min-h-24 items-center justify-center border-y border-(--site-border)">
           <h2 className="text-center text-3xl font-semibold tracking-[0.02em] text-(--site-text) md:text-4xl">
             Featured Projects
           </h2>
         </div>
         <div className="mt-6 space-y-8">
           <ProjectSection
+            id="rare-event-simulation"
             title="Rare-Event Simulation via Generative Models"
             noTopBorder
           >
@@ -193,7 +146,10 @@ const Home: React.FC = () => {
             </div>
           </ProjectSection>
 
-          <ProjectSection title="Control Optimisation with Q-Learning and the Whittle Index">
+          <ProjectSection
+            id="control-optimisation"
+            title="Control Optimisation with Q-Learning and the Whittle Index"
+          >
             <p>
               During my time as a postdoctoral research fellow at UQ I worked
               with Peter Jacko and Yoni Nazarathy to develop a method built on
@@ -231,7 +187,10 @@ const Home: React.FC = () => {
             </div>
           </ProjectSection>
 
-          <ProjectSection title="Modelling and Forecasting Environmental Changes">
+          <ProjectSection
+            id="environmental-forecasting"
+            title="Modelling and Forecasting Environmental Changes"
+          >
             <p>
               During my time with CARM we worked on a project to model
               environmental changes and effects on wild-caught species in
@@ -283,7 +242,10 @@ const Home: React.FC = () => {
             </div>
           </ProjectSection>
 
-          <ProjectSection title="Optical Tweezers Microrheology">
+          <ProjectSection
+            id="optical-tweezers-microrheology"
+            title="Optical Tweezers Microrheology"
+          >
             <p>
               Light carries momentum, and when a laser is tightly focused under
               a microscope, it can exert forces on microscopic objects. This is
@@ -313,7 +275,10 @@ const Home: React.FC = () => {
             />
           </ProjectSection>
 
-          <ProjectSection title="Wall Effects on Optically Trapped Spheres">
+          <ProjectSection
+            id="wall-effects"
+            title="Wall Effects on Optically Trapped Spheres"
+          >
             <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
               <div>
                 <p>
