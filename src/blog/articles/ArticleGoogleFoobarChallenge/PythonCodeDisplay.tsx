@@ -1,134 +1,181 @@
-import React, { useEffect, useState, CSSProperties } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Button } from "primereact/button";
 import { Prism } from "react-syntax-highlighter";
-import { okaidia as codeStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { coy, okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+const getThemeMode = () =>
+  document.documentElement.dataset.theme === "light" ? "light" : "dark";
 
 const PythonCodeDisplay: React.FC<{
   codeFile: string;
   startOpen?: boolean;
-}> = ({ codeFile, startOpen = false }) => {
+  title?: string;
+}> = ({ codeFile, startOpen = false, title = "Python Implementation" }) => {
   const [code, setCode] = useState("");
   const [showCode, setShowCode] = useState(startOpen);
-  const [showCopiedMessage, setShowCopiedMessage] = useState(false); // New state
-  const [isHoveringHide, setIsHoveringHide] = useState(false);
-  const [isHoveringCopy, setIsHoveringCopy] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [themeMode, setThemeMode] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
-    fetch(codeFile)
-      .then((response) => response.text())
-      .then((text) => {
-        setCode(text);
-      });
+    if (typeof document === "undefined") return;
+
+    setThemeMode(getThemeMode());
+    const observer = new MutationObserver(() => {
+      setThemeMode(getThemeMode());
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadCode = async () => {
+      setLoading(true);
+      setLoadFailed(false);
+
+      try {
+        const response = await fetch(codeFile);
+        if (!response.ok) {
+          throw new Error(`Failed to load ${codeFile}`);
+        }
+
+        const text = await response.text();
+        if (!cancelled) {
+          setCode(text);
+          setLoading(false);
+        }
+      } catch {
+        if (!cancelled) {
+          setLoadFailed(true);
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadCode();
+
+    return () => {
+      cancelled = true;
+    };
   }, [codeFile]);
 
-  const toggleCode = () => {
-    setShowCode(!showCode);
+  useEffect(() => {
+    if (!copied) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [copied]);
+
+  const codeStyle = useMemo(
+    () => (themeMode === "light" ? coy : okaidia),
+    [themeMode]
+  );
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(code).then(
-      () => {
-        setShowCopiedMessage(true);
-        setTimeout(() => {
-          setShowCopiedMessage(false);
-        }, 2000);
-      },
-      (err) => {
-        console.error("Could not copy text: ", err);
-      }
-    );
-  };
-
-  const codeContainerStyle: CSSProperties = {
-    position: "relative",
-    cursor: showCode ? "default" : "pointer",
-    maxWidth: showCode ? "100%" : "fit-content",
-    padding: "0",
-    margin: "0 auto",
-    overflowX: "auto",
-  };
-
-  const buttonStyle: CSSProperties = {
-    position: "absolute",
-    top: "0.6rem",
-    right: "0.6rem",
-    cursor: "pointer",
-    padding: "0.6rem",
-    backgroundColor: "transparent",
-    color: "white",
-    border: "none",
-    borderRadius: "1rem",
-    display: showCode ? "block" : "none",
-    height: "2.5rem",
-    margin: "0.3rem 0 0 0",
-  };
-
-  const copyButtonStyle: CSSProperties = {
-    ...buttonStyle,
-    right: "3.1rem",
-  };
-
-  const hoverEffect: CSSProperties = {
-    backgroundColor: "rgba(0,0,0,0.3)",
-    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.3)",
-  };
-
-  const cornerIconStyle: CSSProperties = {
-    width: "1rem",
-    filter: "invert(100%)",
-  };
-
-  const messageStyle: CSSProperties = {
-    position: "absolute",
-    top: "3.1rem",
-    right: "0.6rem",
-    padding: "0.4rem",
-    backgroundColor: "rgba(0,0,0,0.3)",
-    color: "white",
-    borderRadius: "0.6rem",
-    display: "block",
-    margin: "0.3rem 0 0 0",
-    fontSize: "1rem",
-  };
-
-  const handleMouseEnterHide = () => setIsHoveringHide(true);
-  const handleMouseLeaveHide = () => setIsHoveringHide(false);
-  const handleMouseEnterCopy = () => setIsHoveringCopy(true);
-  const handleMouseLeaveCopy = () => setIsHoveringCopy(false);
+  const hasVisibleBody = showCode;
 
   return (
-    <div
-      style={codeContainerStyle}
-      onClick={!showCode ? toggleCode : undefined}
-    >
-      <button
-        style={{ ...buttonStyle, ...(isHoveringHide ? hoverEffect : null) }}
-        onMouseEnter={handleMouseEnterHide}
-        onMouseLeave={handleMouseLeaveHide}
-        onClick={toggleCode}
+    <section className="my-5 overflow-hidden border border-(--site-border) bg-(--site-surface)">
+      <div
+        className={`flex flex-col gap-3 bg-(--site-surface-alt)/60 px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${
+          hasVisibleBody ? "border-b border-(--site-border)" : ""
+        }`}
       >
-        <img
-          src="/images/blog/google-foobar-challenge/minimise.svg"
-          alt="Hide"
-          style={cornerIconStyle}
-        />
-      </button>
-      <button
-        style={{ ...copyButtonStyle, ...(isHoveringCopy ? hoverEffect : null) }}
-        onMouseEnter={handleMouseEnterCopy}
-        onMouseLeave={handleMouseLeaveCopy}
-        onClick={copyToClipboard}
-      >
-        <img
-          src="/images/blog/google-foobar-challenge/clipboard.svg"
-          alt="Copy"
-          style={cornerIconStyle}
-        />
-      </button>
-      {showCopiedMessage && <div style={messageStyle}>Copied!</div>}
-      <Prism language="python" style={codeStyle}>
-        {showCode ? code : "--- Reveal Code ---"}
-      </Prism>
-    </div>
+        <div>
+          <p className="text-xs font-semibold tracking-[0.16em] text-(--site-link) uppercase">
+            {title}
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {copied && (
+            <span className="text-sm text-(--site-link)">Copied</span>
+          )}
+          {showCode && !loading && !loadFailed && (
+            <Button
+              type="button"
+              icon="pi pi-copy"
+              label="Copy"
+              onClick={() => void copyToClipboard()}
+              outlined
+              size="small"
+            />
+          )}
+          <Button
+            type="button"
+            icon={showCode ? "pi pi-eye-slash" : "pi pi-code"}
+            label={showCode ? "Hide Code" : "Reveal Code"}
+            onClick={() => setShowCode((current) => !current)}
+            size="small"
+          />
+        </div>
+      </div>
+
+      {showCode && loading && (
+        <div className="px-4 py-5">
+          <p className="font-['Share_Tech_Mono'] text-sm text-(--site-text-muted)">
+            Loading code...
+          </p>
+        </div>
+      )}
+
+      {showCode && loadFailed && (
+        <div className="px-4 py-5">
+          <p className="text-sm text-(--site-warning)">
+            The code snippet could not be loaded.
+          </p>
+        </div>
+      )}
+
+      {showCode && !loading && !loadFailed && (
+        <div className="overflow-x-auto">
+          <Prism
+            language="python"
+            style={codeStyle}
+            customStyle={{
+              margin: 0,
+              padding: "1rem",
+              borderRadius: 0,
+              background:
+                themeMode === "light"
+                  ? "var(--site-surface)"
+                  : "var(--site-bg)",
+            }}
+            codeTagProps={{
+              style: {
+                fontFamily: '"Share Tech Mono", monospace',
+                fontSize: "0.95rem",
+              },
+            }}
+            showLineNumbers
+            wrapLongLines={false}
+          >
+            {code}
+          </Prism>
+        </div>
+      )}
+    </section>
   );
 };
 

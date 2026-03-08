@@ -206,6 +206,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             </p>
             <PythonCodeDisplay
               codeFile={"/blog/files/google-foobar-challenge/reid.py"}
+              title="Re-ID Solution"
             />
           </section>
         </section>
@@ -288,6 +289,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
 
             <PythonCodeDisplay
               codeFile={"/blog/files/google-foobar-challenge/codedmessages.py"}
+              title="Please Pass the Coded Messages Solution"
             />
           </section>
           <section className={styles.foobarTask} id="sec-task-3">
@@ -365,6 +367,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               codeFile={
                 "/blog/files/google-foobar-challenge/bunnyworkerlocations.py"
               }
+              title="Bunny Worker Locations Solution"
             />
           </section>
         </section>
@@ -444,6 +447,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             </p>
             <PythonCodeDisplay
               codeFile={"/blog/files/google-foobar-challenge/prepareescape.py"}
+              title="Prepare the Bunnies' Escape Solution"
             />
           </section>
           <section className={styles.foobarTask} id="sec-task-5">
@@ -570,6 +574,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               codeFile={
                 "/blog/files/google-foobar-challenge/grandeststaircase.py"
               }
+              title="The Grandest Staircase Of Them All Solution"
             />
           </section>
           <section className={styles.foobarTask} id="sec-task-6">
@@ -695,6 +700,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             </p>
             <PythonCodeDisplay
               codeFile={"/blog/files/google-foobar-challenge/fuelinjection.py"}
+              title="Fuel Injection Perfection Solution"
             />
           </section>
         </section>
@@ -1018,6 +1024,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               codeFile={
                 "/blog/files/google-foobar-challenge/guntotrainerfight.py"
               }
+              title="Bringing a Gun to a Trainer Fight Solution"
             />
           </section>
           <section className={styles.foobarTask} id="sec-task-8">
@@ -1124,6 +1131,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               codeFile={
                 "/blog/files/google-foobar-challenge/freethebunnyworkers.py"
               }
+              title="Free the Bunny Workers Solution"
             />
           </section>
         </section>
@@ -1278,6 +1286,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             </p>
             <PythonCodeDisplay
               codeFile={"/blog/files/google-foobar-challenge/dodgethelasers.py"}
+              title="Dodge the Lasers! Solution"
             />
           </section>
         </section>
@@ -1435,6 +1444,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               codeFile={
                 "/blog/files/google-foobar-challenge/expandingnebula.py"
               }
+              title="Expanding Nebula Solution"
             />
           </section>
           <section className={styles.foobarTask} id="sec-task-11">
@@ -1647,6 +1657,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
               codeFile={
                 "/blog/files/google-foobar-challenge/disorderlyescape.py"
               }
+              title="Disorderly Escape Solution"
             />
           </section>
           <section className={styles.foobarTask} id="sec-task-12">
@@ -1755,6 +1766,7 @@ const ArticleGoogleFoobarChallenge: React.FC = () => {
             </p>
             <PythonCodeDisplay
               codeFile={"/blog/files/google-foobar-challenge/escapepods.py"}
+              title="Escape Pods Solution"
             />
           </section>
         </section>
