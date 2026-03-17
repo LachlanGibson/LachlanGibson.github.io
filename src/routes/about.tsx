@@ -2,7 +2,7 @@ import About from "../about/About";
 
 const title = "Lachlan Gibson - About";
 const description =
-  "Lachlan Gibson is a data scientist and developer with experience in AI, algorithmic design, scientific computing, and data analytics.";
+  "Lachlan Gibson is a software engineer with a background in physics, simulation, machine learning, and scientific computing.";
 const imageUrl =
   "https://www.lachlangibson.dev/images/home/lachlan_gibson.webp";
 const pageUrl = "https://www.lachlangibson.dev/about/";
