@@ -1,11 +1,9 @@
 import Blog from "../blog/Blog";
 
-const title = "Lachlan Gibson - Blog";
-const description =
-  "My blog is where I show off some of my projects and write about topics that interest me.";
-const imageUrl =
-  "https://www.lachlangibson.dev/images/home/lachlan_gibson.webp";
-const pageUrl = "https://www.lachlangibson.dev/blog/";
+const title = "Lachlan Gibson - Articles";
+const description = "Writeups, interactive projects, and experiments.";
+const imageUrl = "https://www.lachlangibson.dev/images/home/lachlan_gibson.webp";
+const pageUrl = "https://www.lachlangibson.dev/articles/";
 
 export function meta() {
   return [

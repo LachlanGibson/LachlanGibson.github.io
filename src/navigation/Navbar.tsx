@@ -18,14 +18,8 @@ const Navbar: React.FC = () => {
   return (
     <nav className="flex min-h-12 items-center px-3 py-4 text-(--site-text) sm:px-4">
       <div className="mr-auto flex items-center gap-3">
-        <img
-          src="/navbar/icons/LG_logo.svg"
-          alt="Logo for Lachlan Gibson's website"
-          className="h-7 w-7"
-        />
-        <span className="text-sm font-medium tracking-[0.01em] max-[460px]:hidden">
-          lachlangibson.dev
-        </span>
+        <img src="/navbar/icons/LG_logo.svg" alt="Logo for Lachlan Gibson's website" className="h-7 w-7" />
+        <span className="text-sm font-medium tracking-[0.01em] max-[460px]:hidden">lachlangibson.dev</span>
       </div>
       <div className="flex items-center gap-5 max-[580px]:gap-3">
         <NavLink className={navLinkClass} to="/">
@@ -34,8 +28,8 @@ const Navbar: React.FC = () => {
         <NavLink className={navLinkClass} to="/about/">
           About
         </NavLink>
-        <NavLink className={navLinkClass} to="/blog/">
-          Portfolio
+        <NavLink className={navLinkClass} to="/articles/">
+          Articles
         </NavLink>
         <button
           type="button"

@@ -3,20 +3,15 @@ import articleMetaData from "../blog/articleMetaData";
 
 const siteRoot = "https://www.lachlangibson.dev";
 
-export function meta(
-  { params }: { params?: { slug?: string } } = {}
-) {
+export function meta({ params }: { params?: { slug?: string } } = {}) {
   const slug = params?.slug;
   const article = slug ? articleMetaData[slug] : undefined;
 
   if (!article || !slug) {
-    return [
-      { title: "Article Not Found - Lachlan Gibson" },
-      { name: "robots", content: "noindex, follow" },
-    ];
+    return [{ title: "Article Not Found - Lachlan Gibson" }, { name: "robots", content: "noindex, follow" }];
   }
 
-  const url = `${siteRoot}/blog/${slug}/`;
+  const url = `${siteRoot}/articles/${slug}/`;
   const imageUrl = article.imageLink ? `${siteRoot}${article.imageLink}` : "";
   const modifiedDate = article.modifiedDateISO || article.publishedDateISO;
 
@@ -45,9 +40,7 @@ export function meta(
       property: "article:tag",
       content: tag,
     })) || []),
-    ...(article.metaTags
-      ? [{ name: "keywords", content: article.metaTags.join(", ") }]
-      : []),
+    ...(article.metaTags ? [{ name: "keywords", content: article.metaTags.join(", ") }] : []),
     { name: "twitter:card", content: "summary" },
     { name: "twitter:title", content: article.title },
     { name: "twitter:description", content: article.description },
@@ -55,12 +48,10 @@ export function meta(
   ];
 }
 
-export function links(
-  { params }: { params?: { slug?: string } } = {}
-) {
+export function links({ params }: { params?: { slug?: string } } = {}) {
   const slug = params?.slug;
   if (!slug) return [];
-  return [{ rel: "canonical", href: `${siteRoot}/blog/${slug}/` }];
+  return [{ rel: "canonical", href: `${siteRoot}/articles/${slug}/` }];
 }
 
 export default function ArticleRoute() {

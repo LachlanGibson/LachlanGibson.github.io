@@ -23,6 +23,7 @@ export type ArticleType = {
   otherMetaElements?: ReactElement[];
   metaTags?: string[];
   language: string;
+  wip?: boolean;
   articleElement: ReactElement;
 };
 
@@ -33,6 +34,7 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
+    wip: true,
     publishedDateISO: "2024-01-26",
     publishedDateLabel: "Work in progress",
     svgLink: "/images/blog/thumbnail/svg/mastermind.svg",
@@ -48,6 +50,7 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     author: "Lachlan Gibson",
     authorImageLink: "/images/home/lachlan_gibson_200.webp",
     type: "article",
+    wip: true,
     publishedDateISO: "2024-01-20",
     publishedDateLabel: "Work in progress",
     svgLink: "/images/blog/thumbnail/svg/codenames.svg",
@@ -116,8 +119,7 @@ const articleMetaData: { [slug: string]: ArticleType } = {
     svgLink: "/images/blog/thumbnail/svg/tic-tac-toe.svg",
     imageLink: "/images/blog/thumbnail/webp/tic-tac-toe.webp",
     imageResolution: ["1200", "800"],
-    description:
-      "A functional game of tic-tac-toe with an interesting AI opponent and explanation.",
+    description: "A functional game of tic-tac-toe with an interesting AI opponent and explanation.",
     language: "en-au",
     metaTags: [
       "ai",

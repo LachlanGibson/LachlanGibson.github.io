@@ -215,7 +215,7 @@ const About: React.FC = () => {
 
             <div className="mt-6 flex flex-wrap items-center gap-4">
               <Link
-                to="/blog/"
+                to="/articles/"
                 className="border border-(--site-link) bg-(--site-link) px-5 py-2.5 text-sm font-semibold text-[#0f2030] no-underline hover:no-underline"
               >
                 View portfolio
@@ -275,7 +275,7 @@ const About: React.FC = () => {
           </div>
           <div className="flex flex-wrap gap-3">
             <Link
-              to="/blog/"
+              to="/articles/"
               className="border border-(--site-link) bg-(--site-link) px-5 py-2.5 text-sm font-semibold text-[#0f2030] no-underline hover:no-underline"
             >
               Go to portfolio

@@ -4,8 +4,8 @@ export default [
   layout("routes/layout.tsx", [
     index("routes/home.tsx"),
     route("about", "routes/about.tsx"),
-    route("blog", "routes/blog.tsx"),
-    route("blog/article-not-found", "routes/article-not-found.tsx"),
-    route("blog/:slug", "routes/article.tsx"),
+    route("articles", "routes/blog.tsx"),
+    route("articles/article-not-found", "routes/article-not-found.tsx"),
+    route("articles/:slug", "routes/article.tsx"),
   ]),
 ] satisfies RouteConfig;
