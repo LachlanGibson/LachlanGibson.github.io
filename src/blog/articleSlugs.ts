@@ -1,4 +1,5 @@
 const articleSlugs = [
+  "tower-defense",
   "mastermind",
   "codenames",
   "connect-four",

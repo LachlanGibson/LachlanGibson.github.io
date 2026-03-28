@@ -5,6 +5,7 @@ import Codenames from "./articles/Codenames/Codenames";
 import ConnectFour from "./articles/ConnectFour/ConnectFour";
 import Mastermind from "./articles/Mastermind/Mastermind";
 import TicTacToe from "./articles/Tictactoe/TicTacToe";
+import TowerDefense from "./articles/TowerDefense/TowerDefense";
 
 export type ArticleType = {
   title: string;
@@ -28,6 +29,22 @@ export type ArticleType = {
 };
 
 const articleMetaData: { [slug: string]: ArticleType } = {
+  "tower-defense": {
+    title: "Pathfinding and A* in Tower Defense",
+    titleShort: "Tower Defense",
+    author: "Lachlan Gibson",
+    authorImageLink: "/images/home/lachlan_gibson_200.webp",
+    type: "article",
+    wip: true,
+    publishedDateISO: "2026-03-28",
+    publishedDateLabel: "Work in progress",
+    svgLink: "/images/blog/thumbnail/svg/connect-four.svg",
+    imageLink: "/images/blog/thumbnail/webp/connect-four.webp",
+    imageResolution: ["1200", "800"],
+    description: "An interactive tower defense game demonstrating the A* pathfinding algorithm.",
+    language: "en-au",
+    articleElement: <TowerDefense />,
+  },
   mastermind: {
     title: "Building a Mastermind AI",
     titleShort: "AI: Mastermind",
