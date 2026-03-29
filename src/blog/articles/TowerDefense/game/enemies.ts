@@ -5,16 +5,19 @@ export function createEnemy(
   type: EnemyType,
   waypoints: Cell[] | null,
   id: string,
+  hpMultiplier = 1,
+  speedMultiplier = 1,
 ): Enemy {
   const stats = ENEMY_STATS[type];
+  const hp = stats.hp * hpMultiplier;
   return {
     id,
     type,
     cellX: START_COL + 0.5,
     cellY: START_ROW + 0.5,
-    hp: stats.hp,
-    maxHp: stats.hp,
-    speed: stats.speed,
+    hp,
+    maxHp: hp,
+    speed: stats.speed * speedMultiplier,
     reward: stats.reward,
     waypoints,
     waypointIndex: 1,

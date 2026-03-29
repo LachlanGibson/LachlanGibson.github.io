@@ -7,10 +7,11 @@ export const START_ROW = 7;
 export const END_COL = 21;
 export const END_ROW = 7;
 
-export const STARTING_GOLD = 15000;
+export const STARTING_GOLD = 100;
 export const STARTING_LIVES = 20;
-export const TOTAL_WAVES = 15;
-export const WAVE_COMPLETE_DURATION = 2.0;
+export const BOSS_WAVE_INTERVAL = 20;
+export const PROCEDURAL_WAVE_START_INDEX = 15; // 0-indexed; wave 16+ is procedural
+export const WAVE_COMPLETE_DURATION = 8.0;
 export const SELL_REFUND_RATE = 0.6;
 export const NO_LEAK_BONUS = 25;
 export const MAX_DELTA_TIME = 0.1;
@@ -33,7 +34,7 @@ export interface EnemyStats {
 export const ENEMY_STATS: Record<EnemyType, EnemyStats> = {
   critter: {
     name: "Critter",
-    hp: 60,
+    hp: 90,
     speed: 2.5,
     reward: 5,
     radiusFraction: 0.28,
@@ -43,7 +44,7 @@ export const ENEMY_STATS: Record<EnemyType, EnemyStats> = {
   },
   runner: {
     name: "Runner",
-    hp: 30,
+    hp: 45,
     speed: 5.0,
     reward: 4,
     radiusFraction: 0.22,
@@ -53,7 +54,7 @@ export const ENEMY_STATS: Record<EnemyType, EnemyStats> = {
   },
   brute: {
     name: "Brute",
-    hp: 400,
+    hp: 600,
     speed: 1.2,
     reward: 12,
     radiusFraction: 0.4,
@@ -63,7 +64,7 @@ export const ENEMY_STATS: Record<EnemyType, EnemyStats> = {
   },
   swarm: {
     name: "Swarm",
-    hp: 15,
+    hp: 22,
     speed: 3.0,
     reward: 2,
     radiusFraction: 0.18,
@@ -73,7 +74,7 @@ export const ENEMY_STATS: Record<EnemyType, EnemyStats> = {
   },
   splitter: {
     name: "Splitter",
-    hp: 120,
+    hp: 180,
     speed: 2.0,
     reward: 8,
     radiusFraction: 0.32,
@@ -83,7 +84,7 @@ export const ENEMY_STATS: Record<EnemyType, EnemyStats> = {
   },
   flyer: {
     name: "Flyer",
-    hp: 50,
+    hp: 75,
     speed: 3.5,
     reward: 7,
     radiusFraction: 0.26,
@@ -93,7 +94,7 @@ export const ENEMY_STATS: Record<EnemyType, EnemyStats> = {
   },
   boss: {
     name: "Boss",
-    hp: 2000,
+    hp: 3000,
     speed: 1.0,
     reward: 50,
     radiusFraction: 0.55,
@@ -120,9 +121,9 @@ export interface TowerStats {
 export const TOWER_STATS: Record<TowerType, TowerStats> = {
   arrow: {
     name: "Arrow",
-    cost: 50,
-    damage: 20,
-    range: 3.0,
+    cost: 10,
+    damage: 8,
+    range: 2.5,
     fireRate: 1.5,
     projectileSpeed: 16,
     splashRadius: 0,
@@ -205,9 +206,9 @@ export interface TowerUpgrade {
 
 export const TOWER_UPGRADES: Record<TowerType, TowerUpgrade[]> = {
   arrow: [
-    { cost: 50, description: "+30% dmg, +0.5 range", damageMult: 1.3, rangeDelta: 0.5 },
+    { cost: 50, description: "+60% dmg, +0.5 range", damageMult: 1.6, rangeDelta: 0.5 },
     { cost: 50, description: "Piercing (2 targets)", piercingCount: 2 },
-    { cost: 50, description: "Poison: 5 dmg/s for 3s", poisonDps: 5, poisonDuration: 3.0 },
+    { cost: 50, description: "Poison: 10 dmg/s for 4s", poisonDps: 10, poisonDuration: 4.0 },
   ],
   cannon: [
     { cost: 100, description: "+40% dmg, +0.3 splash", damageMult: 1.4, splashDelta: 0.3 },

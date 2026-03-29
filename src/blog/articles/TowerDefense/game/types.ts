@@ -1,6 +1,6 @@
 export type EnemyType = 'critter' | 'runner' | 'brute' | 'swarm' | 'splitter' | 'flyer' | 'boss';
 export type TowerType = 'arrow' | 'cannon' | 'slow' | 'sniper' | 'antiair';
-export type GamePhase = 'preparing' | 'wave-in-progress' | 'wave-complete' | 'game-over' | 'victory';
+export type GamePhase = 'preparing' | 'wave-in-progress' | 'wave-complete' | 'game-over';
 export type CellState = 'empty' | 'tower' | 'start' | 'end';
 
 export interface Cell {
@@ -95,6 +95,8 @@ export interface Projectile {
 export interface SpawnEntry {
   type: EnemyType;
   timeUntilSpawn: number;    // seconds until this enemy spawns
+  hpMultiplier: number;      // scales enemy max HP (1.0 = base)
+  speedMultiplier: number;   // scales enemy speed (1.0 = base)
 }
 
 export interface GameState {

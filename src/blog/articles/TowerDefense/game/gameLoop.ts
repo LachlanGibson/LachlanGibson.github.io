@@ -1,6 +1,6 @@
 import type { GameState, Enemy } from './types';
 import {
-  TOTAL_WAVES, WAVE_COMPLETE_DURATION, NO_LEAK_BONUS, MAX_DELTA_TIME,
+  WAVE_COMPLETE_DURATION, NO_LEAK_BONUS, MAX_DELTA_TIME,
   FLASH_DURATION, FLOAT_DURATION, DEATH_PARTICLE_DURATION, SPLASH_EFFECT_DURATION,
   ENEMY_STATS, TOWER_STATS,
 } from './constants';
@@ -10,18 +10,29 @@ import { updateProjectiles } from './projectiles';
 import { buildSpawnQueue } from './waves';
 
 export function startWave(state: GameState): void {
-  if (state.phase !== 'preparing') return;
-  if (state.wave >= TOTAL_WAVES) return;
+  if (
+    state.phase !== 'preparing' &&
+    state.phase !== 'wave-complete' &&
+    state.phase !== 'wave-in-progress'
+  ) return;
   state.wave += 1;
-  state.phase = 'wave-in-progress';
-  state.hasLeakedThisWave = false;
-  state.spawnQueue = buildSpawnQueue(state.wave - 1); // 0-indexed
+  const newEntries = buildSpawnQueue(state.wave - 1); // 0-indexed
+  if (state.phase === 'wave-in-progress') {
+    // Overlapping wave: merge new entries into existing queue
+    state.spawnQueue = [...state.spawnQueue, ...newEntries].sort(
+      (a, b) => a.timeUntilSpawn - b.timeUntilSpawn,
+    );
+  } else {
+    state.phase = 'wave-in-progress';
+    state.hasLeakedThisWave = false;
+    state.spawnQueue = newEntries;
+  }
 }
 
 export function update(state: GameState, dt: number, syncHUD: () => void): void {
   const safeDt = Math.min(dt, MAX_DELTA_TIME);
 
-  if (state.phase === 'game-over' || state.phase === 'victory') return;
+  if (state.phase === 'game-over') return;
 
   // Always tick visual effects so they finish regardless of phase transition
   for (const ft of state.floatingTexts) ft.age += safeDt;
@@ -32,11 +43,15 @@ export function update(state: GameState, dt: number, syncHUD: () => void): void 
   state.splashEffects = state.splashEffects.filter(se => se.age < SPLASH_EFFECT_DURATION);
 
   if (state.phase === 'wave-complete') {
+    const prevCeil = Math.ceil(state.waveTimer);
     state.waveTimer -= safeDt;
     if (state.waveTimer <= 0) {
-      state.phase = state.wave >= TOTAL_WAVES ? 'victory' : 'preparing';
+      startWave(state);
       syncHUD();
+      return;
     }
+    // Sync HUD once per second so the countdown display updates
+    if (Math.ceil(state.waveTimer) !== prevCeil) syncHUD();
     return;
   }
 
@@ -46,7 +61,7 @@ export function update(state: GameState, dt: number, syncHUD: () => void): void 
     const toSpawn = state.spawnQueue.filter(e => e.timeUntilSpawn <= 0);
     state.spawnQueue = state.spawnQueue.filter(e => e.timeUntilSpawn > 0);
     for (const entry of toSpawn) {
-      state.enemies.push(createEnemy(entry.type, state.path ? [...state.path] : null, `e${state.nextId++}`));
+      state.enemies.push(createEnemy(entry.type, state.path ? [...state.path] : null, `e${state.nextId++}`, entry.hpMultiplier, entry.speedMultiplier));
     }
 
     // Move enemies (also ticks poison in enemies.ts)
@@ -54,9 +69,10 @@ export function update(state: GameState, dt: number, syncHUD: () => void): void 
       state.lives = Math.max(0, state.lives - livesLost);
       state.hasLeakedThisWave = true;
       if (state.lives === 0) state.phase = 'game-over';
+      syncHUD();
     });
 
-    if (state.phase === 'game-over') { syncHUD(); return; }
+    if ((state.phase as string) === 'game-over') { return; }
 
     // Towers fire
     updateTowers(state, safeDt, (proj) => state.projectiles.push(proj));
