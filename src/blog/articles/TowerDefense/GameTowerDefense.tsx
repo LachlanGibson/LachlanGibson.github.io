@@ -177,9 +177,8 @@ const GameTowerDefense: React.FC = () => {
     // --- Input ---
     const getCell = (e: MouseEvent): Cell | null => {
       const rect = canvas.getBoundingClientRect();
-      const cs = cellSizeRef.current;
-      const col = Math.floor((e.clientX - rect.left) / cs);
-      const row = Math.floor((e.clientY - rect.top) / cs);
+      const col = Math.floor((e.clientX - rect.left) * COLS / rect.width);
+      const row = Math.floor((e.clientY - rect.top) * ROWS / rect.height);
       if (col < 0 || col >= COLS || row < 0 || row >= ROWS) return null;
       return { col, row };
     };
@@ -290,9 +289,8 @@ const GameTowerDefense: React.FC = () => {
     // --- Touch support ---
     const getTouchCell = (touch: Touch): Cell | null => {
       const rect = canvas.getBoundingClientRect();
-      const cs = cellSizeRef.current;
-      const col = Math.floor((touch.clientX - rect.left) / cs);
-      const row = Math.floor((touch.clientY - rect.top) / cs);
+      const col = Math.floor((touch.clientX - rect.left) * COLS / rect.width);
+      const row = Math.floor((touch.clientY - rect.top) * ROWS / rect.height);
       if (col < 0 || col >= COLS || row < 0 || row >= ROWS) return null;
       return { col, row };
     };
@@ -543,7 +541,7 @@ const GameTowerDefense: React.FC = () => {
         <canvas
           ref={canvasRef}
           className="block w-full"
-          style={{ cursor: canPlace && selectedTowerType ? "crosshair" : "default" }}
+          style={{ cursor: canPlace && selectedTowerType ? "crosshair" : "default", touchAction: "none" }}
         />
         {/* Overlays */}
         {phase === "game-over" && (
