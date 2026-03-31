@@ -9,14 +9,15 @@ export function renderGame(
   hoverCell: Cell | null,
   isHoverValid: boolean,
   selectedTowerType: TowerType | null,
-  inspectedTowerId: string | null,
+  selectedTowerIds: ReadonlySet<string>,
+  dragRect: { x1: number; y1: number; x2: number; y2: number } | null,
   isDark: boolean,
 ): void {
   ctx.clearRect(0, 0, COLS * cellSize, ROWS * cellSize);
   drawGrid(ctx, cellSize, isDark);
   drawPath(ctx, state.path, cellSize);
   drawStartEnd(ctx, cellSize);
-  drawTowers(ctx, state.towers, cellSize, inspectedTowerId);
+  drawTowers(ctx, state.towers, cellSize, selectedTowerIds);
   drawEnemies(ctx, state.enemies, cellSize);
   drawProjectiles(ctx, state.projectiles, cellSize);
   drawSplashEffects(ctx, state.splashEffects, cellSize);
@@ -25,10 +26,11 @@ export function renderGame(
   if (hoverCell && selectedTowerType) {
     drawHoverGhost(ctx, hoverCell, cellSize, isHoverValid, selectedTowerType);
   } else if (hoverCell && !selectedTowerType) {
-    // show range circle for hovered tower
+    // show range circle for hovered tower (unless it's already shown via selection)
     const tower = state.towers.find(t => t.col === hoverCell.col && t.row === hoverCell.row);
-    if (tower) drawRangeCircle(ctx, tower, cellSize);
+    if (tower && !selectedTowerIds.has(tower.id)) drawRangeCircle(ctx, tower, cellSize);
   }
+  if (dragRect) drawDragRect(ctx, dragRect);
 }
 
 function drawGrid(ctx: CanvasRenderingContext2D, cellSize: number, isDark: boolean): void {
@@ -284,20 +286,37 @@ function drawTowers(
   ctx: CanvasRenderingContext2D,
   towers: Tower[],
   cellSize: number,
-  inspectedTowerId: string | null,
+  selectedTowerIds: ReadonlySet<string>,
 ): void {
   for (const tower of towers) {
     drawTowerShape(ctx, tower, cellSize);
-    if (tower.id === inspectedTowerId) {
+    if (selectedTowerIds.has(tower.id)) {
       const cx = (tower.col + 0.5) * cellSize, cy = (tower.row + 0.5) * cellSize;
       ctx.strokeStyle = 'rgba(255,255,255,0.85)';
       ctx.lineWidth = cellSize * 0.06;
       ctx.beginPath();
       ctx.arc(cx, cy, cellSize * 0.44, 0, Math.PI * 2);
       ctx.stroke();
-      drawRangeCircle(ctx, tower, cellSize);
+      // Range circle only for single selection to avoid visual noise
+      if (selectedTowerIds.size === 1) drawRangeCircle(ctx, tower, cellSize);
     }
   }
+}
+
+function drawDragRect(
+  ctx: CanvasRenderingContext2D,
+  rect: { x1: number; y1: number; x2: number; y2: number },
+): void {
+  ctx.save();
+  ctx.strokeStyle = 'rgba(100,180,255,0.8)';
+  ctx.fillStyle = 'rgba(100,180,255,0.1)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  ctx.rect(rect.x1, rect.y1, rect.x2 - rect.x1, rect.y2 - rect.y1);
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
 }
 
 export function drawRangeCircle(ctx: CanvasRenderingContext2D, tower: Tower, cellSize: number): void {

@@ -1,11 +1,11 @@
 import type { EnemyType, TowerType } from "./types";
 
-export const COLS = 22;
-export const ROWS = 15;
+export const COLS = 17;
+export const ROWS = 11;
 export const START_COL = 0;
-export const START_ROW = 7;
-export const END_COL = 21;
-export const END_ROW = 7;
+export const START_ROW = 0;
+export const END_COL = COLS - 1;
+export const END_ROW = ROWS - 1;
 
 export const STARTING_GOLD = 100;
 export const STARTING_LIVES = 20;

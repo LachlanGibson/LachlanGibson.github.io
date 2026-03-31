@@ -48,6 +48,8 @@ function createInitialState(): GameState {
   };
 }
 
+type DragRect = { x1: number; y1: number; x2: number; y2: number };
+
 const TOWER_ORDER: TowerType[] = ["arrow", "cannon", "slow", "sniper", "antiair"];
 const ENABLED_TOWERS = new Set<TowerType>(["arrow", "cannon", "slow", "sniper", "antiair"]);
 
@@ -62,9 +64,14 @@ const GameTowerDefense: React.FC = () => {
   const hoverCellRef = useRef<Cell | null>(null);
   const isHoverValidRef = useRef<boolean>(false);
   const selectedTowerTypeRef = useRef<TowerType | null>("arrow");
-  const inspectedTowerIdRef = useRef<string | null>(null);
+  const selectedTowerIdsRef = useRef<Set<string>>(new Set());
   const isDarkRef = useRef<boolean>(isDark);
   const speedMultiplierRef = useRef<number>(1);
+  // Drag-select state (canvas pixel coordinates)
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+  const dragRectRef = useRef<DragRect | null>(null);
+  const isDraggingRef = useRef(false);
+  const didDragRef = useRef(false);
 
   const [gold, setGold] = useState(STARTING_GOLD);
   const [lives, setLives] = useState(STARTING_LIVES);
@@ -75,7 +82,7 @@ const GameTowerDefense: React.FC = () => {
     return p ? p.length - 1 : 0;
   });
   const [selectedTowerType, setSelectedTowerType] = useState<TowerType | null>("arrow");
-  const [inspectedTower, setInspectedTower] = useState<Tower | null>(null);
+  const [selectedTowers, setSelectedTowers] = useState<Tower[]>([]);
   const [speed, setSpeed] = useState(1);
   const [countdown, setCountdown] = useState(0);
 
@@ -101,10 +108,8 @@ const GameTowerDefense: React.FC = () => {
       selectedTowerTypeRef.current = type;
       setSelectedTowerType(type);
       if (type !== null) {
-        // Deselect any inspected tower
-        inspectedTowerIdRef.current = null;
-        setInspectedTower(null);
-        // Recompute hover validity for current hover cell
+        selectedTowerIdsRef.current = new Set();
+        setSelectedTowers([]);
         if (hoverCellRef.current) {
           computeHoverValidity(hoverCellRef.current.col, hoverCellRef.current.row);
         }
@@ -117,15 +122,6 @@ const GameTowerDefense: React.FC = () => {
     const next = speedMultiplierRef.current === 1 ? 2 : 1;
     speedMultiplierRef.current = next;
     setSpeed(next);
-  }, []);
-
-  const handleUpgradeTower = useCallback((towerId: string) => {
-    const success = upgradeTower(stateRef.current, towerId);
-    if (success) {
-      const tower = stateRef.current.towers.find((t) => t.id === towerId) ?? null;
-      setInspectedTower(tower ? { ...tower } : null);
-      setGold(stateRef.current.gold);
-    }
   }, []);
 
   const handleSellTower = useCallback(
@@ -145,18 +141,67 @@ const GameTowerDefense: React.FC = () => {
         rerouteEnemies(state.enemies, newPath);
         setPathLength(newPath.length - 1);
       }
-      if (inspectedTowerIdRef.current === towerId) {
-        inspectedTowerIdRef.current = null;
-        setInspectedTower(null);
+      // Remove from selection if present
+      const sel = selectedTowerIdsRef.current;
+      if (sel.has(towerId)) {
+        const newSel = new Set(sel);
+        newSel.delete(towerId);
+        selectedTowerIdsRef.current = newSel;
+        setSelectedTowers(state.towers.filter((t) => newSel.has(t.id)));
       }
       setGold(state.gold);
-      // Recompute hover validity
-      if (hoverCellRef.current) {
-        computeHoverValidity(hoverCellRef.current.col, hoverCellRef.current.row);
-      }
+      if (hoverCellRef.current) computeHoverValidity(hoverCellRef.current.col, hoverCellRef.current.row);
     },
     [computeHoverValidity],
   );
+
+  const handleSellSelected = useCallback(() => {
+    const state = stateRef.current;
+    if (state.phase === "game-over") return;
+    const sel = selectedTowerIdsRef.current;
+    if (sel.size === 0) return;
+    let totalRefund = 0;
+    state.towers = state.towers.filter((t) => {
+      if (!sel.has(t.id)) return true;
+      totalRefund += Math.floor(t.totalCostSpent * SELL_REFUND_RATE);
+      state.grid[t.col][t.row] = "empty";
+      return false;
+    });
+    state.gold += totalRefund;
+    const newPath = findPath(state.grid);
+    if (newPath) {
+      state.path = newPath;
+      rerouteEnemies(state.enemies, newPath);
+      setPathLength(newPath.length - 1);
+    }
+    selectedTowerIdsRef.current = new Set();
+    setSelectedTowers([]);
+    setGold(state.gold);
+    if (hoverCellRef.current) computeHoverValidity(hoverCellRef.current.col, hoverCellRef.current.row);
+  }, [computeHoverValidity]);
+
+  const handleUpgradeTower = useCallback((towerId: string) => {
+    const state = stateRef.current;
+    const success = upgradeTower(state, towerId);
+    if (success) {
+      const sel = selectedTowerIdsRef.current;
+      setSelectedTowers(state.towers.filter((t) => sel.has(t.id)).map((t) => ({ ...t })));
+      setGold(state.gold);
+    }
+  }, []);
+
+  const handleUpgradeSelected = useCallback(() => {
+    const state = stateRef.current;
+    const sel = selectedTowerIdsRef.current;
+    let anyUpgraded = false;
+    for (const id of sel) {
+      if (upgradeTower(state, id)) anyUpgraded = true;
+    }
+    if (anyUpgraded) {
+      setSelectedTowers(state.towers.filter((t) => sel.has(t.id)).map((t) => ({ ...t })));
+      setGold(state.gold);
+    }
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -174,7 +219,7 @@ const GameTowerDefense: React.FC = () => {
     const ro = new ResizeObserver(handleResize);
     ro.observe(container);
 
-    // --- Input ---
+    // --- Coordinate helpers ---
     const getCell = (e: MouseEvent): Cell | null => {
       const rect = canvas.getBoundingClientRect();
       const col = Math.floor((e.clientX - rect.left) * COLS / rect.width);
@@ -183,38 +228,47 @@ const GameTowerDefense: React.FC = () => {
       return { col, row };
     };
 
-    const onMouseMove = (e: MouseEvent) => {
-      const cell = getCell(e);
-      hoverCellRef.current = cell;
-      if (cell) computeHoverValidity(cell.col, cell.row);
-      else isHoverValidRef.current = false;
+    const toCanvasCoords = (clientX: number, clientY: number) => {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (clientX - rect.left) * canvas.width / rect.width,
+        y: (clientY - rect.top) * canvas.height / rect.height,
+      };
     };
 
-    const onMouseLeave = () => {
-      hoverCellRef.current = null;
-      isHoverValidRef.current = false;
-    };
-
-    const handleCellClick = (cell: Cell) => {
+    // --- Cell click logic (shared by mouse and touch) ---
+    const handleCellClick = (cell: Cell, shiftKey = false) => {
       const state = stateRef.current;
       const { col, row } = cell;
       const cellState = state.grid[col][row];
       const selType = selectedTowerTypeRef.current;
 
       if (cellState === "tower") {
-        // Inspect
-        const tower = state.towers.find((t) => t.col === col && t.row === row) ?? null;
-        inspectedTowerIdRef.current = tower?.id ?? null;
-        setInspectedTower(tower);
-        selectedTowerTypeRef.current = null;
-        setSelectedTowerType(null);
+        const tower = state.towers.find((t) => t.col === col && t.row === row);
+        if (!tower) return;
+        if (shiftKey) {
+          // Toggle in multi-selection (keep placement mode active)
+          const sel = selectedTowerIdsRef.current;
+          const newSel = new Set(sel);
+          if (newSel.has(tower.id)) newSel.delete(tower.id);
+          else newSel.add(tower.id);
+          selectedTowerIdsRef.current = newSel;
+          setSelectedTowers(state.towers.filter((t) => newSel.has(t.id)));
+        } else {
+          // Single-select this tower, exit placement mode
+          selectedTowerIdsRef.current = new Set([tower.id]);
+          setSelectedTowers([{ ...tower }]);
+          selectedTowerTypeRef.current = null;
+          setSelectedTowerType(null);
+        }
         return;
       }
 
       if (cellState === "empty" && !selType) {
-        // Deselect inspected tower when clicking empty space
-        inspectedTowerIdRef.current = null;
-        setInspectedTower(null);
+        if (!shiftKey) {
+          selectedTowerIdsRef.current = new Set();
+          setSelectedTowers([]);
+        }
         return;
       }
 
@@ -239,14 +293,90 @@ const GameTowerDefense: React.FC = () => {
         rerouteEnemies(state.enemies, newPath);
         setPathLength(newPath.length - 1);
       }
-
       setGold(state.gold);
       computeHoverValidity(col, row);
     };
 
-    const onClick = (e: MouseEvent) => {
+    // --- Mouse events ---
+    const onMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      // Only drag-select when not in tower-placement mode
+      if (selectedTowerTypeRef.current) return;
+      dragStartRef.current = toCanvasCoords(e.clientX, e.clientY);
+      isDraggingRef.current = false;
+      didDragRef.current = false;
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
       const cell = getCell(e);
-      if (cell) handleCellClick(cell);
+      hoverCellRef.current = cell;
+      if (cell) computeHoverValidity(cell.col, cell.row);
+      else isHoverValidRef.current = false;
+
+      // Drag-select detection
+      if (e.buttons === 1 && dragStartRef.current && !selectedTowerTypeRef.current) {
+        const { x, y } = toCanvasCoords(e.clientX, e.clientY);
+        const dx = x - dragStartRef.current.x, dy = y - dragStartRef.current.y;
+        if (!isDraggingRef.current && Math.sqrt(dx * dx + dy * dy) > 4) {
+          isDraggingRef.current = true;
+          didDragRef.current = true;
+        }
+        if (isDraggingRef.current) {
+          dragRectRef.current = {
+            x1: Math.min(dragStartRef.current.x, x),
+            y1: Math.min(dragStartRef.current.y, y),
+            x2: Math.max(dragStartRef.current.x, x),
+            y2: Math.max(dragStartRef.current.y, y),
+          };
+        }
+      } else if (e.buttons !== 1 && isDraggingRef.current) {
+        // Button released outside canvas — cancel drag
+        dragRectRef.current = null;
+        isDraggingRef.current = false;
+        dragStartRef.current = null;
+      }
+    };
+
+    const onMouseUp = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      if (isDraggingRef.current && dragRectRef.current) {
+        const cs = cellSizeRef.current;
+        const dr = dragRectRef.current;
+        const state = stateRef.current;
+        // Map drag rect (canvas pixels) to cell range
+        const c1 = Math.floor(dr.x1 / cs);
+        const r1 = Math.floor(dr.y1 / cs);
+        const c2 = Math.floor(dr.x2 / cs);
+        const r2 = Math.floor(dr.y2 / cs);
+        const towersInRect = state.towers.filter(
+          (t) => t.col >= c1 && t.col <= c2 && t.row >= r1 && t.row <= r2,
+        );
+        if (towersInRect.length > 0) {
+          const base = e.shiftKey ? selectedTowerIdsRef.current : new Set<string>();
+          const newSel = new Set([...base, ...towersInRect.map((t) => t.id)]);
+          selectedTowerIdsRef.current = newSel;
+          setSelectedTowers(state.towers.filter((t) => newSel.has(t.id)));
+        }
+        dragRectRef.current = null;
+      }
+      isDraggingRef.current = false;
+      dragStartRef.current = null;
+    };
+
+    const onMouseLeave = () => {
+      hoverCellRef.current = null;
+      isHoverValidRef.current = false;
+      if (isDraggingRef.current) {
+        dragRectRef.current = null;
+        isDraggingRef.current = false;
+        dragStartRef.current = null;
+      }
+    };
+
+    const onClick = (e: MouseEvent) => {
+      if (didDragRef.current) { didDragRef.current = false; return; }
+      const cell = getCell(e);
+      if (cell) handleCellClick(cell, e.shiftKey);
     };
 
     const onContextMenu = (e: MouseEvent) => {
@@ -257,11 +387,10 @@ const GameTowerDefense: React.FC = () => {
       if (tower) {
         handleSellTower(tower.id);
       } else {
-        // Deselect tower type and inspected tower when right-clicking empty space
         selectedTowerTypeRef.current = null;
         setSelectedTowerType(null);
-        inspectedTowerIdRef.current = null;
-        setInspectedTower(null);
+        selectedTowerIdsRef.current = new Set();
+        setSelectedTowers([]);
       }
     };
 
@@ -269,8 +398,8 @@ const GameTowerDefense: React.FC = () => {
       if (e.key === "Escape") {
         selectedTowerTypeRef.current = null;
         setSelectedTowerType(null);
-        inspectedTowerIdRef.current = null;
-        setInspectedTower(null);
+        selectedTowerIdsRef.current = new Set();
+        setSelectedTowers([]);
       }
       if (e.key === " ") {
         e.preventDefault();
@@ -347,6 +476,7 @@ const GameTowerDefense: React.FC = () => {
       isHoverValidRef.current = false;
     };
 
+    canvas.addEventListener("mousedown", onMouseDown);
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("mouseleave", onMouseLeave);
     canvas.addEventListener("click", onClick);
@@ -355,6 +485,7 @@ const GameTowerDefense: React.FC = () => {
     canvas.addEventListener("touchmove", onTouchMove, { passive: false });
     canvas.addEventListener("touchend", onTouchEnd, { passive: false });
     window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("mouseup", onMouseUp);
 
     // --- Game loop ---
     let rafId: number;
@@ -367,11 +498,10 @@ const GameTowerDefense: React.FC = () => {
       setWave(s.wave);
       setPhase(s.phase);
       setCountdown(Math.ceil(s.waveTimer));
-      // Sync inspected tower in case HP changed etc.
-      if (inspectedTowerIdRef.current) {
-        const t = s.towers.find((t) => t.id === inspectedTowerIdRef.current) ?? null;
-        setInspectedTower(t);
-        if (!t) inspectedTowerIdRef.current = null;
+      // Sync selected towers (towers can die, removing them from state)
+      const sel = selectedTowerIdsRef.current;
+      if (sel.size > 0) {
+        setSelectedTowers(s.towers.filter((t) => sel.has(t.id)));
       }
     };
 
@@ -391,7 +521,8 @@ const GameTowerDefense: React.FC = () => {
           hoverCellRef.current,
           isHoverValidRef.current,
           selectedTowerTypeRef.current,
-          inspectedTowerIdRef.current,
+          selectedTowerIdsRef.current,
+          dragRectRef.current,
           isDarkRef.current,
         );
       }
@@ -404,6 +535,7 @@ const GameTowerDefense: React.FC = () => {
       cancelAnimationFrame(rafId);
       ro.disconnect();
       if (longPressTimer) clearTimeout(longPressTimer);
+      canvas.removeEventListener("mousedown", onMouseDown);
       canvas.removeEventListener("mousemove", onMouseMove);
       canvas.removeEventListener("mouseleave", onMouseLeave);
       canvas.removeEventListener("click", onClick);
@@ -412,6 +544,7 @@ const GameTowerDefense: React.FC = () => {
       canvas.removeEventListener("touchmove", onTouchMove);
       canvas.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("mouseup", onMouseUp);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -424,7 +557,7 @@ const GameTowerDefense: React.FC = () => {
   const handleRestart = useCallback(() => {
     stateRef.current = createInitialState();
     selectedTowerTypeRef.current = "arrow";
-    inspectedTowerIdRef.current = null;
+    selectedTowerIdsRef.current = new Set();
     hoverCellRef.current = null;
     isHoverValidRef.current = false;
     setGold(STARTING_GOLD);
@@ -432,7 +565,7 @@ const GameTowerDefense: React.FC = () => {
     setWave(0);
     setPhase("preparing");
     setSelectedTowerType("arrow");
-    setInspectedTower(null);
+    setSelectedTowers([]);
     speedMultiplierRef.current = 1;
     setSpeed(1);
     setCountdown(0);
@@ -441,10 +574,23 @@ const GameTowerDefense: React.FC = () => {
   }, []);
 
   const canPlace = phase === "preparing" || phase === "wave-in-progress" || phase === "wave-complete";
-  const sellValue = inspectedTower ? Math.floor(inspectedTower.totalCostSpent * SELL_REFUND_RATE) : 0;
   const nextWaveNum = wave + 1;
   const nextWaveIsBoss =
     nextWaveNum > PROCEDURAL_WAVE_START_INDEX && nextWaveNum % BOSS_WAVE_INTERVAL === 0;
+
+  // Multi-select panel derived values
+  const upgradableTowers = selectedTowers.filter((t) => {
+    const ups = TOWER_UPGRADES[t.type];
+    return t.tier < ups.length;
+  });
+  const totalUpgradeCost = upgradableTowers.reduce(
+    (sum, t) => sum + TOWER_UPGRADES[t.type][t.tier].cost,
+    0,
+  );
+  const totalSellValue = selectedTowers.reduce(
+    (sum, t) => sum + Math.floor(t.totalCostSpent * SELL_REFUND_RATE),
+    0,
+  );
 
   return (
     <div className="my-4 select-none">
@@ -543,7 +689,6 @@ const GameTowerDefense: React.FC = () => {
           className="block w-full"
           style={{ cursor: canPlace && selectedTowerType ? "crosshair" : "default", touchAction: "none" }}
         />
-        {/* Overlays */}
         {phase === "game-over" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60">
             <div className="text-2xl font-bold text-red-400">Game Over</div>
@@ -591,25 +736,27 @@ const GameTowerDefense: React.FC = () => {
           })}
         </div>
 
-        {/* Inspect panel */}
-        {inspectedTower &&
+        {/* Single-tower inspect panel */}
+        {selectedTowers.length === 1 &&
           (() => {
-            const upgrades = TOWER_UPGRADES[inspectedTower.type];
+            const tower = selectedTowers[0];
+            const upgrades = TOWER_UPGRADES[tower.type];
             const maxTier = upgrades.length;
-            const nextUpgrade = inspectedTower.tier < maxTier ? upgrades[inspectedTower.tier] : null;
+            const nextUpgrade = tower.tier < maxTier ? upgrades[tower.tier] : null;
             const canUpgrade = nextUpgrade !== null && gold >= nextUpgrade.cost;
+            const sellValue = Math.floor(tower.totalCostSpent * SELL_REFUND_RATE);
             return (
               <div className="mt-2 rounded border border-(--site-border) bg-(--site-bg) px-3 py-2 text-sm text-(--site-text)">
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <span className="font-semibold">{TOWER_STATS[inspectedTower.type].name} Tower</span>
+                    <span className="font-semibold">{TOWER_STATS[tower.type].name} Tower</span>
                     <span className="ml-2 text-xs text-(--site-text-muted)">
-                      Tier {inspectedTower.tier}/{maxTier}
-                      {inspectedTower.tier === maxTier ? " · MAX" : ""}
+                      Tier {tower.tier}/{maxTier}
+                      {tower.tier === maxTier ? " · MAX" : ""}
                     </span>
                   </div>
                   <button
-                    onClick={() => handleSellTower(inspectedTower.id)}
+                    onClick={() => handleSellTower(tower.id)}
                     className="shrink-0 rounded bg-red-700 px-2 py-0.5 text-xs font-semibold text-white hover:bg-red-600"
                   >
                     Sell ${sellValue}
@@ -619,7 +766,7 @@ const GameTowerDefense: React.FC = () => {
                   <div className="mt-1.5 flex items-center justify-between gap-2 border-t border-(--site-border) pt-1.5">
                     <span className="text-xs text-(--site-text-muted)">Upgrade: {nextUpgrade.description}</span>
                     <button
-                      onClick={() => handleUpgradeTower(inspectedTower.id)}
+                      onClick={() => handleUpgradeTower(tower.id)}
                       disabled={!canUpgrade}
                       className={[
                         "shrink-0 rounded px-2 py-0.5 text-xs font-semibold",
@@ -636,11 +783,52 @@ const GameTowerDefense: React.FC = () => {
             );
           })()}
 
+        {/* Multi-tower panel */}
+        {selectedTowers.length > 1 && (
+          <div className="mt-2 rounded border border-(--site-border) bg-(--site-bg) px-3 py-2 text-sm text-(--site-text)">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-semibold">
+                {selectedTowers.length} towers selected
+                {upgradableTowers.length < selectedTowers.length && upgradableTowers.length > 0 && (
+                  <span className="ml-2 text-xs font-normal text-(--site-text-muted)">
+                    ({selectedTowers.length - upgradableTowers.length} at max tier)
+                  </span>
+                )}
+              </span>
+              <button
+                onClick={handleSellSelected}
+                className="shrink-0 rounded bg-red-700 px-2 py-0.5 text-xs font-semibold text-white hover:bg-red-600"
+              >
+                Sell All ${totalSellValue}
+              </button>
+            </div>
+            {upgradableTowers.length > 0 && (
+              <div className="mt-1.5 flex items-center justify-between gap-2 border-t border-(--site-border) pt-1.5">
+                <span className="text-xs text-(--site-text-muted)">
+                  Upgrade {upgradableTowers.length === selectedTowers.length ? "all" : `${upgradableTowers.length}/${selectedTowers.length}`}
+                </span>
+                <button
+                  onClick={handleUpgradeSelected}
+                  disabled={gold < totalUpgradeCost}
+                  className={[
+                    "shrink-0 rounded px-2 py-0.5 text-xs font-semibold",
+                    gold >= totalUpgradeCost
+                      ? "bg-green-700 text-white hover:bg-green-600"
+                      : "cursor-not-allowed opacity-50 bg-(--site-bg-secondary) text-(--site-text-muted)",
+                  ].join(" ")}
+                >
+                  ${totalUpgradeCost}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Tips */}
         <div className="mt-1.5 text-xs text-(--site-text-muted)">
           {selectedTowerType
-            ? `Click to place · Right-click to sell · Esc to deselect · Space to send wave · F to toggle 2×`
-            : `Click a tower to inspect · Right-click to sell · Space to send wave · F to toggle 2×`}
+            ? `Click to place · Right-click/long-press to sell · Esc to deselect · Space to send wave · F for 2×`
+            : `Click tower to select · Shift+click or drag to multi-select · Right-click to sell · Space to send wave`}
         </div>
       </div>
     </div>
