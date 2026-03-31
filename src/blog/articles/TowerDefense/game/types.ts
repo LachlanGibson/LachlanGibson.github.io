@@ -1,7 +1,7 @@
 export type EnemyType = 'critter' | 'runner' | 'brute' | 'swarm' | 'splitter' | 'flyer' | 'boss';
 export type TowerType = 'arrow' | 'cannon' | 'slow' | 'sniper' | 'antiair';
 export type GamePhase = 'preparing' | 'wave-in-progress' | 'wave-complete' | 'game-over';
-export type CellState = 'empty' | 'tower' | 'start' | 'end';
+export type CellState = 'empty' | 'tower' | 'start' | 'end' | 'water';
 
 export interface Cell {
   col: number;
@@ -100,6 +100,7 @@ export interface SpawnEntry {
 }
 
 export interface GameState {
+  seed: number;              // map generation seed
   grid: CellState[][];       // grid[col][row]
   towers: Tower[];
   enemies: Enemy[];

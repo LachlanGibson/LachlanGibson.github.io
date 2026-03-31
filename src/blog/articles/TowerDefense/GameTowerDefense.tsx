@@ -20,15 +20,19 @@ import { createTower, upgradeTower } from "./game/towers";
 import { rerouteEnemies } from "./game/enemies";
 import { startWave, update } from "./game/gameLoop";
 import { renderGame } from "./game/renderer";
+import { createRng, generateWater, WATER_GROUP_COUNT } from "./game/mapgen";
 import type { GameState, GamePhase, TowerType, Tower, Cell, CellState } from "./game/types";
 
-function createInitialState(): GameState {
+function createInitialState(seed?: number): GameState {
+  const actualSeed = seed ?? Math.floor(Math.random() * 1e8);
   const grid: CellState[][] = Array.from({ length: COLS }, () =>
     Array.from({ length: ROWS }, () => "empty" as CellState),
   );
   grid[START_COL][START_ROW] = "start";
   grid[END_COL][END_ROW] = "end";
+  generateWater(grid, createRng(actualSeed), WATER_GROUP_COUNT);
   return {
+    seed: actualSeed,
     grid,
     towers: [],
     enemies: [],
@@ -85,6 +89,7 @@ const GameTowerDefense: React.FC = () => {
   const [selectedTowers, setSelectedTowers] = useState<Tower[]>([]);
   const [speed, setSpeed] = useState(1);
   const [countdown, setCountdown] = useState(0);
+  const [seed, setSeed] = useState(() => stateRef.current.seed);
 
   // Keep isDark ref in sync
   useEffect(() => {
@@ -569,6 +574,7 @@ const GameTowerDefense: React.FC = () => {
     speedMultiplierRef.current = 1;
     setSpeed(1);
     setCountdown(0);
+    setSeed(stateRef.current.seed);
     const p = stateRef.current.path;
     setPathLength(p ? p.length - 1 : 0);
   }, []);
@@ -824,11 +830,14 @@ const GameTowerDefense: React.FC = () => {
           </div>
         )}
 
-        {/* Tips */}
-        <div className="mt-1.5 text-xs text-(--site-text-muted)">
-          {selectedTowerType
-            ? `Click to place · Right-click/long-press to sell · Esc to deselect · Space to send wave · F for 2×`
-            : `Click tower to select · Shift+click or drag to multi-select · Right-click to sell · Space to send wave`}
+        {/* Tips + seed */}
+        <div className="mt-1.5 flex items-center justify-between gap-2 text-xs text-(--site-text-muted)">
+          <span className="min-w-0 truncate">
+            {selectedTowerType
+              ? `Click to place · Right-click/long-press to sell · Esc to deselect · Space to send wave · F for 2×`
+              : `Click tower to select · Shift+click or drag to multi-select · Right-click to sell · Space to send wave`}
+          </span>
+          <span className="shrink-0 tabular-nums">Seed: {seed}</span>
         </div>
       </div>
     </div>

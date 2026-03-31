@@ -1,4 +1,4 @@
-import type { GameState, Tower, Enemy, Projectile, Cell, TowerType, FloatingText, DeathParticle, SplashEffect } from './types';
+import type { GameState, Tower, Enemy, Projectile, Cell, TowerType, CellState, FloatingText, DeathParticle, SplashEffect } from './types';
 import { COLS, ROWS, START_COL, START_ROW, END_COL, END_ROW, TOWER_STATS, ENEMY_STATS, FLOAT_DURATION, DEATH_PARTICLE_DURATION, SPLASH_EFFECT_DURATION } from './constants';
 import { getEffectiveStats } from './towers';
 
@@ -15,6 +15,7 @@ export function renderGame(
 ): void {
   ctx.clearRect(0, 0, COLS * cellSize, ROWS * cellSize);
   drawGrid(ctx, cellSize, isDark);
+  drawWater(ctx, state.grid, cellSize, isDark);
   drawPath(ctx, state.path, cellSize);
   drawStartEnd(ctx, cellSize);
   drawTowers(ctx, state.towers, cellSize, selectedTowerIds);
@@ -31,6 +32,44 @@ export function renderGame(
     if (tower && !selectedTowerIds.has(tower.id)) drawRangeCircle(ctx, tower, cellSize);
   }
   if (dragRect) drawDragRect(ctx, dragRect);
+}
+
+function drawWater(
+  ctx: CanvasRenderingContext2D,
+  grid: CellState[][],
+  cellSize: number,
+  isDark: boolean,
+): void {
+  const fill = isDark ? '#1a3a5c' : '#5bafd6';
+  const ripple = isDark ? 'rgba(120,200,255,0.3)' : 'rgba(255,255,255,0.5)';
+  const amp = cellSize * 0.09;
+  const lw = Math.max(1, cellSize * 0.055);
+
+  for (let col = 0; col < COLS; col++) {
+    for (let row = 0; row < ROWS; row++) {
+      if (grid[col][row] !== 'water') continue;
+      const x = col * cellSize;
+      const y = row * cellSize;
+
+      ctx.fillStyle = fill;
+      ctx.fillRect(x, y, cellSize, cellSize);
+
+      ctx.save();
+      ctx.strokeStyle = ripple;
+      ctx.lineWidth = lw;
+      ctx.lineCap = 'round';
+      // Two ripple arcs at 1/3 and 2/3 height
+      for (let i = 0; i < 2; i++) {
+        const midY = y + cellSize * (0.33 + i * 0.33);
+        ctx.beginPath();
+        ctx.moveTo(x + cellSize * 0.15, midY);
+        ctx.quadraticCurveTo(x + cellSize * 0.38, midY - amp, x + cellSize * 0.5, midY);
+        ctx.quadraticCurveTo(x + cellSize * 0.62, midY + amp, x + cellSize * 0.85, midY);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
 }
 
 function drawGrid(ctx: CanvasRenderingContext2D, cellSize: number, isDark: boolean): void {

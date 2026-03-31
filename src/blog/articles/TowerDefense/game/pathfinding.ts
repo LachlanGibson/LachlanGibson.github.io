@@ -32,7 +32,8 @@ export function hasPath(
     if (cur.col === ec && cur.row === er) return true;
     for (const nb of neighbors(cur.col, cur.row)) {
       const k = cellKey(nb.col, nb.row);
-      if (!visited.has(k) && grid[nb.col][nb.row] !== 'tower') {
+      const s = grid[nb.col][nb.row];
+      if (!visited.has(k) && s !== 'tower' && s !== 'water') {
         visited.add(k);
         queue.push(nb);
       }
@@ -80,7 +81,8 @@ export function findPath(
     closed.add(cur);
     const g = gScore.get(cur) ?? Infinity;
     for (const nb of neighbors(curCol, curRow)) {
-      if (grid[nb.col][nb.row] === 'tower') continue;
+      const ns = grid[nb.col][nb.row];
+      if (ns === 'tower' || ns === 'water') continue;
       const nk = cellKey(nb.col, nb.row);
       if (closed.has(nk)) continue;
       const tg = g + 1;
