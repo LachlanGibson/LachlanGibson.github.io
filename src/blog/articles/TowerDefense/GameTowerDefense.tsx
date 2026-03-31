@@ -23,8 +23,20 @@ import { renderGame } from "./game/renderer";
 import { createRng, generateWater, WATER_GROUP_COUNT } from "./game/mapgen";
 import type { GameState, GamePhase, TowerType, Tower, Cell, CellState } from "./game/types";
 
-function createInitialState(seed?: number): GameState {
-  const actualSeed = seed ?? Math.floor(Math.random() * 1e8);
+interface GameSettings {
+  seed: number | null;   // null = random each game
+  startingGold: number;
+  startingLives: number;
+}
+
+const DEFAULT_SETTINGS: GameSettings = {
+  seed: null,
+  startingGold: STARTING_GOLD,
+  startingLives: STARTING_LIVES,
+};
+
+function createInitialState(settings: GameSettings = DEFAULT_SETTINGS): GameState {
+  const actualSeed = settings.seed ?? Math.floor(Math.random() * 1e8);
   const grid: CellState[][] = Array.from({ length: COLS }, () =>
     Array.from({ length: ROWS }, () => "empty" as CellState),
   );
@@ -41,8 +53,8 @@ function createInitialState(seed?: number): GameState {
     deathParticles: [],
     splashEffects: [],
     path: findPath(grid),
-    gold: STARTING_GOLD,
-    lives: STARTING_LIVES,
+    gold: settings.startingGold,
+    lives: settings.startingLives,
     wave: 0,
     phase: "preparing",
     waveTimer: 0,
@@ -56,6 +68,186 @@ type DragRect = { x1: number; y1: number; x2: number; y2: number };
 
 const TOWER_ORDER: TowerType[] = ["arrow", "cannon", "slow", "sniper", "antiair"];
 const ENABLED_TOWERS = new Set<TowerType>(["arrow", "cannon", "slow", "sniper", "antiair"]);
+
+interface SettingsModalProps {
+  settings: GameSettings;
+  currentSeed: number;
+  onApply: (s: GameSettings) => void;
+  onClose: () => void;
+}
+
+const SettingsModal: React.FC<SettingsModalProps> = ({ settings, currentSeed, onApply, onClose }) => {
+  const [seedMode, setSeedMode] = React.useState<"random" | "fixed">(
+    settings.seed === null ? "random" : "fixed",
+  );
+  const [seedInput, setSeedInput] = React.useState(
+    settings.seed !== null ? String(settings.seed) : String(currentSeed),
+  );
+  const [gold, setGold] = React.useState(String(settings.startingGold));
+  const [lives, setLives] = React.useState(String(settings.startingLives));
+
+  const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+
+  const handleApply = () => {
+    const parsedSeed = seedMode === "fixed" ? (parseInt(seedInput) || 0) : null;
+    const parsedGold = clamp(parseInt(gold) || STARTING_GOLD, 25, 9999);
+    const parsedLives = clamp(parseInt(lives) || STARTING_LIVES, 1, 99);
+    onApply({ seed: parsedSeed, startingGold: parsedGold, startingLives: parsedLives });
+  };
+
+  // Close on Escape or backdrop click
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className="w-full max-w-sm rounded-lg border border-(--site-border) bg-(--site-bg) shadow-xl">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-(--site-border) px-4 py-3">
+          <h2 className="text-sm font-semibold text-(--site-text)">Game Settings</h2>
+          <button
+            onClick={onClose}
+            className="rounded px-1.5 py-0.5 text-sm text-(--site-text-muted) hover:text-(--site-text)"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="space-y-4 px-4 py-4">
+          {/* Seed */}
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-(--site-text)">Map Seed</label>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setSeedMode("random")}
+                className={[
+                  "rounded border px-3 py-1 text-xs font-medium transition-colors",
+                  seedMode === "random"
+                    ? "border-yellow-400 bg-yellow-400/15 text-(--site-text)"
+                    : "border-(--site-border) text-(--site-text-muted) hover:border-yellow-400/60",
+                ].join(" ")}
+              >
+                Random
+              </button>
+              <button
+                onClick={() => setSeedMode("fixed")}
+                className={[
+                  "rounded border px-3 py-1 text-xs font-medium transition-colors",
+                  seedMode === "fixed"
+                    ? "border-yellow-400 bg-yellow-400/15 text-(--site-text)"
+                    : "border-(--site-border) text-(--site-text-muted) hover:border-yellow-400/60",
+                ].join(" ")}
+              >
+                Fixed
+              </button>
+            </div>
+            {seedMode === "fixed" ? (
+              <input
+                type="number"
+                value={seedInput}
+                onChange={(e) => setSeedInput(e.target.value)}
+                className="mt-2 w-full rounded border border-(--site-border) bg-(--site-bg-secondary) px-3 py-1.5 text-sm text-(--site-text) focus:outline-none focus:ring-1 focus:ring-yellow-400/60"
+                placeholder="Enter seed number"
+              />
+            ) : (
+              <p className="mt-2 text-xs text-(--site-text-muted)">
+                Current seed: <span className="tabular-nums text-(--site-text)" suppressHydrationWarning>{currentSeed}</span>
+                {" "}— a new random seed is chosen each restart.
+              </p>
+            )}
+          </div>
+
+          {/* Starting Gold */}
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-(--site-text)">
+              Starting Gold
+              <span className="ml-1 font-normal text-(--site-text-muted)">(25 – 9999)</span>
+            </label>
+            <div className="flex items-center gap-2">
+              {[50, 100, 200, 500].map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setGold(String(v))}
+                  className={[
+                    "rounded border px-2 py-0.5 text-xs transition-colors",
+                    gold === String(v)
+                      ? "border-yellow-400 bg-yellow-400/15 text-(--site-text)"
+                      : "border-(--site-border) text-(--site-text-muted) hover:border-yellow-400/60",
+                  ].join(" ")}
+                >
+                  {v}
+                </button>
+              ))}
+              <input
+                type="number"
+                value={gold}
+                onChange={(e) => setGold(e.target.value)}
+                min={25}
+                max={9999}
+                className="w-20 rounded border border-(--site-border) bg-(--site-bg-secondary) px-2 py-1 text-sm text-(--site-text) focus:outline-none focus:ring-1 focus:ring-yellow-400/60"
+              />
+            </div>
+          </div>
+
+          {/* Starting Lives */}
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-(--site-text)">
+              Starting Lives
+              <span className="ml-1 font-normal text-(--site-text-muted)">(1 – 99)</span>
+            </label>
+            <div className="flex items-center gap-2">
+              {[5, 10, 20, 50].map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setLives(String(v))}
+                  className={[
+                    "rounded border px-2 py-0.5 text-xs transition-colors",
+                    lives === String(v)
+                      ? "border-yellow-400 bg-yellow-400/15 text-(--site-text)"
+                      : "border-(--site-border) text-(--site-text-muted) hover:border-yellow-400/60",
+                  ].join(" ")}
+                >
+                  {v}
+                </button>
+              ))}
+              <input
+                type="number"
+                value={lives}
+                onChange={(e) => setLives(e.target.value)}
+                min={1}
+                max={99}
+                className="w-20 rounded border border-(--site-border) bg-(--site-bg-secondary) px-2 py-1 text-sm text-(--site-text) focus:outline-none focus:ring-1 focus:ring-yellow-400/60"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-2 border-t border-(--site-border) px-4 py-3">
+          <button
+            onClick={onClose}
+            className="rounded border border-(--site-border) px-3 py-1.5 text-xs font-medium text-(--site-text-muted) hover:text-(--site-text)"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleApply}
+            className="rounded bg-green-700 px-4 py-1.5 text-xs font-semibold text-white hover:bg-green-600"
+          >
+            Apply &amp; Restart
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const GameTowerDefense: React.FC = () => {
   const { resolvedTheme } = useTheme();
@@ -90,6 +282,8 @@ const GameTowerDefense: React.FC = () => {
   const [speed, setSpeed] = useState(1);
   const [countdown, setCountdown] = useState(0);
   const [seed, setSeed] = useState(() => stateRef.current.seed);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [pendingSettings, setPendingSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
 
   // Keep isDark ref in sync
   useEffect(() => {
@@ -221,8 +415,7 @@ const GameTowerDefense: React.FC = () => {
       canvas.height = cs * ROWS;
     };
     handleResize();
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(container);
+    window.addEventListener("resize", handleResize);
 
     // --- Coordinate helpers ---
     const getCell = (e: MouseEvent): Cell | null => {
@@ -538,7 +731,7 @@ const GameTowerDefense: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(rafId);
-      ro.disconnect();
+      window.removeEventListener("resize", handleResize);
       if (longPressTimer) clearTimeout(longPressTimer);
       canvas.removeEventListener("mousedown", onMouseDown);
       canvas.removeEventListener("mousemove", onMouseMove);
@@ -559,14 +752,14 @@ const GameTowerDefense: React.FC = () => {
     setWave(stateRef.current.wave);
   }, []);
 
-  const handleRestart = useCallback(() => {
-    stateRef.current = createInitialState();
+  const applyRestart = useCallback((settings: GameSettings) => {
+    stateRef.current = createInitialState(settings);
     selectedTowerTypeRef.current = "arrow";
     selectedTowerIdsRef.current = new Set();
     hoverCellRef.current = null;
     isHoverValidRef.current = false;
-    setGold(STARTING_GOLD);
-    setLives(STARTING_LIVES);
+    setGold(stateRef.current.gold);
+    setLives(stateRef.current.lives);
     setWave(0);
     setPhase("preparing");
     setSelectedTowerType("arrow");
@@ -578,6 +771,16 @@ const GameTowerDefense: React.FC = () => {
     const p = stateRef.current.path;
     setPathLength(p ? p.length - 1 : 0);
   }, []);
+
+  const handleRestart = useCallback(() => {
+    applyRestart(pendingSettings);
+  }, [applyRestart, pendingSettings]);
+
+  const handleApplySettings = useCallback((newSettings: GameSettings) => {
+    setPendingSettings(newSettings);
+    setSettingsOpen(false);
+    applyRestart(newSettings);
+  }, [applyRestart]);
 
   const canPlace = phase === "preparing" || phase === "wave-in-progress" || phase === "wave-complete";
   const nextWaveNum = wave + 1;
@@ -689,10 +892,14 @@ const GameTowerDefense: React.FC = () => {
       </div>
 
       {/* Canvas */}
-      <div ref={containerRef} className="relative w-full border border-(--site-border)">
+      <div
+        ref={containerRef}
+        className="relative w-full border border-(--site-border)"
+        style={{ aspectRatio: `${COLS}/${ROWS}` }}
+      >
         <canvas
           ref={canvasRef}
-          className="block w-full"
+          className="absolute inset-0 block h-full w-full"
           style={{ cursor: canPlace && selectedTowerType ? "crosshair" : "default", touchAction: "none" }}
         />
         {phase === "game-over" && (
@@ -830,16 +1037,31 @@ const GameTowerDefense: React.FC = () => {
           </div>
         )}
 
-        {/* Tips + seed */}
+        {/* Tips + settings */}
         <div className="mt-1.5 flex items-center justify-between gap-2 text-xs text-(--site-text-muted)">
           <span className="min-w-0 truncate">
             {selectedTowerType
-              ? `Click to place · Right-click/long-press to sell · Esc to deselect · Space to send wave · F for 2×`
-              : `Click tower to select · Shift+click or drag to multi-select · Right-click to sell · Space to send wave`}
+              ? "Place · R-click to sell · Esc deselect · Space wave · F 2×"
+              : "Click to select · Shift+click or drag multi-select · R-click to sell"}
           </span>
-          <span className="shrink-0 tabular-nums">Seed: {seed}</span>
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="shrink-0 rounded border border-(--site-border) px-2 py-0.5 text-xs text-(--site-text-muted) hover:border-yellow-400/60 hover:text-(--site-text)"
+          >
+            ⚙ Settings
+          </button>
         </div>
       </div>
+
+      {/* Settings modal */}
+      {settingsOpen && (
+        <SettingsModal
+          settings={pendingSettings}
+          currentSeed={seed}
+          onApply={handleApplySettings}
+          onClose={() => setSettingsOpen(false)}
+        />
+      )}
     </div>
   );
 };
