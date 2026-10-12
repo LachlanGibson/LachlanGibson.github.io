@@ -53,14 +53,9 @@ for (let col = 0; col < 4; col++) {
   }
 }
 
-const findWinningCells = (
-  board: Board,
-  player: Player,
-): CoordinateSet | undefined => {
+const findWinningCells = (board: Board, player: Player): CoordinateSet | undefined => {
   for (const winPossibility of winPossibilities) {
-    const cell = winPossibility.find(
-      ([col, row]) => board[col][row] !== player,
-    );
+    const cell = winPossibility.find(([col, row]) => board[col][row] !== player);
     if (!cell) {
       return winPossibility;
     }
@@ -104,9 +99,7 @@ const minimax = (
   const moves = availableMoves(board);
   for (const action of moves) {
     const nudge = noise ? (Math.random() - 0.5) * 2 * noise : 0;
-    const score =
-      nudge +
-      minimax(board, action, depth - 1, alpha, beta, player, prevPlayer, noise);
+    const score = nudge + minimax(board, action, depth - 1, alpha, beta, player, prevPlayer, noise);
     if (player === "R") {
       bestScore = Math.max(bestScore, score);
       alpha = Math.max(alpha, score);
@@ -276,15 +269,7 @@ const GameConnectFour: React.FC = () => {
     if (!showScores) return undefined;
     const moves = availableMoves(board);
     const scores = moves.map((action) => {
-      const score = minimax(
-        board,
-        action,
-        depth,
-        -Infinity,
-        Infinity,
-        player,
-        player === "R" ? "Y" : "R",
-      );
+      const score = minimax(board, action, depth, -Infinity, Infinity, player, player === "R" ? "Y" : "R");
       return score;
     });
     return [moves, scores];
@@ -299,10 +284,7 @@ const GameConnectFour: React.FC = () => {
       const newBoard = thinkStep(board, columnIndex, currentPlayer);
       setBoard(newBoard);
       setPlayer((prev) => (prev === "R" ? "Y" : "R"));
-      setLastCoordinates([
-        columnIndex,
-        newBoard[columnIndex].findIndex((cell) => cell),
-      ]);
+      setLastCoordinates([columnIndex, newBoard[columnIndex].findIndex((cell) => cell)]);
       const result = checkWin(newBoard, columnIndex);
       if (result !== "in progress") {
         const winCells = findWinningCells(newBoard, currentPlayer);
@@ -326,21 +308,8 @@ const GameConnectFour: React.FC = () => {
       for (const action of moves) {
         const nudge = noise ? (Math.random() - 0.5) * 2 * noise : 0;
         const score =
-          nudge +
-          minimax(
-            board,
-            action,
-            depth,
-            -Infinity,
-            Infinity,
-            player,
-            player === "R" ? "Y" : "R",
-            noise,
-          );
-        if (
-          (score > bestScore && player === "R") ||
-          (score < bestScore && player === "Y")
-        ) {
+          nudge + minimax(board, action, depth, -Infinity, Infinity, player, player === "R" ? "Y" : "R", noise);
+        if ((score > bestScore && player === "R") || (score < bestScore && player === "Y")) {
           bestScore = score;
           bestMove = action;
         }
@@ -360,7 +329,7 @@ const GameConnectFour: React.FC = () => {
       Math.floor(thinkFlowRate / options.length),
     );
 
-    let decidedTimeout: NodeJS.Timeout;
+    let decidedTimeout: ReturnType<typeof setTimeout>;
     const startTime = Date.now();
     const placeCol = aiChooseMove();
     const endTime = Date.now();
@@ -388,17 +357,7 @@ const GameConnectFour: React.FC = () => {
       clearTimeout(timeout);
       clearTimeout(decidedTimeout);
     };
-  }, [
-    player,
-    gameStatus,
-    isRAI,
-    isYAI,
-    makeMove,
-    isAiTurn,
-    board,
-    noise,
-    depth,
-  ]);
+  }, [player, gameStatus, isRAI, isYAI, makeMove, isAiTurn, board, noise, depth]);
 
   const resetGame = () => {
     setBoard([
@@ -430,19 +389,14 @@ const GameConnectFour: React.FC = () => {
 
   const checkLastCell = (colIndex: number, cellIndex: number) => {
     if (lastCoordinates && gameStatus === "in progress") {
-      return (
-        lastCoordinates[0] === colIndex && lastCoordinates[1] === cellIndex
-      );
+      return lastCoordinates[0] === colIndex && lastCoordinates[1] === cellIndex;
     }
     return false;
   };
 
   const isAWinningCell = (colIndex: number, cellIndex: number) => {
     if (winningCells) {
-      return winningCells.some(
-        ([winColIndex, winCellIndex]) =>
-          winColIndex === colIndex && winCellIndex === cellIndex,
-      );
+      return winningCells.some(([winColIndex, winCellIndex]) => winColIndex === colIndex && winCellIndex === cellIndex);
     }
     return false;
   };
@@ -471,17 +425,11 @@ const GameConnectFour: React.FC = () => {
                   return (
                     <div
                       key={cellIndex}
-                      className={`${styles.cell} ${
-                        isAWinningCell(columnIndex, cellIndex)
-                          ? styles.winningCell
-                          : ""
-                      }`}
+                      className={`${styles.cell} ${isAWinningCell(columnIndex, cellIndex) ? styles.winningCell : ""}`}
                     >
                       <div
                         className={`${styles.circle} ${
-                          checkLastCell(columnIndex, cellIndex)
-                            ? styles.lastCell
-                            : ""
+                          checkLastCell(columnIndex, cellIndex) ? styles.lastCell : ""
                         } ${cell ? styles[cell] : ""}`}
                       ></div>
                     </div>
@@ -499,13 +447,7 @@ const GameConnectFour: React.FC = () => {
               return (
                 <div key={columnIndex} className="w-full text-center">
                   {currentScores[0].includes(columnIndex)
-                    ? Math.round(
-                        currentScores[1][
-                          currentScores[0].indexOf(columnIndex)
-                        ] * 1000,
-                      ) /
-                        10 +
-                      "%"
+                    ? Math.round(currentScores[1][currentScores[0].indexOf(columnIndex)] * 1000) / 10 + "%"
                     : ""}
                 </div>
               );
@@ -518,38 +460,23 @@ const GameConnectFour: React.FC = () => {
         label="Reset Game"
         className={`${styles.settings} ${styles.resetButton}`}
       />
-      <div
-        className={`flex flex-col items-center justify-center ${styles.settings}`}
-      >
-        <div className="mt-1 text-xs font-medium text-(--site-text-muted)">
-          AI Settings
-        </div>
+      <div className={`flex flex-col items-center justify-center ${styles.settings}`}>
+        <div className="mt-1 text-xs font-medium text-(--site-text-muted)">AI Settings</div>
         <div className="m-1 flex w-full items-center justify-center gap-4">
           <div className="flex items-center justify-center">
             <div className="flex flex-col items-start justify-center gap-1">
               <label className="flex items-center gap-2">
-                <InputSwitch
-                  inputId="X-AI-switch"
-                  checked={isRAI}
-                  onChange={() => setIsRAI((prev) => !prev)}
-                />
+                <InputSwitch inputId="X-AI-switch" checked={isRAI} onChange={() => setIsRAI((prev) => !prev)} />
                 <span className="text-sm font-medium">Blue</span>
               </label>
               <label className="flex items-center gap-2">
-                <InputSwitch
-                  inputId="O-AI-switch"
-                  checked={isYAI}
-                  onChange={() => setIsYAI((prev) => !prev)}
-                />
+                <InputSwitch inputId="O-AI-switch" checked={isYAI} onChange={() => setIsYAI((prev) => !prev)} />
                 <span className="text-sm font-medium">Yellow</span>
               </label>
             </div>
           </div>
           <div className="flex flex-col items-start justify-center gap-1">
-            <label
-              htmlFor="ai-noise"
-              className="flex items-center justify-center"
-            >
+            <label htmlFor="ai-noise" className="flex items-center justify-center">
               <span className="w-12 text-sm font-medium">Noise</span>
               <Slider
                 id="ai-noise"

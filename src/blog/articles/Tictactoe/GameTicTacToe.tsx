@@ -3,13 +3,7 @@ import { Button } from "primereact/button";
 import { InputSwitch } from "primereact/inputswitch";
 import { Slider } from "primereact/slider";
 import styles from "./GameTicTacToe.module.css";
-import {
-  compareNumberArrays,
-  copy2DArray,
-  dotProduct,
-  randomChoice,
-  softMaxT,
-} from "../../../utility/utilities";
+import { compareNumberArrays, copy2DArray, dotProduct, randomChoice, softMaxT } from "../../../utility/utilities";
 type Player = "X" | "O";
 type GameResult = Player | "Tie";
 type Action = [number, number];
@@ -34,7 +28,7 @@ const thinkMove = (board: string[][], player: Player, action: Action) => {
 const getActionValues = (
   board: string[][],
   player: Player,
-  expectedValue: (board: string[][], player: Player, move: Action) => number
+  expectedValue: (board: string[][], player: Player, move: Action) => number,
 ): [Action[], number[]] => {
   const actions = availableActions(board);
   const values = availableActions(board).map((move) => {
@@ -81,7 +75,7 @@ const GameTicTacToe = () => {
         setTurn((prev) => (prev === "X" ? "O" : "X"));
       }
     },
-    [board, turn]
+    [board, turn],
   );
 
   const expectedValue = useCallback(
@@ -104,14 +98,11 @@ const GameTicTacToe = () => {
       const player = prevPlayer === "X" ? "O" : "X";
       const [, values] = getActionValues(board, player, expectedValue);
 
-      const probs = softMaxT(
-        values,
-        player === "X" ? xTemperature : -oTemperature
-      );
+      const probs = softMaxT(values, player === "X" ? xTemperature : -oTemperature);
       expectedValueMemo[boardString] = dotProduct(values, probs);
       return expectedValueMemo[boardString];
     },
-    [oTemperature, xTemperature]
+    [oTemperature, xTemperature],
   );
 
   useEffect(() => {
@@ -123,10 +114,7 @@ const GameTicTacToe = () => {
     const aiChooseMove = (board: string[][]) => {
       expectedValueMemo = {};
       const [moves, values] = getActionValues(board, turn, expectedValue);
-      const probs = softMaxT(
-        values,
-        turn === "X" ? xTemperature : -oTemperature
-      );
+      const probs = softMaxT(values, turn === "X" ? xTemperature : -oTemperature);
       const index = randomChoice(probs);
       return moves[index];
     };
@@ -137,7 +125,7 @@ const GameTicTacToe = () => {
       setAiConsiderCell(cell);
     }, 100);
 
-    let decidedTimeout: NodeJS.Timeout;
+    let decidedTimeout: ReturnType<typeof setTimeout>;
     const startTime = Date.now();
     const [placeRow, placeCol] = aiChooseMove(board);
     const endTime = Date.now();
@@ -165,18 +153,7 @@ const GameTicTacToe = () => {
       clearTimeout(timeout);
       clearTimeout(decidedTimeout);
     };
-  }, [
-    turn,
-    isXHuman,
-    isOHuman,
-    gameOver,
-    oTemperature,
-    xTemperature,
-    makeMove,
-    board,
-    expectedValue,
-    isAiTurn,
-  ]);
+  }, [turn, isXHuman, isOHuman, gameOver, oTemperature, xTemperature, makeMove, board, expectedValue, isAiTurn]);
 
   const stringifyBoard = (board: string[][]): string => {
     return board
@@ -256,11 +233,7 @@ const GameTicTacToe = () => {
     return board.every((row) => row.every((cell) => cell));
   };
 
-  function createCellClassName(
-    cell: string,
-    rowIndex: number,
-    colIndex: number
-  ) {
+  function createCellClassName(cell: string, rowIndex: number, colIndex: number) {
     let className = styles.cell + ` ${styles[cell.toLowerCase()]}`;
     if (gameOver) {
       className += " " + styles.gameOver;
@@ -281,11 +254,7 @@ const GameTicTacToe = () => {
     <>
       <div className="mx-auto mt-2 mb-4 max-w-lg rounded-xl border border-(--site-border) bg-(--site-surface) p-3 shadow-(--site-shadow)">
         <div className={styles.winner}>
-          {winner
-            ? winner === "Tie"
-              ? "It's a Tie!"
-              : `Player ${winner} wins!`
-            : `Player ${turn}'s turn`}
+          {winner ? (winner === "Tie" ? "It's a Tie!" : `Player ${winner} wins!`) : `Player ${turn}'s turn`}
         </div>
         <div className={styles.board}>
           {board.map((row, rowIndex) =>
@@ -298,25 +267,17 @@ const GameTicTacToe = () => {
               >
                 {cell}
               </div>
-            ))
+            )),
           )}
         </div>
         <div className="mt-3 flex flex-wrap items-center justify-center gap-4">
           <div className={styles.checkboxDiv}>
             <label className="flex items-center gap-2">
-              <InputSwitch
-                inputId="X-AI-switch"
-                checked={!isXHuman}
-                onChange={() => setIsXHuman((prev) => !prev)}
-              />
+              <InputSwitch inputId="X-AI-switch" checked={!isXHuman} onChange={() => setIsXHuman((prev) => !prev)} />
               <span className={styles.controlLabel}>X AI</span>
             </label>
             <label className="flex items-center gap-2">
-              <InputSwitch
-                inputId="O-AI-switch"
-                checked={!isOHuman}
-                onChange={() => setIsOHuman((prev) => !prev)}
-              />
+              <InputSwitch inputId="O-AI-switch" checked={!isOHuman} onChange={() => setIsOHuman((prev) => !prev)} />
               <span className={styles.controlLabel}>O AI</span>
             </label>
           </div>

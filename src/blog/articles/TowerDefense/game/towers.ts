@@ -1,4 +1,4 @@
-import type { Tower, TowerType, Projectile, GameState } from './types';
+import type { Tower, TowerType, Projectile, GameState, Enemy } from './types';
 import { TOWER_STATS, TOWER_UPGRADES, END_COL, END_ROW } from './constants';
 
 export interface EffectiveStats {
@@ -135,7 +135,7 @@ export function updateTowers(
     }
 
     // Targeting strategy
-    let target = eligible[0];
+    let target: Enemy;
     if (tower.type === 'sniper') {
       // Furthest along path for ground enemies; distance-to-end for flyers
       const ex = END_COL + 0.5, ey = END_ROW + 0.5;
