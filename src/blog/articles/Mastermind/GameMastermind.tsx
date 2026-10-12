@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
-import { Button } from "primereact/button";
-import { InputNumber } from "primereact/inputnumber";
+import Button from "../../../ui/Button";
+import NumberInput from "../../../ui/NumberInput";
 import {
   compareNumberArrays,
   countUniqueStrings,
@@ -349,7 +349,7 @@ const GameMastermind: React.FC = () => {
           onClick={gameStatus ? resetGame : handleSubmit}
           aria-label={gameStatus ? "Reset game" : "Submit guess"}
           icon={gameStatus ? "pi pi-refresh" : "pi pi-check"}
-          className="m-auto h-10 w-10"
+          className="m-auto h-10 w-12"
           text
         />
         <div
@@ -407,7 +407,7 @@ const GameMastermind: React.FC = () => {
             onClick={resetGame}
             aria-label="Reset game"
             icon="pi pi-refresh"
-            className="h-10 w-10"
+            className="h-10 w-12"
             text
           />
           <Button
@@ -415,7 +415,7 @@ const GameMastermind: React.FC = () => {
             onClick={provideHint}
             aria-label="Hint"
             icon="pi pi-question"
-            className="h-10 w-10"
+            className="h-10 w-12"
             text
           />
         </div>
@@ -423,44 +423,35 @@ const GameMastermind: React.FC = () => {
         <div className="mx-auto grid w-full max-w-xs gap-2">
           <label className="grid grid-cols-[1fr_5rem] items-center gap-3 text-sm">
             <span>Guesses:</span>
-            <InputNumber
+            <NumberInput
               inputClassName="w-full text-center"
               className="w-20"
               min={6}
               max={12}
               value={maxNumberOfGuesses}
-              onValueChange={(e) => {
-                if (e.value !== null) setMaxNumberOfGuesses(Number(e.value));
-              }}
-              useGrouping={false}
+              onChange={setMaxNumberOfGuesses}
             />
           </label>
           <label className="grid grid-cols-[1fr_5rem] items-center gap-3 text-sm">
             <span>Code size:</span>
-            <InputNumber
+            <NumberInput
               inputClassName="w-full text-center"
               className="w-20"
               min={3}
               max={numberOfColours}
               value={codeSize}
-              onValueChange={(e) => {
-                if (e.value !== null) setCodeSize(Number(e.value));
-              }}
-              useGrouping={false}
+              onChange={setCodeSize}
             />
           </label>
           <label className="grid grid-cols-[1fr_5rem] items-center gap-3 text-sm">
             <span>Colours:</span>
-            <InputNumber
+            <NumberInput
               inputClassName="w-full text-center"
               className="w-20"
               min={codeSize}
               max={maxNumberOfColours}
               value={numberOfColours}
-              onValueChange={(e) => {
-                if (e.value !== null) setNumberOfColours(Number(e.value));
-              }}
-              useGrouping={false}
+              onChange={setNumberOfColours}
             />
           </label>
           <p className="mt-1 text-center text-xl font-semibold">{`Remaining options: ${possibleCodes.length}`}</p>

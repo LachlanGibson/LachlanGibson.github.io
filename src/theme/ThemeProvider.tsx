@@ -1,11 +1,9 @@
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
-import { PrimeReactProvider } from "primereact/api";
 import {
   ThemeContext,
   type ThemeMode,
 } from "./ThemeContext";
-import { darkThemeHref, lightThemeHref } from "./themeHrefs";
 
 const THEME_STORAGE_KEY = "lachlan-theme-mode";
 const getSystemTheme = (): ThemeMode =>
@@ -20,14 +18,6 @@ const applyTheme = (theme: ThemeMode) => {
     themeColorMeta.setAttribute(
       "content",
       theme === "dark" ? "#182536" : "#f8fbff"
-    );
-  }
-
-  const themeLink = document.getElementById("app-theme");
-  if (themeLink) {
-    themeLink.setAttribute(
-      "href",
-      theme === "dark" ? darkThemeHref : lightThemeHref
     );
   }
 };
@@ -61,12 +51,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <PrimeReactProvider>
-      <ThemeContext.Provider
-        value={{ mode, resolvedTheme, setMode, toggleTheme }}
-      >
-        {children}
-      </ThemeContext.Provider>
-    </PrimeReactProvider>
+    <ThemeContext.Provider
+      value={{ mode, resolvedTheme, setMode, toggleTheme }}
+    >
+      {children}
+    </ThemeContext.Provider>
   );
 };

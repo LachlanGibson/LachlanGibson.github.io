@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Button } from "primereact/button";
+import Button from "../../../ui/Button";
 import { range, shuffleArray } from "../../../utility/utilities";
 import wordList from "./wordList";
 

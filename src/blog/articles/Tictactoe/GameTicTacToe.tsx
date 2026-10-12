@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Button } from "primereact/button";
-import { InputSwitch } from "primereact/inputswitch";
-import { Slider } from "primereact/slider";
+import Button from "../../../ui/Button";
+import Switch from "../../../ui/Switch";
+import Slider from "../../../ui/Slider";
 import styles from "./GameTicTacToe.module.css";
 import { compareNumberArrays, copy2DArray, dotProduct, randomChoice, softMaxT } from "../../../utility/utilities";
 type Player = "X" | "O";
@@ -273,11 +273,11 @@ const GameTicTacToe = () => {
         <div className="mt-3 flex flex-wrap items-center justify-center gap-4">
           <div className={styles.checkboxDiv}>
             <label className="flex items-center gap-2">
-              <InputSwitch inputId="X-AI-switch" checked={!isXHuman} onChange={() => setIsXHuman((prev) => !prev)} />
+              <Switch inputId="X-AI-switch" checked={!isXHuman} onChange={(checked) => setIsXHuman(!checked)} />
               <span className={styles.controlLabel}>X AI</span>
             </label>
             <label className="flex items-center gap-2">
-              <InputSwitch inputId="O-AI-switch" checked={!isOHuman} onChange={() => setIsOHuman((prev) => !prev)} />
+              <Switch inputId="O-AI-switch" checked={!isOHuman} onChange={(checked) => setIsOHuman(!checked)} />
               <span className={styles.controlLabel}>O AI</span>
             </label>
           </div>
@@ -294,7 +294,7 @@ const GameTicTacToe = () => {
               max={1}
               step={0.01}
               value={xTemperature}
-              onChange={(e) => setXTemperature(Number(e.value))}
+              onChange={setXTemperature}
               className="w-40"
             />
             <span className="w-4 text-center text-sm font-medium">X</span>
@@ -308,7 +308,7 @@ const GameTicTacToe = () => {
               max={1}
               step={0.01}
               value={oTemperature}
-              onChange={(e) => setOTemperature(Number(e.value))}
+              onChange={setOTemperature}
               className="w-40"
             />
             <span className="w-4 text-center text-sm font-medium">O</span>

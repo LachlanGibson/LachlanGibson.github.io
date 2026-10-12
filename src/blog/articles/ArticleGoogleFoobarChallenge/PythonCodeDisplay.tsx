@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Button } from "primereact/button";
+import Button from "../../../ui/Button";
 import { Prism } from "react-syntax-highlighter";
 import { coy, okaidia } from "react-syntax-highlighter/dist/esm/styles/prism";
 

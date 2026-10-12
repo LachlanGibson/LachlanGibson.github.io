@@ -20,7 +20,7 @@ There is no test suite.
 ## Pinned dependencies
 
 - `typescript` is held at 6.x because typescript-eslint does not yet support TypeScript 7 (peer `<6.1.0`).
-- `primereact` is held at 10.x; v11 is a breaking rewrite (theme CSS files removed, `InputSwitch`/`menuitem` gone, compound components) and needs a dedicated migration.
+- `primeicons` is held at 7.x: v8+ (like all PrimeUI packages, including PrimeReact v11) is under the PrimeUI License and needs a license key. PrimeReact was removed for this reason; don't reintroduce PrimeUI packages.
 
 ## Architecture
 
@@ -32,5 +32,5 @@ There is no test suite.
   3. An entry in `src/blog/articleMetaData.tsx` (title, dates, thumbnail, SEO meta, and `articleElement`). `src/routes/article.tsx` builds all OG/Twitter meta from this. `wip: true` marks unfinished articles.
   4. Thumbnails in `public/images/blog/thumbnail/{svg,webp}/`. `public/sitemap.xml` is maintained by hand.
 - **Interactive games** follow a pattern of an article wrapper component (`<Name>.tsx`) plus a `Game<Name>.tsx`. The Tower Defense game (`src/blog/articles/TowerDefense/`) is the most complex: a canvas + `requestAnimationFrame` loop with game state in `useRef`s mutated directly, React state only for HUD values, and pure logic split into modules under `game/` (pathfinding/A*, map gen, waves, towers, enemies, projectiles, renderer). `PLANS.md`/`PLANS2.md` (untracked) hold its design plans.
-- **Styling:** Tailwind v4 (via `@tailwindcss/vite`) plus PrimeReact components; CSS modules for per-article styles. Site colours are CSS variables in `src/index.css` (`--site-bg`, `--site-text`, `--site-link`, ...) used as e.g. `bg-(--site-surface-alt)`.
-- **Theming:** `src/theme/ThemeProvider.tsx` + `useTheme()`. Dark mode sets `app-dark` class and `data-theme` on `<html>`, and swaps the PrimeReact theme stylesheet `<link id="app-theme">` between lara-light/dark-cyan. Preference persisted in localStorage.
+- **Styling:** Tailwind v4 (via `@tailwindcss/vite`); CSS modules for per-article styles. Site colours are CSS variables in `src/index.css` (`--site-*` for page colours, `--ui-*` for component colours, both redefined for light mode) used as e.g. `bg-(--site-surface-alt)`. Shared form controls (`Button`, `Switch`, `Slider`, `NumberInput`) live in `src/ui/`; icons are PrimeIcons font classes (`pi pi-*`).
+- **Theming:** `src/theme/ThemeProvider.tsx` + `useTheme()`. Sets `data-theme` (and the `app-dark` class in dark mode) on `<html>`; `:root` holds the dark values and `:root[data-theme="light"]` overrides them. Preference persisted in localStorage.

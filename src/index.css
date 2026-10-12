@@ -17,6 +17,35 @@
   --site-border: #3e5679;
   --site-warning: #c86e6e;
   --site-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+
+  /* Component tokens (values from the PrimeReact Lara cyan theme the site used before) */
+  --ui-primary: #22d3ee;
+  --ui-primary-hover: #67e8f9;
+  --ui-primary-active: #a5f3fc;
+  --ui-primary-text: #030712;
+  --ui-primary-tint-hover: rgba(34, 211, 238, 0.04);
+  --ui-primary-tint-active: rgba(34, 211, 238, 0.16);
+  --ui-secondary: #94a3b8;
+  --ui-secondary-hover: #cbd5e1;
+  --ui-secondary-active: #e2e8f0;
+  --ui-secondary-text: #020617;
+  --ui-button-focus-ring: 0 0 0 2px #1c2127, 0 0 0 4px rgba(34, 211, 238, 0.7);
+  --ui-focus-ring: 0 0 0 0.2rem rgba(34, 211, 238, 0.2);
+  --ui-text: rgba(255, 255, 255, 0.87);
+  --ui-text-secondary: rgba(255, 255, 255, 0.6);
+  --ui-input-bg: #111827;
+  --ui-input-border: #424b57;
+  --ui-slider-track: #424b57;
+  --ui-slider-handle: #424b57;
+  --ui-switch-off: #6b7280;
+  --ui-switch-off-hover: #424b57;
+  --ui-switch-knob: rgba(255, 255, 255, 0.6);
+  --ui-divider: #424b57;
+  --ui-card-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  --ui-overlay-border: 1px solid var(--site-border);
+  --ui-overlay-padding: 0.25rem;
+  --ui-menu-focus: #424b57;
+  --ui-overlay-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 :root[data-theme="light"] {
@@ -31,6 +60,33 @@
   --site-border: #d3deed;
   --site-warning: #a33e3e;
   --site-shadow: 0 10px 24px rgba(15, 35, 60, 0.1);
+
+  --ui-primary: #06b6d4;
+  --ui-primary-hover: #0891b2;
+  --ui-primary-active: #0e7490;
+  --ui-primary-text: #ffffff;
+  --ui-primary-tint-hover: rgba(6, 182, 212, 0.04);
+  --ui-primary-tint-active: rgba(6, 182, 212, 0.16);
+  --ui-secondary: #64748b;
+  --ui-secondary-hover: #475569;
+  --ui-secondary-active: #334155;
+  --ui-secondary-text: #ffffff;
+  --ui-button-focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px #71e7fb;
+  --ui-focus-ring: 0 0 0 0.2rem #a5f3fc;
+  --ui-text: #4b5563;
+  --ui-text-secondary: #6b7280;
+  --ui-input-bg: #ffffff;
+  --ui-input-border: #d1d5db;
+  --ui-slider-track: #e5e7eb;
+  --ui-slider-handle: #ffffff;
+  --ui-switch-off: #d1d5db;
+  --ui-switch-off-hover: #b7bcc5;
+  --ui-switch-knob: #ffffff;
+  --ui-divider: #e5e7eb;
+  --ui-overlay-border: none;
+  --ui-overlay-padding: 0.5rem;
+  --ui-menu-focus: #e5e7eb;
+  --ui-overlay-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 /*
@@ -41,7 +97,8 @@ https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
   html {
     -webkit-text-size-adjust: none; /* for iOS Safari */
     text-size-adjust: none; /* for other mobile browsers */
-    font-family: "Outfit", sans-serif;
+    font-family: "Inter", sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     overflow-y: auto;
   }
 
@@ -105,48 +162,69 @@ https://blog.logrocket.com/what-should-modern-css-boilerplate-look-like/
     line-height: 1.6;
   }
 
-  p,
-  .p-card,
-  .p-menu .p-menuitem-link {
+  p {
     color: var(--site-text);
   }
 }
 
-.p-button.p-button-outlined {
-  border-color: var(--site-border);
-  color: var(--site-text);
-}
+@layer components {
+  /* Native range input styled like the old PrimeReact slider; --fill is the filled percentage */
+  .ui-slider {
+    appearance: none;
+    height: 0.286rem;
+    border-radius: 6px;
+    background: linear-gradient(
+      to right,
+      var(--ui-primary) var(--fill, 0%),
+      var(--ui-slider-track) var(--fill, 0%)
+    );
+    cursor: pointer;
+  }
 
-.p-button.p-button-outlined:hover {
-  background-color: var(--site-surface-alt);
-  border-color: var(--site-border);
-}
+  .ui-slider::-webkit-slider-thumb {
+    appearance: none;
+    box-sizing: border-box;
+    width: 1.143rem;
+    height: 1.143rem;
+    border: 2px solid var(--ui-primary);
+    border-radius: 50%;
+    background: var(--ui-slider-handle);
+    transition:
+      background-color 0.2s,
+      box-shadow 0.2s;
+  }
 
-.p-card {
-  background-color: var(--site-surface);
-  color: var(--site-text);
-}
+  .ui-slider::-moz-range-thumb {
+    box-sizing: border-box;
+    width: 1.143rem;
+    height: 1.143rem;
+    border: 2px solid var(--ui-primary);
+    border-radius: 50%;
+    background: var(--ui-slider-handle);
+    transition:
+      background-color 0.2s,
+      box-shadow 0.2s;
+  }
 
-.p-card .p-card-body,
-.p-card .p-card-content,
-.p-card .p-card-title,
-.p-card .p-card-subtitle,
-.p-card .p-card-footer {
-  background-color: transparent;
-  color: inherit;
-}
+  .ui-slider:hover::-webkit-slider-thumb {
+    background: var(--ui-primary);
+  }
 
-.p-menu {
-  border-color: var(--site-border);
-  background-color: var(--site-surface);
-}
+  .ui-slider:hover::-moz-range-thumb {
+    background: var(--ui-primary);
+  }
 
-.p-menu .p-menuitem-link {
-  color: var(--site-text);
-}
+  .ui-slider:focus-visible {
+    outline: none;
+  }
 
-.p-menu .p-menuitem-link:hover {
-  background-color: var(--site-surface-alt);
+  .ui-slider:focus-visible::-webkit-slider-thumb {
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .ui-slider:focus-visible::-moz-range-thumb {
+    box-shadow: var(--ui-focus-ring);
+  }
 }
 
 .theme-image-light {

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Button } from "primereact/button";
-import { InputSwitch } from "primereact/inputswitch";
-import { Slider } from "primereact/slider";
+import Button from "../../../ui/Button";
+import Switch from "../../../ui/Switch";
+import Slider from "../../../ui/Slider";
 import styles from "./GameConnectFour.module.css";
 import { copy2DArray } from "../../../utility/utilities";
 
@@ -466,11 +466,11 @@ const GameConnectFour: React.FC = () => {
           <div className="flex items-center justify-center">
             <div className="flex flex-col items-start justify-center gap-1">
               <label className="flex items-center gap-2">
-                <InputSwitch inputId="X-AI-switch" checked={isRAI} onChange={() => setIsRAI((prev) => !prev)} />
+                <Switch inputId="X-AI-switch" checked={isRAI} onChange={setIsRAI} />
                 <span className="text-sm font-medium">Blue</span>
               </label>
               <label className="flex items-center gap-2">
-                <InputSwitch inputId="O-AI-switch" checked={isYAI} onChange={() => setIsYAI((prev) => !prev)} />
+                <Switch inputId="O-AI-switch" checked={isYAI} onChange={setIsYAI} />
                 <span className="text-sm font-medium">Yellow</span>
               </label>
             </div>
@@ -484,7 +484,7 @@ const GameConnectFour: React.FC = () => {
                 max={0.1}
                 step={0.001}
                 value={noise}
-                onChange={(e) => setNoise(Number(e.value))}
+                onChange={setNoise}
                 className="w-28"
               />
             </label>
@@ -513,11 +513,7 @@ const GameConnectFour: React.FC = () => {
           </div>
         </div>
         <label className="flex items-center gap-2">
-          <InputSwitch
-            inputId="show_scores-switch"
-            checked={showScores}
-            onChange={() => setShowScores((prev) => !prev)}
-          />
+          <Switch inputId="show_scores-switch" checked={showScores} onChange={setShowScores} />
           <span className="text-sm font-medium">Show Scores</span>
         </label>
       </div>
